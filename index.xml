@@ -33,8 +33,17 @@ It makes use of a variety of open source projects including:
     
     <item>
       <title>chapter9</title>
+      <link>https://devinkin.github.io/post/chapter9/</link>
+      <pubDate>Sat, 18 Apr 2020 01:41:16 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/chapter9/</guid>
+      <description>第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns</description>
+    </item>
+    
+    <item>
+      <title>chapter9</title>
       <link>https://devinkin.github.io/posts/chapter9/</link>
-      <pubDate>Sat, 18 Apr 2020 00:51:15 +0800</pubDate>
+      <pubDate>Sat, 18 Apr 2020 01:34:45 +0800</pubDate>
       
       <guid>https://devinkin.github.io/posts/chapter9/</guid>
       <description>第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns</description>

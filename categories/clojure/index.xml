@@ -1,23 +1,59 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Clojure on Even - A super concise theme for Hugo</title>
+    <title>Clojure on Devinkin Blog</title>
     <link>https://devinkin.github.io/categories/clojure/</link>
-    <description>Recent content in Clojure on Even - A super concise theme for Hugo</description>
+    <description>Recent content in Clojure on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 18 Apr 2020 01:41:16 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 18 Apr 2020 12:03:28 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/categories/clojure/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>chapter9</title>
-      <link>https://devinkin.github.io/post/chapter9/</link>
-      <pubDate>Sat, 18 Apr 2020 01:41:16 +0800</pubDate>
+      <title>Clojure趣学指南-第六章</title>
+      <link>https://devinkin.github.io/post/chapter6/</link>
+      <pubDate>Sat, 18 Apr 2020 12:03:28 +0800</pubDate>
       
-      <guid>https://devinkin.github.io/post/chapter9/</guid>
-      <description>第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns</description>
+      <guid>https://devinkin.github.io/post/chapter6/</guid>
+      <description>第6章 不可变性介绍 什么是不可变性 不可变的首要原则: 不可变对象的所有可能属性都在构造时候定义好, 并且不能被改变. 不可变性能做什么 不可变式编程,</description>
+    </item>
+    
+    <item>
+      <title>Clojure趣学指南-第五章</title>
+      <link>https://devinkin.github.io/post/chapter5/</link>
+      <pubDate>Sat, 18 Apr 2020 12:02:30 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/chapter5/</guid>
+      <description>第5章-集合类型 Clojure提供了丰富的集合复合数据类型, 包括: 向量(vectors) 列表(lists) 队列(queues) 集合(sets</description>
+    </item>
+    
+    <item>
+      <title>Clojure趣学指南-第四章</title>
+      <link>https://devinkin.github.io/post/chapter4/</link>
+      <pubDate>Sat, 18 Apr 2020 12:01:10 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/chapter4/</guid>
+      <description>第4章 标量数据类型代表这下列类型之一的值. number symbol keyword string character 截断 Clojure默认会截断, 因此如果需要高精度浮点数, 需要在浮点数后面加上 M 字符. 晋升</description>
+    </item>
+    
+    <item>
+      <title>Clojure趣学指南-第三章</title>
+      <link>https://devinkin.github.io/post/chapter3/</link>
+      <pubDate>Sat, 18 Apr 2020 12:00:38 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/chapter3/</guid>
+      <description>第3章 真值 在Clojure中被看作为真有以下 1 2 3 4 (if true :truthy :falsey) ;:truthy (if [] :truthy :falsey) ;:truthy (if nil :truthy :falsey) ;:falsey (if false :truthy :falsey) ;:falsey 不要创建布尔对象 不要这么做 1 2 3 4 (def evil-false (Boolean. &amp;#34;false&amp;#34;)) (= false evil-false)</description>
+    </item>
+    
+    <item>
+      <title>Clojure趣学指南-第二章</title>
+      <link>https://devinkin.github.io/post/chapter2/</link>
+      <pubDate>Sat, 18 Apr 2020 11:58:18 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/chapter2/</guid>
+      <description>第2章 基本数据类型 数字类型(整形, 浮点型, 有理数) 符号 关键字(总是对自身求值) 字符串(字符序列) 字符(前缀是 \) 集合类型 列表(使用括号包围),</description>
     </item>
     
   </channel>

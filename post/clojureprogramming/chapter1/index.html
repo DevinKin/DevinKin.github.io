@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Clojure编程-第一章-Clojure简介 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第1章-Clojure简介 关键字 关键字使用一个冒号标识。 如果关键字里面包含 / ，表示这个关键字是命名空间限定的。 如果一个关键字以两个冒号 :: 开头" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/clojureprogramming/chapter1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Clojure编程-第一章-Clojure简介" />
+<meta property="og:description" content="第1章-Clojure简介 关键字 关键字使用一个冒号标识。 如果关键字里面包含 / ，表示这个关键字是命名空间限定的。 如果一个关键字以两个冒号 :: 开头" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/clojureprogramming/chapter1/" />
+<meta property="article:published_time" content="2020-04-18T15:09:35+08:00" />
+<meta property="article:modified_time" content="2020-04-18T15:09:35+08:00" />
+<meta itemprop="name" content="Clojure编程-第一章-Clojure简介">
+<meta itemprop="description" content="第1章-Clojure简介 关键字 关键字使用一个冒号标识。 如果关键字里面包含 / ，表示这个关键字是命名空间限定的。 如果一个关键字以两个冒号 :: 开头">
+<meta itemprop="dateModified" content="2020-04-18T15:09:35&#43;08:00" />
+<meta itemprop="wordCount" content="5116">
+
+
+
+<meta itemprop="keywords" content="Clojure,Lisp," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Clojure编程-第一章-Clojure简介"/>
+<meta name="twitter:description" content="第1章-Clojure简介 关键字 关键字使用一个冒号标识。 如果关键字里面包含 / ，表示这个关键字是命名空间限定的。 如果一个关键字以两个冒号 :: 开头"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Clojure编程-第一章-Clojure简介</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-18 </span>
+        <div class="post-category">
+            <a href="/categories/clojure/"> Clojure </a>
+            </div>
+          <span class="more-meta"> 约 5116 字 </span>
+          <span class="more-meta"> 预计阅读 11 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第1章-clojure简介">第1章-Clojure简介</a>
+      <ul>
+        <li><a href="#关键字">关键字</a></li>
+        <li><a href="#正则表达式">正则表达式</a></li>
+        <li><a href="#注释">注释</a></li>
+        <li><a href="#空格和逗号">空格和逗号</a></li>
+        <li><a href="#集合字面量">集合字面量</a></li>
+        <li><a href="#命名空间">命名空间</a></li>
+        <li><a href="#特殊形式">特殊形式</a></li>
+        <li><a href="#总结">总结</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="第1章-clojure简介">第1章-Clojure简介</h2>
+<h3 id="关键字">关键字</h3>
+<p>关键字使用一个冒号标识。</p>
+<p>如果关键字里面包含 <code>/</code> ，表示这个关键字是命名空间限定的。</p>
+<p>如果一个关键字以两个冒号 <code>::</code> 开头，表示是当前命名空间的关键字。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">pizza</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&#34;Ramunto&#39;s&#34;</span>
+	    <span class="ss">:location</span> <span class="s">&#34;Claremont, NH&#34;</span>
+	    <span class="ss">::location</span> <span class="s">&#34;43.3734, -72.3365&#34;</span><span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果一个关键字以两个冒号开头，同时又包含了 <code>/</code> ，表示某个特定命名空间里面的关键字。</p>
+<p>关键字是一种命名类型，它们有自己内在的名字(可以通过 <code>name</code> 函数访问)，以及一个可选的命名空间(通过 <code>namespace</code> 函数访问)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">name </span><span class="ss">:user/location</span><span class="p">)</span>
+<span class="c1">;= &#34;location&#34;</span>
+<span class="p">(</span><span class="nb">namespace </span><span class="ss">:user/location</span><span class="p">)</span>
+<span class="c1">;= &#34;user&#34;</span>
+<span class="p">(</span><span class="nb">namespace </span><span class="ss">:location</span><span class="p">)</span>
+<span class="c1">;= nil</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="正则表达式">正则表达式</h3>
+<p>Clojure把 <code>#</code> 开头的字符串当作正则表达式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">class </span><span class="o">#</span><span class="s">&#34;(p|h)ail&#34;</span><span class="p">)</span>
+<span class="c1">;= java.util.regex.Pattern</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Clojure中的正则表达式方法不需要像Java那样使用反斜杠进行转义</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">re-seq </span><span class="o">#</span><span class="s">&#34;(\d+)-(\d+)&#34;</span> <span class="s">&#34;1-3&#34;</span><span class="p">)</span>  <span class="c1">;;Java的写法 &#34;(\\d+)-(\\d+)&#34;</span>
+<span class="c1">;= ([&#34;1-3&#34; &#34;1&#34; &#34;3&#34;])</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="注释">注释</h3>
+<p>单行注释使用 <code>;</code></p>
+<p>形式级别注释使用 <code>#_</code> 宏。该宏会注释掉Clojure自身数据结构定义的形式。</p>
+<p>还有一种形式注解代码，使用 <code>comment</code> 宏， <code>comment</code> 形式的返回值始终为 <code>nil</code>  ，里面的代码没有被 <code>reader</code> 彻底忽略。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">when </span><span class="nv">true</span>
+  <span class="p">(</span><span class="nb">comment </span><span class="p">(</span><span class="nb">println </span><span class="s">&#34;hello&#34;</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="空格和逗号">空格和逗号</h3>
+<p>在形式、参数之间，数据结构的元素都是使用空格分隔的。和使用 <code>,</code> 分隔等价</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span><span class="p">])</span>
+<span class="c1">;= true</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>map里面有多对值，可以使用逗号分隔多对值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">create-user</span> <span class="p">{</span><span class="ss">:name</span> <span class="nv">new-username</span>, <span class="ss">:email</span> <span class="nv">email</span><span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="集合字面量">集合字面量</h3>
+<p><code>'()</code> 表示 <code>list</code></p>
+<p><code>[]</code> 表示 <code>vector</code></p>
+<p><code>{}</code> 表示 <code>map</code></p>
+<p><code>#{}</code> 表示 <code>set</code></p>
+<h3 id="命名空间">命名空间</h3>
+<p>命名空间是Clojure最基本的代码模块组件。</p>
+<p>Clojure中的一种引用类型， <code>var</code> 是一种可修改的内存地址，从而可以保存任何值。在 <code>var</code> 被定义的命名空间里， <code>var</code> 和一个符号相关联。</p>
+<p>在Clojure中， <code>var</code> 是特殊形式 <code>def</code> 来定义的， <code>def</code> 只作用于当前命名空间。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1">;= #&#39;chapter1.core/x</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在引用符号时候没有指定命名空间，它会求值成当前命名空间中的符号。</p>
+<p>我们在引用符号的时候也可以指定符号所在的命名空间。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="nv">*ns*</span>
+<span class="c1">;= #namespace[chapter1.core]</span>
+
+<span class="p">(</span><span class="kd">ns </span><span class="nv">foo</span><span class="p">)</span>
+<span class="c1">;= nil</span>
+
+<span class="nv">*ns*</span>
+<span class="c1">;= #namespace[foo]</span>
+
+<span class="nv">user/x</span>
+<span class="c1">;= &#34;hello&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>ns</code> 宏可以创建一个新的命名空间并切换到新的命名空间。</p>
+<p><code>java.lang</code> 的包里面的类默认被引入到Clojure的命名空间，可以不加任何包名直接访问这些Java类。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="nv">String</span>
+<span class="c1">;= java.lang.String</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>let</code> 绑定向量中对表达式求值，但关心表达式求值的结果，可以使用 <code>_</code> 来指定表达式不关心的值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">location</span> <span class="p">(</span><span class="nf">get-lat-long</span><span class="p">)</span>
+      <span class="nv">_</span> <span class="p">(</span><span class="nb">println </span><span class="s">&#34;Current location:&#34;</span> <span class="nv">location</span><span class="p">)</span>
+      <span class="nv">location</span> <span class="p">(</span><span class="nf">find-city-name</span> <span class="nv">location</span><span class="p">)]</span>
+  <span class="nv">...display</span> <span class="nv">city</span> <span class="nb">name for </span><span class="nv">current</span> <span class="nv">location</span> <span class="nv">in</span> <span class="nv">UI...</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>let</code> 定义的绑定跟其他语言的本地变量有两个显著区别</p>
+<ul>
+<li>所有的局部变量都是不可变的。可以嵌套 <code>let</code> 重写本地绑定或者在相同的绑定向量中重写同名的后续绑定。但无法在单个 <code>let</code> 形式中改变绑定的名称和改变其值。</li>
+<li>在编译时解释 <code>let</code> 的绑定向量，以提供公共集合类型的可选析构。</li>
+</ul>
+<h3 id="特殊形式">特殊形式</h3>
+<h4 id="解析">解析</h4>
+<p>clojure的向量集合实现了 <code>java.util.List</code> 接口，因此可以使用 <code>.get</code> 方法访问向量的值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">v</span> <span class="p">[</span><span class="mi">42</span> <span class="s">&#34;foo&#34;</span> <span class="mf">99.2</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">12</span><span class="p">]])</span>
+<span class="p">(</span><span class="nf">v</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">nth </span><span class="nv">v</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">.get</span> <span class="nv">v</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1">;= 99.2</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Clojure解析提供了一种简明的语法，用于以声明的方式将其中集合和绑定值作为 <code>let</code> 形式的命名局部变量提取其中的包含值。</p>
+<p>有两种解构风格</p>
+<ul>
+<li>一种操作顺序集合</li>
+<li>另一种操作maps</li>
+</ul>
+<h4 id="顺序集合解构">顺序集合解构</h4>
+<p>顺序集合解构工作在顺序集合，包括如下内容</p>
+<ul>
+<li>Clojure的list，vectors和seqs</li>
+<li>任何实现了 <code>java.util.List</code> 的集合</li>
+<li>Java的数组</li>
+<li>可以解构成字符的字符串</li>
+</ul>
+<p>基本序列解构案例</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">v</span> <span class="p">[</span><span class="mi">42</span> <span class="s">&#34;foo&#34;</span> <span class="mf">99.2</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">12</span><span class="p">]])</span>
+<span class="c1">;=#&#39;chapter1.core/v</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">]</span> <span class="nv">v</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">z</span><span class="p">))</span>
+<span class="c1">;=141.2</span>
+
+<span class="c1">;;等价于</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">x</span> <span class="p">(</span><span class="nb">nth </span><span class="nv">v</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">y</span> <span class="p">(</span><span class="nb">nth </span><span class="nv">v</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="nv">z</span> <span class="p">(</span><span class="nb">nth </span><span class="nv">v</span> <span class="mi">2</span><span class="p">)]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">z</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>解构形式用于映射被绑定的集合结构。因此我们可以将析构形式与反析构集合对齐，得到一个非常准确的概念，即哪些值将绑定到哪些名称。</p>
+<p>解构形式还可以组合，因此我们可以深入内嵌向量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">v</span> <span class="p">[</span><span class="mi">42</span> <span class="s">&#34;foo&#34;</span> <span class="mf">99.2</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">12</span><span class="p">]])</span>
+<span class="c1">;=#&#39;chapter1.core/v</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">x</span> <span class="nv">_</span> <span class="nv">_</span> <span class="p">[</span><span class="nv">y</span> <span class="nv">z</span><span class="p">]]</span> <span class="nv">v</span><span class="p">]</span>
+    <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>解构机制是没有限制它能在多大程度上分解足够深度的嵌套数据结构。</p>
+<p>顺序解构形式有两种特性</p>
+<ul>
+<li>收集额外位置的序列值。可以使用 <code>&amp;</code> 将解构形式中指定位置的的值收集到序列中。这种机制类似于Java方法的 <code>varargs</code> 而且是Clojure函数 <code>rest</code> 参数的基础。</li>
+<li>保留解构的值。你可以通过在解构形式使用 <code>:as</code> 选项指定被解构的原始集合名称，为其建立一个本地绑定。</li>
+</ul>
+<p>收集额外位置的序列值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">v</span> <span class="p">[</span><span class="mi">42</span> <span class="s">&#34;foo&#34;</span> <span class="mf">99.2</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">12</span><span class="p">]])</span>
+<span class="c1">;=#&#39;chapter1.core/v</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">x</span> <span class="o">&amp;</span> <span class="nv">rest</span><span class="p">]</span> <span class="nv">v</span><span class="p">]</span>
+  <span class="nv">rest</span><span class="p">)</span>
+<span class="c1">;=(&#34;foo&#34; 99.2 [5 12])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>保留解构的值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">v</span> <span class="p">[</span><span class="mi">42</span> <span class="s">&#34;foo&#34;</span> <span class="mf">99.2</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">12</span><span class="p">]])</span>
+<span class="c1">;=#&#39;chapter1.core/v</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">x</span> <span class="nv">_</span> <span class="nv">z</span> <span class="ss">:as</span> <span class="nv">original-vector</span><span class="p">]</span> <span class="nv">v</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">conj </span><span class="nv">original-vector</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">z</span><span class="p">)))</span>
+
+<span class="c1">;=[42 &#34;foo&#34; 99.2 [5 12] 141.2]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当要解构一个函数调用的返回结果集时会很方便。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">some-collection</span> <span class="p">(</span><span class="nf">some-function</span> <span class="nv">...</span><span class="p">)</span>
+      <span class="p">[</span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span> <span class="p">[</span><span class="nv">a</span> <span class="nv">b</span><span class="p">]]</span> <span class="nv">some-collection</span><span class="p">]</span>
+  <span class="nv">..do</span> <span class="nv">something</span> <span class="nv">with</span> <span class="nv">some-collection</span> <span class="nb">and </span><span class="nv">its</span> <span class="nv">values...</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="map解构">Map解构</h4>
+<p>Map解构在概念上和序列解构一样。它用于以下数据解构的解构</p>
+<ul>
+<li>Clojure的 <code>hash-maps</code> <code>array-maps</code> 和records</li>
+<li>所有实现了 <code>java.util.Map</code> 的集合</li>
+<li>get函数支持的任何值都可以使用索引作为键进行映射解构。一般使用如下参数作为键
+<ul>
+<li>Clojure vectors</li>
+<li>Strings</li>
+<li>Arrays</li>
+</ul>
+</li>
+</ul>
+<p>Clojure基本的map解构案例</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">m</span> <span class="p">{</span><span class="ss">:a</span> <span class="mi">5</span> <span class="ss">:b</span> <span class="mi">6</span>
+	<span class="ss">:c</span> <span class="p">[</span><span class="mi">7</span> <span class="mi">8</span> <span class="mi">9</span><span class="p">]</span>
+	<span class="ss">:d</span> <span class="p">{</span><span class="ss">:e</span> <span class="mi">10</span> <span class="ss">:f</span> <span class="mi">11</span><span class="p">}</span>
+	<span class="s">&#34;foo&#34;</span> <span class="mi">88</span>
+	<span class="mi">42</span> <span class="nv">false</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/m</span>
+
+
+<span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nv">a</span> <span class="ss">:a</span> <span class="nv">b</span> <span class="ss">:b</span><span class="p">}</span> <span class="nv">m</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">a</span> <span class="nv">b</span><span class="p">))</span>
+<span class="c1">;=11</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注意，没有要求解构用于map的查找键必须是关键字，任何类型的值都可以用于查找。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nv">f</span> <span class="s">&#34;foo&#34;</span><span class="p">}</span> <span class="nv">m</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">f</span> <span class="mi">12</span><span class="p">))</span>
+<span class="c1">;=100</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nv">v</span> <span class="mi">42</span><span class="p">}</span> <span class="nv">m</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">if </span><span class="nv">v</span> <span class="mi">1</span> <span class="mi">0</span><span class="p">))</span>
+<span class="c1">;=0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>向量、字符串和数组的索引都可以用于map解构的键。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nv">x</span> <span class="mi">3</span> <span class="nv">y</span> <span class="mi">8</span><span class="p">}</span> <span class="p">[</span><span class="mi">12</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">-18</span> <span class="mi">44</span> <span class="mi">6</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))</span>
+<span class="c1">;=-17</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>map的解构也可以像序列解构那样进行组合解构，下面先把关键字 <code>d</code> 的值取出来，然后再把该map关键字为 <code>e</code> 的值取出来。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">m</span> <span class="p">{</span><span class="ss">:a</span> <span class="mi">5</span> <span class="ss">:b</span> <span class="mi">6</span>
+	<span class="ss">:c</span> <span class="p">[</span><span class="mi">7</span> <span class="mi">8</span> <span class="mi">9</span><span class="p">]</span>
+	<span class="ss">:d</span> <span class="p">{</span><span class="ss">:e</span> <span class="mi">10</span> <span class="ss">:f</span> <span class="mi">11</span><span class="p">}</span>
+	<span class="s">&#34;foo&#34;</span> <span class="mi">88</span>
+	<span class="mi">42</span> <span class="nv">false</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/m</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[{{</span><span class="nv">e</span> <span class="ss">:e</span> <span class="p">}</span> <span class="ss">:d</span><span class="p">}</span> <span class="nv">m</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="nv">e</span><span class="p">))</span>
+<span class="c1">;=20</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>组合使用map和序列解构</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">m</span> <span class="p">{</span><span class="ss">:a</span> <span class="mi">5</span> <span class="ss">:b</span> <span class="mi">6</span>
+	<span class="ss">:c</span> <span class="p">[</span><span class="mi">7</span> <span class="mi">8</span> <span class="mi">9</span><span class="p">]</span>
+	<span class="ss">:d</span> <span class="p">{</span><span class="ss">:e</span> <span class="mi">10</span> <span class="ss">:f</span> <span class="mi">11</span><span class="p">}</span>
+	<span class="s">&#34;foo&#34;</span> <span class="mi">88</span>
+	<span class="mi">42</span> <span class="nv">false</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/m</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[{[</span><span class="nv">x</span> <span class="nv">_</span> <span class="nv">y</span><span class="p">]</span> <span class="ss">:c</span><span class="p">}</span> <span class="nv">m</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))</span>
+<span class="c1">;=16</span>
+
+
+<span class="p">(</span><span class="k">def </span><span class="nv">map-in-vector</span> <span class="p">[</span><span class="s">&#34;Jampes&#34;</span> <span class="p">{</span><span class="ss">:birthday</span> <span class="p">(</span><span class="nf">java.util.Date.</span> <span class="mi">73</span> <span class="mi">1</span> <span class="mi">6</span><span class="p">)}])</span>
+<span class="c1">;=#&#39;chapter1.core/map-in-vector</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nb">name </span><span class="p">{</span><span class="nv">bd</span> <span class="ss">:birthday</span><span class="p">}]</span> <span class="nv">map-in-vector</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">str name </span><span class="s">&#34; was born on &#34;</span> <span class="nv">bd</span><span class="p">))</span>
+<span class="c1">;=&#34;Jampes was born on Tue Feb 06 00:00:00 CST 1973&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>保留解构map的值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nv">r1</span> <span class="ss">:x</span> <span class="nv">r2</span> <span class="ss">:y</span> <span class="ss">:as</span> <span class="nv">randoms</span><span class="p">}</span>
+      <span class="p">(</span><span class="nb">zipmap </span><span class="p">[</span><span class="ss">:x</span> <span class="ss">:y</span> <span class="ss">:z</span><span class="p">]</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="p">(</span><span class="nb">partial rand-int </span><span class="mi">10</span><span class="p">)))]</span>
+  <span class="p">(</span><span class="nb">assoc </span><span class="nv">randoms</span> <span class="ss">:sum</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">r1</span> <span class="nv">r2</span><span class="p">)))</span>
+<span class="c1">;= {:x 0, :y 5, :z 2, :sum 5}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以使用 <code>:or</code> 对来提供默认的映射。如果解构形式指定的键在源集合中不可访问(没有对应的值)，那么会返回map提供的默认值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">m</span> <span class="p">{</span><span class="ss">:a</span> <span class="mi">5</span> <span class="ss">:b</span> <span class="mi">6</span>
+	<span class="ss">:c</span> <span class="p">[</span><span class="mi">7</span> <span class="mi">8</span> <span class="mi">9</span><span class="p">]</span>
+	<span class="ss">:d</span> <span class="p">{</span><span class="ss">:e</span> <span class="mi">10</span> <span class="ss">:f</span> <span class="mi">11</span><span class="p">}</span>
+	<span class="s">&#34;foo&#34;</span> <span class="mi">88</span>
+	<span class="mi">42</span> <span class="nv">false</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/m</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nv">k</span> <span class="ss">:unknow</span> <span class="nv">x</span> <span class="ss">:a</span>
+       <span class="ss">:or</span> <span class="p">{</span><span class="nv">k</span> <span class="mi">50</span><span class="p">}}</span> <span class="nv">m</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">k</span> <span class="nv">x</span><span class="p">))</span>
+<span class="c1">;= 55</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><code>:or</code> 知道map没有对应的值和false(nil或false)的值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nv">opt1</span> <span class="ss">:option</span><span class="p">}</span> <span class="p">{</span><span class="ss">:option</span> <span class="nv">false</span><span class="p">}</span>  <span class="c1">; opt1为false</span>
+	<span class="nv">opt1</span> <span class="p">(</span><span class="nb">or </span><span class="nv">opt1</span> <span class="nv">true</span><span class="p">)</span>   <span class="c1">; opt1为true</span>
+	<span class="p">{</span><span class="nv">opt2</span> <span class="ss">:option</span> <span class="ss">:or</span> <span class="p">{</span><span class="nv">opt2</span> <span class="nv">true</span><span class="p">}}</span> <span class="p">{</span><span class="ss">:option</span> <span class="nv">false</span><span class="p">}]</span>   <span class="c1">; opt2为false</span>
+    <span class="p">{</span><span class="ss">:opt1</span> <span class="nv">opt1</span> <span class="ss">:opt2</span> <span class="nv">opt2</span><span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>将值绑定到键名上。但是每个键名都要输入两次，违背了解构的简洁性。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">chas</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&#34;Chas&#34;</span> <span class="ss">:age</span> <span class="mi">31</span> <span class="ss">:location</span> <span class="s">&#34;Massachusetts&#34;</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/chas</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="nb">name </span><span class="ss">:name</span> <span class="nv">age</span> <span class="ss">:age</span> <span class="nv">location</span> <span class="ss">:location</span><span class="p">}</span> <span class="nv">chas</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">format</span> <span class="s">&#34;%s is %s years old and lives in %s.&#34;</span> <span class="nb">name </span><span class="nv">age</span> <span class="nv">location</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>因此，可以使用 <code>:keys</code> , <code>:strs</code> , <code>:syms</code> 选项来指定键，字符串和符号键(分别)到源map和对应值的名称中，应以let形式无重复绑定。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">chas</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&#34;Chas&#34;</span> <span class="ss">:age</span> <span class="mi">31</span> <span class="ss">:location</span> <span class="s">&#34;Massachusetts&#34;</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/chas</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nb">name </span><span class="nv">age</span> <span class="nv">location</span><span class="p">]}</span> <span class="nv">chas</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">format</span> <span class="s">&#34;%s is %s years old and lives in %s.&#34;</span> <span class="nb">name </span><span class="nv">age</span> <span class="nv">location</span><span class="p">))</span>
+<span class="c1">;= &#34;Chas is 31 years old and lives in Massachusetts.&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>:strs</code> 是当源集合使用字符串或符号作为键时使用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">brian</span> <span class="p">{</span><span class="s">&#34;name&#34;</span> <span class="s">&#34;Brian&#34;</span> <span class="s">&#34;age&#34;</span> <span class="mi">31</span> <span class="s">&#34;location&#34;</span> <span class="s">&#34;British Columbia&#34;</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/brian</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="ss">:strs</span> <span class="p">[</span><span class="nb">name </span><span class="nv">age</span> <span class="nv">location</span><span class="p">]}</span> <span class="nv">brian</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">format</span> <span class="s">&#34;%s is %s year old and lives in %s.&#34;</span> <span class="nb">name </span><span class="nv">age</span> <span class="nv">location</span><span class="p">))</span>
+<span class="c1">;= &#34;Brian is 31 year old and lives in British Columbia.&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>:syms</code> 是当源集合使用符号作为键时使用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">christophe</span> <span class="p">{</span><span class="ss">&#39;name</span> <span class="s">&#34;Christophe&#34;</span> <span class="ss">&#39;age</span> <span class="mi">33</span> <span class="ss">&#39;location</span> <span class="s">&#34;Rhone-Alpes&#34;</span><span class="p">})</span>
+<span class="c1">;= #&#39;chapter1.core/christophe</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="ss">:syms</span> <span class="p">[</span><span class="nb">name </span><span class="nv">age</span> <span class="nv">location</span><span class="p">]}</span> <span class="nv">christophe</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">format</span> <span class="s">&#34;%s is %s years old and lives in %s.&#34;</span> <span class="nb">name </span><span class="nv">age</span> <span class="nv">location</span><span class="p">))</span>
+<span class="c1">;= &#34;Christophe is 33 years old and lives in Rhone-Alpes.&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="将rest序列分解为键值对">将rest序列分解为键值对</h4>
+<p>我们将原向量解构为位置它的元素，其余部分收集到rest序列中。将由交替的键值对组成的其余序列转换为哈希map以便用于解构。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">user-info</span> <span class="p">[</span><span class="s">&#34;robert8990&#34;</span> <span class="mi">2011</span> <span class="ss">:name</span> <span class="s">&#34;Bob&#34;</span> <span class="ss">:city</span> <span class="s">&#34;Boston&#34;</span><span class="p">])</span>
+<span class="c1">;= #&#39;chapter1.core/user-info</span>
+<span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">usernmae</span> <span class="nv">account-year</span> <span class="o">&amp;</span> <span class="nv">extra-info</span><span class="p">]</span> <span class="nv">user-info</span>
+      <span class="p">{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nb">name </span><span class="nv">city</span><span class="p">]}</span> <span class="p">(</span><span class="nb">apply hash-map </span><span class="nv">extra-info</span><span class="p">)]</span>
+  <span class="p">(</span><span class="nf">format</span> <span class="s">&#34;%s is in %s&#34;</span> <span class="nb">name </span><span class="nv">city</span><span class="p">))</span>
+<span class="c1">;= &#34;Bob is in Boston&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>let解构形式提供了一种特殊的组合行为，对map解构出rest序列，然后将rest序列转换为键值对进行映射并组合。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">user-info</span> <span class="p">[</span><span class="s">&#34;robert8990&#34;</span> <span class="mi">2011</span> <span class="ss">:name</span> <span class="s">&#34;Bob&#34;</span> <span class="ss">:city</span> <span class="s">&#34;Boston&#34;</span><span class="p">])</span>
+<span class="c1">;= #&#39;chapter1.core/user-info</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">username</span> <span class="nv">account-year</span> <span class="o">&amp;</span> <span class="p">{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nb">name </span><span class="nv">city</span><span class="p">]}]</span> <span class="nv">user-info</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">format</span> <span class="s">&#34;%s is in %s&#34;</span> <span class="nb">name </span><span class="nv">city</span><span class="p">))</span>
+<span class="c1">;= &#34;Bob is in Boston&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="创建函数fn">创建函数fn</h4>
+<p>Clojure中函数是一等公民。使用 <code>fn</code> 特殊形式来创建它们。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="mi">10</span> <span class="nv">x</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>fn</code> 接受let形式的绑定向量，该向量定义了函数接收的参数名称和数量。</p>
+<p>绑定向量后面的形式组成了函数体。该函数体以隐式 <code>do</code> 形式放置。函数体返回最后一个形式的求值结果。</p>
+<p>可以创建多个所需的参数个数不同的函数(类似重载)，我们可以将函数绑定到变量中以便我们可以使用该变量多次调用函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">strange-adder</span> <span class="p">(</span><span class="k">fn </span><span class="nv">adder-self-reference</span>
+		     <span class="p">([</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nf">adder-self-reference</span> <span class="nv">x</span> <span class="mi">1</span><span class="p">))</span>
+		     <span class="p">([</span><span class="nv">x</span> <span class="nv">y</span><span class="p">]</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))))</span>
+<span class="p">(</span><span class="nf">strange-adder</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c1">;= 带有第二个默认值的单参函数会调用带有两个参数的函数。</span>
+<span class="c1">;= 11</span>
+
+<span class="p">(</span><span class="nf">strange-adder</span> <span class="mi">10</span> <span class="mi">50</span><span class="p">)</span>
+<span class="c1">;= 60</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>函数所需参数的个数绑定向量和函数体的实现必须放在同一个括号内。函数会基于参数的数量去分配调用那个匹配的函数。函数调用会基于参数的数量去选择最接近的函数。</p>
+<p><code>letfn</code> 可以定义同时定义多个函数，这些函数之间可以互相访问。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">lefn</span> <span class="p">[(</span><span class="nf">odd?</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+	     <span class="p">(</span><span class="nf">even?</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">)))</span>
+       <span class="p">(</span><span class="nf">even?</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+	      <span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">zero? </span><span class="nv">n</span><span class="p">)</span>
+		  <span class="p">(</span><span class="nf">odd?</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">))))])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>defn</code> 是一个封装了 <code>def</code> 和 <code>fn</code> 功能的宏，因此可以简洁地定义一个在当前名称空间中命名和注册的函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">strange-adder</span> <span class="p">(</span><span class="k">fn </span><span class="nv">strange-adder</span>
+		     <span class="p">([</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nf">strange-adder</span> <span class="nv">x</span> <span class="mi">1</span><span class="p">))</span>
+		     <span class="p">([</span><span class="nv">x</span> <span class="nv">y</span><span class="p">]</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))))</span>
+
+<span class="c1">;; 等价于</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">strange-adder</span>
+  <span class="p">([</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nf">strange-adder</span> <span class="nv">x</span> <span class="mi">1</span><span class="p">))</span>
+  <span class="p">([</span><span class="nv">x</span> <span class="nv">y</span><span class="p">]</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>定义一个单特性(只接受一种类型参数形式)的函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">redudant-adder</span> <span class="p">(</span><span class="k">fn </span><span class="nv">redudant-adder</span>
+		      <span class="p">[</span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">]</span>
+		      <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">)))</span>
+
+<span class="c1">;; 等价于</span>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">redudant-adder</span>
+  <span class="p">[</span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span> <span class="nv">z</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>defn</code> 形式比 <code>def</code> 和 <code>fn</code> 组合的可读性更强，就不必对调用的函数进行内联处理。</p>
+<h4 id="解构函数参数">解构函数参数</h4>
+<p>由于函数使用了 <code>let</code> 的来绑定函数的参数，函数的参数支持 <code>let</code> 形式的解构。</p>
+<p>可变参数函数使用 <code>&amp;</code> 解构参数列表，获取其余(rest)的参数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">concat-rest</span>
+  <span class="p">[</span><span class="nv">x</span> <span class="o">&amp;</span> <span class="nv">rest</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">apply str </span><span class="p">(</span><span class="nb">butlast </span><span class="nv">rest</span><span class="p">)))</span>
+
+<span class="c1">;= #&#39;chapter1.core/concat-rest</span>
+<span class="c1">;= (concat-rest 0 1 2 3 4)</span>
+<span class="c1">;= &#34;123&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>为其他(rest)参数形成的序列形式可以像任何序列一样被解构。下面的函数解构rest参数使得该函数表现得像隐式定义了零参数特性。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">make-user</span>
+  <span class="p">[</span><span class="o">&amp;</span> <span class="p">[</span><span class="nv">user-id</span><span class="p">]]</span>
+  <span class="p">{</span><span class="ss">:user-id</span> <span class="p">(</span><span class="nb">or </span><span class="nv">user-id</span>
+		<span class="p">(</span><span class="nb">str </span><span class="p">(</span><span class="nf">java.util.UUID/randomUUID</span><span class="p">)))})</span>
+<span class="c1">;= #&#39;chapter1.core/make-user</span>
+
+<span class="c1">;= (make-user)</span>
+<span class="c1">;= {:user-id &#34;f115da8a-39fa-4580-b529-8e6305d99a00&#34;}</span>
+
+<span class="c1">;= (make-user &#34;habi&#34;)</span>
+<span class="c1">;= {:user-id &#34;habi&#34;}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>fn</code> 和 <code>defn</code> 都支持使用关键字参数，并可以用 <code>let</code> 形式的解构语法进行解构。函数接收关键字参数并收集到一个map里面，可以使用map形式的解构。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">make-user</span>
+  <span class="p">[</span><span class="nv">username</span> <span class="o">&amp;</span> <span class="p">{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">email</span> <span class="nv">join-date</span><span class="p">]</span>
+	       <span class="ss">:or</span> <span class="p">{</span><span class="nv">join-date</span> <span class="p">(</span><span class="nf">java.util.Date</span><span class="p">)}}]</span>
+  <span class="p">{</span><span class="ss">:username</span> <span class="nv">username</span>
+   <span class="ss">:join-date</span> <span class="nv">join-date</span>
+   <span class="ss">:email</span> <span class="nv">email</span>
+   <span class="c1">;; 2.592e9 -&gt; one month in ms</span>
+   <span class="ss">:exp-date</span> <span class="p">(</span><span class="nf">java.util.Date.</span> <span class="p">(</span><span class="nb">long </span><span class="p">(</span><span class="nb">+ </span><span class="mf">2.592</span><span class="nv">e9</span> <span class="p">(</span><span class="nf">.getTime</span> <span class="nv">join-date</span><span class="p">))))})</span>
+<span class="c1">;= #&#39;chapter1.core/make-user</span>
+
+<span class="p">(</span><span class="nf">make-user</span> <span class="s">&#34;Bobby&#34;</span>
+	   <span class="ss">:join-date</span> <span class="p">(</span><span class="nf">java.util.Date.</span> <span class="mi">111</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)</span>
+	   <span class="ss">:email</span> <span class="s">&#34;bobby@example.com&#34;</span><span class="p">)</span>
+
+<span class="o">#</span><span class="nv">_</span><span class="p">{</span><span class="ss">:username</span> <span class="s">&#34;Bobby&#34;</span>,
+ <span class="ss">:join-date</span> <span class="o">#</span><span class="nv">inst</span> <span class="s">&#34;2010-12-31T16:00:00.000-00:00&#34;</span>,
+ <span class="ss">:email</span> <span class="s">&#34;bobby@example.com&#34;</span>,
+ <span class="ss">:exp-date</span> <span class="o">#</span><span class="nv">inst</span> <span class="s">&#34;2011-01-30T16:00:00.000-00:00&#34;</span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用关键字参数解构rest参数组成的map。 这里的 <code>[&quot;m&quot; 9]</code> 是关键字参数的名称。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">foo</span>
+  <span class="p">[</span><span class="o">&amp;</span> <span class="p">{</span><span class="nv">k</span> <span class="p">[</span><span class="s">&#34;m&#34;</span> <span class="mi">9</span><span class="p">]}]</span>
+  <span class="p">(</span><span class="nb">inc </span><span class="nv">k</span><span class="p">))</span>
+
+<span class="c1">;= (foo [&#34;m&#34; 9] 19)</span>
+<span class="c1">;= 20</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>fn</code> 提供了对带有函数参数和返回值格式的断言的前置条件和后置条件的支持。</p>
+<p>Clojure函数字面量是指：当你需要定义一个匿名函数，特别是一个非常简单的函数，函数字面量提供方便的语法去做这个事情。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span> <span class="nv">y</span><span class="p">]</span> <span class="p">(</span><span class="nf">Math/pow</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">))</span>
+
+<span class="c1">;= 等价于</span>
+<span class="o">#</span><span class="p">(</span><span class="nf">Math/pow</span> <span class="nv">%1</span> <span class="nv">%2</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>#</code> 只是读取器的一些语法糖，我们可以读取文本代码的内容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">read-string</span> <span class="s">&#34;#(Math/pow %1 %2)&#34;</span><span class="p">)</span>
+
+<span class="c1">;= (fn* [p1__14161# p2__14162#] (Math/pow p1__14161# p2__14162#))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="使用未命名位置符号指定特性和参数">使用未命名位置符号指定特性和参数</h4>
+<p><code>fn</code> 使用了符号同时指定函数特性和参数名称。函数字面量使用位置符号 <code>%</code> 指定参数， <code>%1</code> 表示第一个参数， <code>%2</code> 表示第二个参数。</p>
+<p>最高位置的符号定义了函数的特性，所以如果我们想定义一个接受4个参数的函数，我们只需要在函数的正文引用 <code>%4</code> 。</p>
+<p>在函数字面量中定义参数还有两个原型</p>
+<ul>
+<li>接受单个参数的函数字面量非常常见，你可以仅使用 <code>%</code> 引用函数的第一个参数。 等价于 <code>%1</code> 。</li>
+<li>你可以使用 <code>%&amp;</code> 符号定义可变参数函数并指定剩余参数。</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span> <span class="o">&amp;</span> <span class="nv">rest</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">- </span><span class="nv">x</span> <span class="p">(</span><span class="nb">apply + </span><span class="nv">rest</span><span class="p">)))</span>
+
+<span class="c1">;= 等价于</span>
+<span class="o">#</span><span class="p">(</span><span class="nb">- </span><span class="nv">%</span> <span class="p">(</span><span class="nb">apply + </span><span class="nv">%</span><span class="o">&amp;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="函数字面量不能嵌套">函数字面量不能嵌套</h4>
+<p><code>#(#(+ % %))</code> 是不合法的。</p>
+<h4 id="条件判断if">条件判断if</h4>
+<p><code>if</code> 是Clojure唯一的基本操作符。第一个表达式是逻辑判断表达式，第一个表达式为真时，执行第二个表达式，否则，执行第三个表达式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">if </span><span class="nv">false</span> <span class="s">&#34;unevaluated&#34;</span> <span class="sc">\f</span><span class="p">)</span>
+<span class="c1">;= \f</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>很多宏都在 <code>if</code> 上改进，包括。</p>
+<ul>
+<li><code>when</code></li>
+<li><code>cond</code></li>
+<li><code>if-let</code> 和 <code>when-let</code> ：由 <code>if</code> 和 <code>let</code> 组成的 <code>if-let</code> 和 <code>when</code> 和 <code>let</code> 组成的 <code>when-let</code></li>
+</ul>
+<h4 id="循环">循环</h4>
+<p>Clojure 提供了几个有用且必要的循环设计，包括 <code>doesq</code> 和 <code>dotimes</code> ，所有这些都正在 <code>recur</code> 上构建。</p>
+<p><code>recur</code> 在不占用堆栈空间的情况下将控制权转移到本地的循环头，堆栈空间由循环或者函数定义。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">x</span> <span class="mi">5</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">neg? </span><span class="nv">x</span><span class="p">)</span>
+    <span class="nv">x</span>
+    <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">x</span><span class="p">))))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>循环头由函数建立，这种情况下 <code>recur</code> 使用提供的值作为参数来重新绑定函数的参数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure">      <span class="p">(</span><span class="kd">defn </span><span class="nv">countdown</span>
+	<span class="p">[</span><span class="nv">x</span><span class="p">]</span>
+	<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">zero? </span><span class="nv">x</span><span class="p">)</span>
+	  <span class="ss">:blastoff!</span>
+	  <span class="p">(</span><span class="k">do </span><span class="p">(</span><span class="nb">println </span><span class="nv">x</span><span class="p">)</span>
+	      <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">x</span><span class="p">)))))</span>
+
+      <span class="c1">;= #&#39;chapter1.core/countdown</span>
+<span class="p">(</span><span class="nf">countdown</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1">;5</span>
+<span class="c1">;4</span>
+<span class="c1">;3</span>
+<span class="c1">;2</span>
+<span class="c1">;1</span>
+<span class="c1">;:blastoff!</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>recur</code> 是非常低级的循环递归操作，通常没有必要使用。</p>
+<ul>
+<li>可以使用Clojure核心库的 <code>doseq</code> 和 <code>dotimes</code></li>
+<li>当迭代集合或者序列，函数操作如 <code>map</code> ， <code>reduce</code> ， <code>for</code> 是更好的选择。</li>
+</ul>
+<p>因为 <code>recur</code> 不占用堆栈空间(避免栈溢出错误)，在实现某些递归算法的时候是至关重要的。</p>
+<p>同时，因为 <code>recur</code> 允许你处理数字而不需要重新装箱， <code>recur</code> 在实现数学和面向数据的操作时非常有用。</p>
+<h4 id="指定变量-var">指定变量：var</h4>
+<p>将一个变量的值赋给该变量的符号</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1">;= #&#39;user/x</span>
+<span class="nv">x</span>
+<span class="c1">;= 5</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>然而在某些场景下，你想引用变量的本身，而不是他的值， <code>var</code> 特殊形式可以这样做</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">var </span><span class="nv">x</span><span class="p">)</span>
+<span class="c1">;= #&#39;user/x</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在REPL中可以使用 <code>#'</code> 前缀加上符号来调用 <code>var</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="o">#</span><span class="ss">&#39;x</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="与java交互-dot-和new">与Java交互：.和new</h4>
+<p>所有与Java的交互操作，如实例化，调用静态方法和实例方法，和访问字段，通过 <code>new</code> 和 <code>.</code> 的特殊形式。</p>
+<p>Clojure读取器提供一些语法糖，这使得Java互操作总体上更加简洁，并且在语法上更符合Clojure关于方法调用和实例化的函数位置的概念。</p>
+<p>因此，很少看见 <code>.</code> 和 <code>new</code> 会直接使用，但还会在某些场景遇到。</p>
+<p>常用的Java交互形式的语法糖和解释</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>Java代码</th>
+<th>交互形式语法糖</th>
+<th>等价形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对象实例化</td>
+<td>new java.util.ArrayList(100)</td>
+<td>(java.util.ArrayList. 100)</td>
+<td>(new java.util.ArrayList 100)</td>
+</tr>
+<tr>
+<td>静态方法调用</td>
+<td>Math.pow(2,10)</td>
+<td>(Math/pow 2 10)</td>
+<td>(. Math pow 2 10)</td>
+</tr>
+<tr>
+<td>实例方法调用</td>
+<td>&ldquo;hello&rdquo;.substring(1,3)</td>
+<td>(.substring &ldquo;hello&rdquo; 1 3)</td>
+<td>(. &ldquo;hello&rdquo; substring 1 3)</td>
+</tr>
+<tr>
+<td>访问静态字段</td>
+<td>Integer.MAX_VALUE</td>
+<td>Integer/MAX_VALUE</td>
+<td>(. Integer MAX_VALUE)</td>
+</tr>
+<tr>
+<td>访问实例字段</td>
+<td>someObject.someField</td>
+<td>(.someField someObject)</td>
+<td>(. some-object some-field)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="指定可变-set">指定可变：set!</h4>
+<p>Clojure强调使用不可变数据解构和值，在某些上下文中你就需要对某些状态进行改变。</p>
+<p>Clojure提供 <code>set!</code> 可以用于以下场景</p>
+<ul>
+<li>设置具有非根绑定的变量的本地线程值。</li>
+<li>设置Java字段值。</li>
+<li>设置由 <code>deftype</code> 定义的可变字段的值。</li>
+</ul>
+<h3 id="总结">总结</h3>
+<h4 id="eval">eval</h4>
+<p><code>eval</code> 可以对任意代表有效的Clojure表达式数据提供最大灵活性的求值。</p>
+<p>Clojure REPL的重实现</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">embedded-repl</span>
+  <span class="s">&#34;A naive Clojure REPL implementation. Enter `:quit`
+</span><span class="s">   to exit.&#34;</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">print </span><span class="p">(</span><span class="nb">str </span><span class="p">(</span><span class="nb">ns-name </span><span class="nv">*ns*</span><span class="p">)</span> <span class="s">&#34;&gt;&gt;&gt; &#34;</span><span class="p">))</span>
+  <span class="p">(</span><span class="nf">flush</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">expr</span> <span class="p">(</span><span class="nf">read</span><span class="p">)</span>
+	<span class="nv">value</span> <span class="p">(</span><span class="nb">eval </span><span class="nv">expr</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">not= </span><span class="ss">:quit</span> <span class="nv">value</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">println </span><span class="nv">value</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">recur</span><span class="p">))))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-18
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/clojure/">Clojure</a>
+          <a href="/tags/lisp/">Lisp</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/clojureprogramming/chapter2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Clojure编程-第二章-函数式编程</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/csapp/chapter1/">
+            <span class="next-text nav-default">CSAPP-第一章-计算机系统漫游</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

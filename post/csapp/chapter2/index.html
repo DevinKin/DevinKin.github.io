@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CSAPP-第二章-信息的表示和处理 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第2章-信息的表示和处理 无符号编码基于传统的二进制表示法，表示大于或者等于零的数字。 补码（two&amp;rsquo;s-complement）编码" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/csapp/chapter2/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="CSAPP-第二章-信息的表示和处理" />
+<meta property="og:description" content="第2章-信息的表示和处理 无符号编码基于传统的二进制表示法，表示大于或者等于零的数字。 补码（two&rsquo;s-complement）编码" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/csapp/chapter2/" />
+<meta property="article:published_time" content="2020-04-17T14:36:28+08:00" />
+<meta property="article:modified_time" content="2020-04-17T14:36:28+08:00" />
+<meta itemprop="name" content="CSAPP-第二章-信息的表示和处理">
+<meta itemprop="description" content="第2章-信息的表示和处理 无符号编码基于传统的二进制表示法，表示大于或者等于零的数字。 补码（two&rsquo;s-complement）编码">
+<meta itemprop="dateModified" content="2020-04-17T14:36:28&#43;08:00" />
+<meta itemprop="wordCount" content="5499">
+
+
+
+<meta itemprop="keywords" content="Os,C," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CSAPP-第二章-信息的表示和处理"/>
+<meta name="twitter:description" content="第2章-信息的表示和处理 无符号编码基于传统的二进制表示法，表示大于或者等于零的数字。 补码（two&rsquo;s-complement）编码"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CSAPP-第二章-信息的表示和处理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-17 </span>
+        <div class="post-category">
+            <a href="/categories/os/"> Os </a>
+            </div>
+          <span class="more-meta"> 约 5499 字 </span>
+          <span class="more-meta"> 预计阅读 11 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#信息存储">信息存储</a>
+      <ul>
+        <li><a href="#字数据大小">字数据大小</a></li>
+        <li><a href="#布尔代数简介">布尔代数简介</a></li>
+        <li><a href="#c语言中的位级运算">C语言中的位级运算</a></li>
+        <li><a href="#c语言中的逻辑运算">C语言中的逻辑运算</a></li>
+        <li><a href="#c语言中的移位运算">C语言中的移位运算</a></li>
+      </ul>
+    </li>
+    <li><a href="#整数表示">整数表示</a>
+      <ul>
+        <li><a href="#无符号数的编码">无符号数的编码</a></li>
+        <li><a href="#补码编码">补码编码</a></li>
+        <li><a href="#有符号数的其他表示方法">有符号数的其他表示方法</a></li>
+        <li><a href="#有符号数和无符号数之间的转换">有符号数和无符号数之间的转换</a></li>
+        <li><a href="#c语言中的有符号数和无符号数">C语言中的有符号数和无符号数</a></li>
+        <li><a href="#扩展一个数字的位表示">扩展一个数字的位表示</a></li>
+        <li><a href="#截断数字">截断数字</a></li>
+      </ul>
+    </li>
+    <li><a href="#整数运算">整数运算</a>
+      <ul>
+        <li><a href="#无符号加法">无符号加法</a></li>
+        <li><a href="#补码加法">补码加法</a></li>
+        <li><a href="#补码的非">补码的非</a></li>
+        <li><a href="#无符号乘法">无符号乘法</a></li>
+        <li><a href="#补码乘法">补码乘法</a></li>
+        <li><a href="#乘以常数">乘以常数</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="第2章-信息的表示和处理">第2章-信息的表示和处理</h1>
+<ul>
+<li>
+<p>无符号编码基于传统的二进制表示法，表示大于或者等于零的数字。</p>
+</li>
+<li>
+<p>补码（two&rsquo;s-complement）编码是表示有符号整数的最常见的方式，有符号整数就是可以为正或者为负的数字。</p>
+</li>
+<li>
+<p>浮点数（floating-point）编码是表示实数的科学计数法的以2为基数的版本。</p>
+</li>
+<li>
+<p>C语言的版本和GCC命令行选项</p>
+<table>
+<thead>
+<tr>
+<th align="center">C版本</th>
+<th align="center">GCC命令行选项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">GNU89</td>
+<td align="center">无，-std=gnu89</td>
+</tr>
+<tr>
+<td align="center">ANSI,ISO C90</td>
+<td align="center">-ansi，-std=c89</td>
+</tr>
+<tr>
+<td align="center">ISO C99</td>
+<td align="center">-std=c99</td>
+</tr>
+<tr>
+<td align="center">ISO C11</td>
+<td align="center">-std=c11</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id="信息存储">信息存储</h2>
+<ul>
+<li>大多数计算机使用8位的块，或者字节（byte），作为最小的可寻址的内存单位，而不是访问内存中单独的位。</li>
+<li>机器级程序将内存视为一个非常大的字节数组，称为虚拟内存。</li>
+<li>内存的每个字节都由一个唯一的数字来标识，称为它的地址。所有可能地址的集合就称为虚拟地址空间。</li>
+<li>C编译器还把每个指针和类型信息联系起来，这样可以根据指针值的类型，生成不同的机器级代码来访问存储在指针所指向位置处的值。但是它生成的机器级程序并不包含关于数据类型的信息。</li>
+</ul>
+<h3 id="字数据大小">字数据大小</h3>
+<ul>
+<li>字长：在同一时间中处理二进制数的位数。32位CPU同一时间处理字长为32位二进制数据。</li>
+<li>地址总线的位数决定了CPU可直接寻址的内存空间大小。若地址总线为n位，则寻址空间为$2^{n-10}$字节。</li>
+<li>每台计算机都有一个字长（word size），指明指针数据的标称大小（norminal size）。</li>
+<li>因为虚拟地址是以一个字来编码的，所以字长决定的最重要的系统参数就是虚拟地址空间的最大大小。</li>
+<li>一个字长为$w$位的机器而言，虚拟地址的范围为$0～2^w - 1$，程序最多访问$2^w$个字节。</li>
+<li>可移植性的一个方面是使程序对不同数据类型的确切大小不敏感。</li>
+</ul>
+<h4 id="寻址和字节顺序">寻址和字节顺序</h4>
+<ul>
+<li>对于跨越多字节的程序对象，我们必须建立两个规则
+<ul>
+<li>这个对象的地址是什么？</li>
+<li>在内存中如何排列这些字节？</li>
+</ul>
+</li>
+<li>排列表示一个对象的字节有两个通用的规则
+<ul>
+<li>最低有效字节在前面的方式，称为小端法（little ending）。</li>
+<li>最高有效字节在前面的方式，称为大端法（big ending）。</li>
+</ul>
+</li>
+<li>书写字节序列的自然方式是最低位字节在左边，最高位字节在右边。</li>
+</ul>
+<h3 id="布尔代数简介">布尔代数简介</h3>
+<ul>
+<li>位向量就是固定长度为$w$，由0和1组成的串。</li>
+<li>位向量的运算可以定义成参数的每个对应元素之间的运算。假设$a$和$b$分别表示位向量$[ a_{w-1}，a_{w-2}，\cdots，a_0]$和$[ b_{w-1}，b_{w-2}，\cdots，b_0]$，我们将<code>a&amp;b</code>也定义为一个长度为$w$的位向量，其中第i个元素等于${a_i}$&amp;$b_i$，$0 \le i \lt w$。</li>
+<li>位向量一个很有用的应用就是表示有限集合。我们可以用位向量$[ a_{w-1}，a_{w-2}，\cdots，a_0]$编码任何子集$ A \subseteq {0，1，\cdots，w - 1}$，其中$a_i = 1$当且仅当$i \in A$。</li>
+<li>位向量$a \dot = [01101001]$表示集合$A = { 0,3,5,6}$，位向量$b \dot = [01010101]$表示集合$A = {0,2,4,6}$。</li>
+</ul>
+<h3 id="c语言中的位级运算">C语言中的位级运算</h3>
+<ul>
+<li>C语言位运算符。
+<ul>
+<li><code>~</code>位运算NOT</li>
+<li><code>&amp;</code>位运算AND</li>
+<li><code>|</code>位运算OR</li>
+<li><code>^</code>位运算异或（EXCLUSIVE-OR）</li>
+</ul>
+</li>
+</ul>
+<h3 id="c语言中的逻辑运算">C语言中的逻辑运算</h3>
+<ul>
+<li>C语言的逻辑运算
+<ul>
+<li><code>||</code>逻辑或</li>
+<li><code>&amp;&amp;</code>逻辑与</li>
+<li><code>!</code>逻辑非</li>
+</ul>
+</li>
+<li>逻辑运算与位运算的区别
+<ul>
+<li>逻辑运算对第一个参数求值就能确定表达式的结果，那么逻辑运算符不会对第二个参数求值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="c语言中的移位运算">C语言中的移位运算</h3>
+<ul>
+<li>移位运算是从左至右可结合的，所以$x&laquo;j&laquo;k$等价于$(x&laquo;j)&laquo;k$。</li>
+<li>x左移k位，丢弃最高的k位，并在右端补k个0。</li>
+<li>一般而言，机器支持两种形式的右移
+<ul>
+<li>逻辑右移。逻辑左移在在左端补k个0，得到的结果是$[ 0,\cdots,0,x_{w-1},x_{w-2},\cdots,x_k ]$</li>
+<li>算术右移。在左端补k个最高有效位的值，得到的结果是$ [ x_{w-1},\cdots,x_{w-1},x_{w-2}, \cdots ,x_k]$</li>
+</ul>
+</li>
+<li>几乎所有的编译器/机器组合都对有符号数使用算术右移。</li>
+<li>对于无符号数，右移必须是逻辑的。</li>
+</ul>
+<h2 id="整数表示">整数表示</h2>
+<table>
+<thead>
+<tr>
+<th align="center">符号</th>
+<th align="center">类型</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">$B2T_{w}$</td>
+<td align="center">函数</td>
+<td align="center">二进制转补码</td>
+</tr>
+<tr>
+<td align="center">$B2U_w$</td>
+<td align="center">函数</td>
+<td align="center">二进制转无符号数</td>
+</tr>
+<tr>
+<td align="center">$U2B_w$</td>
+<td align="center">函数</td>
+<td align="center">无符号数转二进制</td>
+</tr>
+<tr>
+<td align="center">$U2T_w$</td>
+<td align="center">函数</td>
+<td align="center">无符号数转补码</td>
+</tr>
+<tr>
+<td align="center">$T2B_w$</td>
+<td align="center">函数</td>
+<td align="center">补码转二进制</td>
+</tr>
+<tr>
+<td align="center">$T2U_w$</td>
+<td align="center">函数</td>
+<td align="center">补码转无符号数</td>
+</tr>
+<tr>
+<td align="center">$TMin_w$</td>
+<td align="center">常数</td>
+<td align="center">最小补码值</td>
+</tr>
+<tr>
+<td align="center">$TMax_w$</td>
+<td align="center">常数</td>
+<td align="center">最大补码值</td>
+</tr>
+<tr>
+<td align="center">$UMax_w$</td>
+<td align="center">常熟</td>
+<td align="center">最大无符号数</td>
+</tr>
+<tr>
+<td align="center">$+_{w}^{t}$</td>
+<td align="center">操作</td>
+<td align="center">补码加法</td>
+</tr>
+<tr>
+<td align="center">$+_w^u$</td>
+<td align="center">操作</td>
+<td align="center">无符号数加法</td>
+</tr>
+<tr>
+<td align="center">$*_w^t$</td>
+<td align="center">操作</td>
+<td align="center">补码乘法</td>
+</tr>
+<tr>
+<td align="center">$-_w^t$</td>
+<td align="center">操作</td>
+<td align="center">补码取反</td>
+</tr>
+<tr>
+<td align="center">$-_w^u$</td>
+<td align="center">操作</td>
+<td align="center">无符号数取反</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>C和C++都支持有符号（默认）和无符号数。Java只支持有符号数。</li>
+</ul>
+<h3 id="无符号数的编码">无符号数的编码</h3>
+<ul>
+<li>
+<p>无符号数编码的定义：对于向量$\vec{x} = [ x_{w-1},x_{w-2}, \cdots, x_0]$
+$$
+B2U_w (\vec{x}) \dot= \sum_{i=0}^{w-1}x_i2^i
+$$</p>
+</li>
+<li>
+<p>符号$\dot=$表示左边被定义为等于右边。</p>
+</li>
+<li>
+<p>函数$B2U_w$将一个长度为$w$的0,1串映射到非符整数。</p>
+</li>
+<li>
+<p>整数值$UMax_w\dot=\sum_{i=0}^{w-1}2^i=2^w - 1$。</p>
+</li>
+<li>
+<p>无符号数的二进制表示有一个很重要的属性，也就是每个介于$0～2^w-1$之间的数都有唯一一个$w$位的值编码。</p>
+</li>
+<li>
+<p>无符号数编码的唯一性：函数$B2U_w$是一个双射。</p>
+</li>
+</ul>
+<h3 id="补码编码">补码编码</h3>
+<ul>
+<li>
+<p>最常见的有符号数的计算机表示方式就是补码形式。</p>
+</li>
+<li>
+<p>补码的定义是，将最高有效位解释为负权（negative weight）。</p>
+</li>
+<li>
+<p>用函数$B2T_w$来表示补码。</p>
+</li>
+<li>
+<p>补码编码的定义：对向量$\vec{x} = [ x_{w-1},x_{w-2}, \cdots, x_0]$
+$$
+B2T_w(\vec{x}) \dot= -x_{w-1}2^{w-1} + \sum_{i=0}^{w-2}x_i2^i
+$$</p>
+</li>
+<li>
+<p>补码能表示的最小值$TMin_w\dot=-2^{w-1}$。</p>
+</li>
+<li>
+<p>补码能表示的最大值$TMax_w\dot=\sum_{i=0}^{w-2}2^i=2^{w-1}-1$。</p>
+</li>
+<li>
+<p>补码编码的唯一性：函数$B2T_w$是一个双射。</p>
+</li>
+<li>
+<p>补码的范围是不对称的：$|TMin| = | TMax | + 1$。</p>
+</li>
+<li>
+<p>最大无符号数值刚好比补码的最大值的两倍大一点：$Uax_w=2TMax_w + 1$。</p>
+</li>
+<li>
+<p>补码表示中所有表示负数的位模式在无符号表示中都变成了整数。$-1$和$UMax$有同样的位表示（一个全1的串）。</p>
+</li>
+</ul>
+<h3 id="有符号数的其他表示方法">有符号数的其他表示方法</h3>
+<ul>
+<li>
+<p>反码（Ones&rsquo;s COmplement）：除了最高有效位的权是$-(2^{w-1} - 1)$而不是$-2^{w-1}$，它和补码是一样的。
+$$
+B2O_w(\vec{x})\dot=-x_{w-1}(2^{w-1} - 1) + \sum_{i=0}^{w-2}x_i2_i
+$$</p>
+</li>
+<li>
+<p>原码（Sign-Magnitude）：最高有效位是符号位，用来确定剩下的位应该取负权还是正权。
+$$
+B2S_w(\vec{x})\dot=(-1)^{x_{w-1}} \cdot(\sum_{i=0}^{w-2}x_i2_i)
+$$</p>
+</li>
+<li>
+<p>这两种方法对于数字0有两种不同的编码方式。把$[00\cdots0]$都解释为+0。而值$-0$在在原码中表示$[10\cdots0]$，在反码中表示为$[11\cdots1]$。</p>
+</li>
+</ul>
+<h3 id="有符号数和无符号数之间的转换">有符号数和无符号数之间的转换</h3>
+<ul>
+<li>
+<p>对大多数C语言的实现，处理同样字长的有符号数和无符号数之间的转换的一般规则是：数值可能改变，但位模式不变。</p>
+</li>
+<li>
+<p>给定 $0 \le x \le UMax_w$范围内的一个整数x，函数 $U2B_w(x)$ 会给出$x$唯一的$w$位无符号表示。</p>
+</li>
+<li>
+<p>给定$TMin_w \le x \le TMax_w$，函数$T2B_w(x)$会给出$x$的唯一$w$位补码表示。</p>
+</li>
+<li>
+<p>将函数$T2U_w$定义为$T2U_w \dot=B2U_w(T2B_w(x))$</p>
+</li>
+<li>
+<p>将函数$U2T_w$定义为$U2T_w \dot = B2T_w(U2B_w(x))$</p>
+</li>
+<li>
+<p>函数$U2T$描述了无符号数和补码的转换，函数$T2U$描述了补码和无符号数的转换。</p>
+</li>
+<li>
+<p>补码转无符号数原理</p>
+<ul>
+<li>对于满足$TMin_w \le x \le TMax_w$的x有：</li>
+</ul>
+<p>$$
+T2U_w(x) =
+\begin{cases}
+x+2^w,&amp; {x \lt 0}\<br>
+x,&amp; {x \ge 0}
+\end{cases}
+$$</p>
+</li>
+<li>
+<p>无符号数转换为补码1</p>
+<ul>
+<li>对于满足$0 \le u \le UMax_w$的$u$有：
+$$
+U2T_w(u)=
+\begin{cases}
+u,&amp; {u \le UMax_w}\<br>
+u-2^w,&amp; {u \gt TMax_w}
+\end{cases}
+$$</li>
+</ul>
+</li>
+</ul>
+<h3 id="c语言中的有符号数和无符号数">C语言中的有符号数和无符号数</h3>
+<ul>
+<li>
+<p>要创建一个无符号常量，必须加上后缀字符 =='U'== 或者 =='u'==</p>
+</li>
+<li>
+<p>输出测试代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp"></span>  
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="n">u</span> <span class="o">=</span> <span class="mi">2147483648</span><span class="p">;</span>
+  
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;x = %u = %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;u = %u = %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">u</span><span class="p">);</span>
+<span class="p">}</span>
+  
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>C语言对同时包含有符号和无符号数表达式的处理方式如下：</p>
+<ul>
+<li>当执行一个运算时，它的一个运算数是有符号的而另一个是无符号的，那么C语言会隐式地将有符号参数强制类型转换为无符号数来执行运算。</li>
+</ul>
+</li>
+<li>
+<p>例如 ==-1 &lt; 0U==，返回的是false。因为左边的操作数隐式地转换为无符号数。</p>
+</li>
+</ul>
+<h3 id="扩展一个数字的位表示">扩展一个数字的位表示</h3>
+<ul>
+<li>要将一个无符号数转换为一个更大的数据类型，只要简单的在表示的开头加0，这种运算被称为零扩展(zero extension)。</li>
+<li>无符号数的零扩展原理
+<ul>
+<li>定义宽度$w$的位向量$\vec{u}=[u_{w-1},u_{w-2},&hellip;,u_0]$和宽度为$w'$ 的位向量$\vec{u&rsquo;}=[u_{w-1},u_{w-2},&hellip;,u_0]$，其中$w'&gt;w$，则$B2U_w(\vec{u})=B2U_w(\vec{u&rsquo;})$</li>
+</ul>
+</li>
+<li>要将一个补码转换为更大的数据类型，可以执行一个符号扩展(sign extension)，在表大中添加最高有效位的值。</li>
+<li>补码的符号扩展原理
+<ul>
+<li>定义宽度$w$的位向量$\vec{x}=[x_{w-1},x_{w-2},&hellip;,x_0]$和宽度为$w'$ 的位向量$\vec{x&rsquo;}=[x_{w-1},x_{w-2},&hellip;,x_0]$，其中$w'&gt;w$，则$B2T_w(\vec{x})=B2T_w(\vec{x&rsquo;})$</li>
+</ul>
+</li>
+</ul>
+<p>零扩展和符号扩展代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">typedef</span>  <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">byte_pointer</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">show_bytes</span><span class="p">(</span><span class="n">byte_pointer</span> <span class="n">start</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">size_t</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&#34; %.2x&#34;</span><span class="p">,</span> <span class="n">start</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">show_int</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">show_float</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">show_pointer</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">));</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">test_show_bytess</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ival</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">fval</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">val</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">pval</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ival</span><span class="p">;</span>
+    <span class="n">show_int</span><span class="p">(</span><span class="n">ival</span><span class="p">);</span>
+    <span class="n">show_float</span><span class="p">(</span><span class="n">fval</span><span class="p">);</span>
+    <span class="n">show_pointer</span><span class="p">(</span><span class="n">pval</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">short</span> <span class="n">sx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">12345</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">usx</span> <span class="o">=</span> <span class="n">sx</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">sx</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">ux</span> <span class="o">=</span> <span class="n">usx</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;sx = %d:</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">sx</span><span class="p">);</span>
+    <span class="n">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">sx</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">short</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;usx = %u:</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">usx</span><span class="p">);</span>
+    <span class="n">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">usx</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">short</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;x = %d:</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="n">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;ux = %u:</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">ux</span><span class="p">);</span>
+    <span class="n">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">ux</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="截断数字">截断数字</h3>
+<ul>
+<li>截断一个数字可能会改变它的值，溢出的一种形式。</li>
+<li>截断无符号数原理：令$\vec{x}$等于位向量$[ x_{w-1},x_{w-2}, \cdots, x_0]$，而$\vec{x}&lsquo;$是将其截断位k位的结果$\vec{x}'[ x=_{k-1},x_{k-2}, \cdots, x_0]$，令$x=B2U_w(\vec{x})$，$x'=B2U_w(\vec{x&rsquo;})$。则$x'=x \mod 2^k$。</li>
+<li>补码的截断也具有相似的属性，只不过要将最高位转换为符号位。</li>
+<li>截断补码数值原理：令$\vec{x}$等于位向量$[ x_{w-1},x_{w-2}, \cdots, x_0]$，而$\vec{x}&lsquo;$是将其截断位k位的结果$\vec{x}'[ x=_{k-1},x_{k-2}, \cdots, x_0]$，令$x=B2U_w(\vec{x})$，$x'=U2T_k(\vec{x&rsquo;})$。则$x'=U2T_k(x \mod 2^k)$。</li>
+</ul>
+<h2 id="整数运算">整数运算</h2>
+<h3 id="无符号加法">无符号加法</h3>
+<ul>
+<li>
+<p>让参数$x$$和$$y$定义运算$+_w^u$，其中$0 \le x,y \lt2^w$，该操作是把整数和$x+y$截断为$w$位得到的结果。</p>
+</li>
+<li>
+<p>无符号加法原理：对满足$0 \le x ,y\lt2^w$的$x$和$y$有：
+$$
+x+_w^u=\begin{cases}
+x+y,&amp; {x+y \lt 2^w}\<br>
+x+y-2^w,&amp; {2^w \le x+y \lt 2^{w+1}}
+\end{cases}
+$$</p>
+</li>
+<li>
+<p>无符号数取反原理：对于满足$0 \le x \lt2^w$的任意$x$，其$w$位的无符号逆元$-^u_wx$由下式给出
+$$
+-^u_wx=\begin{cases}
+x,&amp; {x = 0}\<br>
+2^w-x,&amp; {x \gt 0}
+\end{cases}
+$$</p>
+</li>
+<li>
+<p>检测无符号加法数中的溢出：通过观察发现$x+y\ge x$，因此如果$s$没有溢出，我们能够肯定$s \ge x$。另一方面，如果$s$确实溢出了，我们就有$s=x+y-2^w$。假设$y&lt;2^w$，我们就有$y-2^w \lt 0$，因此$s=x+(y-2^w)&lt;x$。</p>
+</li>
+</ul>
+<h3 id="补码加法">补码加法</h3>
+<ul>
+<li>
+<p>定义$x+^t_wy$为整数和$x+y$被截断为$w$位的结果，并将这个结果看作是补码数。</p>
+</li>
+<li>
+<p>补码加法的原理：对于满足$-2^{w-1} \le x,y \le 2^{w-1}-1$的整数x和y，有：
+$$
+x+^t_wy=\begin{cases}
+x+y-2^w,&amp; {2^{w-1} \le x+y}\<br>
+2^w-x,&amp; {-2^{w-1} \le x+y \lt 2^{w-1}} \<br>
+x+y+2^w, &amp; {x+y \lt -2^{w-1}}
+\end{cases}
+$$</p>
+</li>
+<li>
+<p>检测补码加法中的溢出：对满足$TMin_w \le x,y\le T_w$的$x$和$y$，令$s \dot=x+^t_wy$。</p>
+<ul>
+<li>当且仅当$x&gt;0,y&gt;0$，但$s \le0$，计算$s$发生令正溢出。</li>
+<li>当且仅当$x&lt;0,y&lt;0$，但$s\ge0$时，计算$s$发生了负溢出。</li>
+</ul>
+</li>
+</ul>
+<h3 id="补码的非">补码的非</h3>
+<ul>
+<li>
+<p>补码的非原理：对满足$TMin_w \le x \le TMax_w$的$x$，其补码的非$-^t_wx$由下式给出
+$$
+-^t_wx=\begin{cases}
+TMin_w,&amp; {x=TMin_w}\<br>
+-x,&amp; {x&gt;TMin_w} \<br>
+x+y+2^w, &amp; {x+y \lt -2^{w-1}}
+\end{cases}
+$$</p>
+</li>
+<li>
+<p>执行位级补码的第一种方法是对每一位求补，再对结果加1。在C语言中，对任意整数值，计算表达式<code>-x</code>与<code>~x+1</code>得到的结果完全一样。</p>
+</li>
+<li>
+<p>字长为4的示例</p>
+<table>
+<thead>
+<tr>
+<th align="center">x</th>
+<th align="center">~x</th>
+<th align="center">incr(~x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">[0101] 5</td>
+<td align="center">[1010] 6</td>
+<td align="center">[1011] 5</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>计算一个补码非的第二种方法是建立在将位向量分为两部分的基础上的。</p>
+<ul>
+<li>
+<p>假设k是最右边的1的位置，因而$x$的位级表示形如$[x_{w-1},x_{w-2},\cdots,x_{k+1},1,0,\cdots,0]$，$x\ne0$就可以找到这样的$k$</p>
+</li>
+<li>
+<p>补码的非值写成二进制格式就是$[\sim x_{w-1},\sim x_{w-2},\cdots,\sim x_{k+1},1,0,\cdots,0]$，对$k$左边的所有位取反。</p>
+<table>
+<thead>
+<tr>
+<th align="center">x</th>
+<th align="center">-x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">[011<strong>1</strong>] 7</td>
+<td align="center">[100<strong>1</strong>] -7</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="无符号乘法">无符号乘法</h3>
+<ul>
+<li>
+<p>C语言中的无符号乘法被定义位产生$w$位的值，就是$2w$位的整数乘积的低$w$位表示的值。我们将这个值表示为$x*^u_wy$。</p>
+</li>
+<li>
+<p>无符号乘法原理：对满足$0 \le x,y\le UMax_w$的$x$和$y$有：
+$$
+x*_w^uy=(x\cdot y) \mod 2^w
+$$</p>
+</li>
+</ul>
+<h3 id="补码乘法">补码乘法</h3>
+<ul>
+<li>
+<p>C语言中的有符号乘法是通过将$2w$位的乘积截断为$w$位来实现的，我们将这个值表示为$x*^t_wy$。</p>
+</li>
+<li>
+<p>将一个补码数截断为$w$位相当于先计算该值模$2w$，然后把无符号数转换为补码。</p>
+</li>
+<li>
+<p>补码乘法原理：对于满足$TMin_w \le x, y \le TMax_w$的$x$和$y$有：
+$$
+x*^t_wy=U2T_w((x\cdot y) \mod 2^w)
+$$</p>
+</li>
+<li>
+<p>对于无符号和补码乘法来说，乘法运算的位级表示都是一样的。</p>
+</li>
+</ul>
+<h3 id="乘以常数">乘以常数</h3>
+<ul>
+<li>大多数机器上，整数乘法指令相当慢，因此，编译器使用了一项重要的优化，试着用移位和加法运算的组合来代替乘以常数因子的乘法。</li>
+<li>乘以2的幂原理：设$x$为位模式$[x_{w-1},x_{w-2}, \cdots , x_0]$表示的无符号整数。那么对于任何$k \ge 0$，我们都认为$[x_{w-1},x_{w-2}, \cdots , x_0,0,\cdots,0]$给出了$x2^k$的$w+k$位的无符号表示，这里右边增加了$k$个0。</li>
+<li>左移一个数值等价于执行一个与2的幂相乘的无符号乘法。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/os/">Os</a>
+          <a href="/tags/c/">C</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/csapp/chapter1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">CSAPP-第一章-计算机系统漫游</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

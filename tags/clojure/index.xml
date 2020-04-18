@@ -6,54 +6,117 @@
     <description>Recent content in Clojure on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 18 Apr 2020 12:03:28 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 18 Apr 2020 15:21:50 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/tags/clojure/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Clojure趣学指南-第六章</title>
-      <link>https://devinkin.github.io/post/chapter6/</link>
-      <pubDate>Sat, 18 Apr 2020 12:03:28 +0800</pubDate>
+      <title>Clojure趣学指南-第九章-结合数据和代码</title>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter9/</link>
+      <pubDate>Sat, 18 Apr 2020 15:21:50 +0800</pubDate>
       
-      <guid>https://devinkin.github.io/post/chapter6/</guid>
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter9/</guid>
+      <description>第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns</description>
+    </item>
+    
+    <item>
+      <title>Clojure趣学指南-第八章-宏</title>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter8/</link>
+      <pubDate>Sat, 18 Apr 2020 15:21:38 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter8/</guid>
+      <description>第八章-宏 要理解宏, 你需要Clojure中的不同时间 读取时 宏展开时 编译时 运行时 宏在编译时执行它们的大部分工作. 代码是数据,数据即代码 在Clo</description>
+    </item>
+    
+    <item>
+      <title>Clojure趣学指南-第七章-函数式编程</title>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter7/</link>
+      <pubDate>Sat, 18 Apr 2020 15:21:03 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter7/</guid>
+      <description>第7章-函数式编程 各种形式的函数 函数是一等公民 一等的概念 他可以根据需要创建 他可以作为数据结构存储 他可以作为参数传递给函数 他可以作为函数的返回</description>
+    </item>
+    
+    <item>
+      <title>Clojure趣学指南-第六章</title>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter6/</link>
+      <pubDate>Sat, 18 Apr 2020 15:20:50 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter6/</guid>
       <description>第6章 不可变性介绍 什么是不可变性 不可变的首要原则: 不可变对象的所有可能属性都在构造时候定义好, 并且不能被改变. 不可变性能做什么 不可变式编程,</description>
     </item>
     
     <item>
       <title>Clojure趣学指南-第五章</title>
-      <link>https://devinkin.github.io/post/chapter5/</link>
-      <pubDate>Sat, 18 Apr 2020 12:02:30 +0800</pubDate>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter5/</link>
+      <pubDate>Sat, 18 Apr 2020 15:20:27 +0800</pubDate>
       
-      <guid>https://devinkin.github.io/post/chapter5/</guid>
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter5/</guid>
       <description>第5章-集合类型 Clojure提供了丰富的集合复合数据类型, 包括: 向量(vectors) 列表(lists) 队列(queues) 集合(sets</description>
     </item>
     
     <item>
       <title>Clojure趣学指南-第四章</title>
-      <link>https://devinkin.github.io/post/chapter4/</link>
-      <pubDate>Sat, 18 Apr 2020 12:01:10 +0800</pubDate>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter4/</link>
+      <pubDate>Sat, 18 Apr 2020 15:20:06 +0800</pubDate>
       
-      <guid>https://devinkin.github.io/post/chapter4/</guid>
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter4/</guid>
       <description>第4章 标量数据类型代表这下列类型之一的值. number symbol keyword string character 截断 Clojure默认会截断, 因此如果需要高精度浮点数, 需要在浮点数后面加上 M 字符. 晋升</description>
     </item>
     
     <item>
       <title>Clojure趣学指南-第三章</title>
-      <link>https://devinkin.github.io/post/chapter3/</link>
-      <pubDate>Sat, 18 Apr 2020 12:00:38 +0800</pubDate>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter3/</link>
+      <pubDate>Sat, 18 Apr 2020 15:19:55 +0800</pubDate>
       
-      <guid>https://devinkin.github.io/post/chapter3/</guid>
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter3/</guid>
       <description>第3章 真值 在Clojure中被看作为真有以下 1 2 3 4 (if true :truthy :falsey) ;:truthy (if [] :truthy :falsey) ;:truthy (if nil :truthy :falsey) ;:falsey (if false :truthy :falsey) ;:falsey 不要创建布尔对象 不要这么做 1 2 3 4 (def evil-false (Boolean. &amp;#34;false&amp;#34;)) (= false evil-false)</description>
     </item>
     
     <item>
       <title>Clojure趣学指南-第二章</title>
-      <link>https://devinkin.github.io/post/chapter2/</link>
-      <pubDate>Sat, 18 Apr 2020 11:58:18 +0800</pubDate>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter2/</link>
+      <pubDate>Sat, 18 Apr 2020 15:18:09 +0800</pubDate>
       
-      <guid>https://devinkin.github.io/post/chapter2/</guid>
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter2/</guid>
       <description>第2章 基本数据类型 数字类型(整形, 浮点型, 有理数) 符号 关键字(总是对自身求值) 字符串(字符序列) 字符(前缀是 \) 集合类型 列表(使用括号包围),</description>
+    </item>
+    
+    <item>
+      <title>Clojure编程-第四章-并发和并行</title>
+      <link>https://devinkin.github.io/post/clojureprogramming/chapter4/</link>
+      <pubDate>Sat, 18 Apr 2020 15:12:02 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/clojureprogramming/chapter4/</guid>
+      <description>第4章-并发和并行 通过时间和空间转移计算 Clojure提供了许多实体， 它封装了用于控制何时以及如何执行计算的分离用例 delays futures promises 只有 futures 与并发有关,</description>
+    </item>
+    
+    <item>
+      <title>Clojure编程-第三章-集合和数据结构</title>
+      <link>https://devinkin.github.io/post/clojureprogramming/chapter3/</link>
+      <pubDate>Sat, 18 Apr 2020 15:11:07 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/clojureprogramming/chapter3/</guid>
+      <description>集合和数据结构 Maps 、 vectors 、 sets 和 lists 是Clojure提供的基本数据结构。以下是这些数据结构的字面表示形式 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 &amp;#39;(a b :name 12.5) ;;list [&amp;#39;a &amp;#39;b</description>
+    </item>
+    
+    <item>
+      <title>Clojure编程-第二章-函数式编程</title>
+      <link>https://devinkin.github.io/post/clojureprogramming/chapter2/</link>
+      <pubDate>Sat, 18 Apr 2020 15:10:11 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/clojureprogramming/chapter2/</guid>
+      <description>第2章-函数式编程 函数式编程(FP)在软件工程开发是一个模糊的概念。 什么是函数式编程 函数式编程是一个涵盖了许多语言级基本类型和功能的总称，不</description>
+    </item>
+    
+    <item>
+      <title>Clojure编程-第一章-Clojure简介</title>
+      <link>https://devinkin.github.io/post/clojureprogramming/chapter1/</link>
+      <pubDate>Sat, 18 Apr 2020 15:09:35 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/clojureprogramming/chapter1/</guid>
+      <description>第1章-Clojure简介 关键字 关键字使用一个冒号标识。 如果关键字里面包含 / ，表示这个关键字是命名空间限定的。 如果一个关键字以两个冒号 :: 开头</description>
     </item>
     
   </channel>

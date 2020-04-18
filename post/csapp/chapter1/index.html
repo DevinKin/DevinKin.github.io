@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CSAPP-第一章-计算机系统漫游 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第1章-计算机系统漫游 程序被其他程序翻译成不同的格式 GCC编译器驱动程序读取源程序文件，并把它翻译成一个可执行目标文件。这个翻译过程可分为4" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/csapp/chapter1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="CSAPP-第一章-计算机系统漫游" />
+<meta property="og:description" content="第1章-计算机系统漫游 程序被其他程序翻译成不同的格式 GCC编译器驱动程序读取源程序文件，并把它翻译成一个可执行目标文件。这个翻译过程可分为4" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/csapp/chapter1/" />
+<meta property="article:published_time" content="2020-04-17T14:36:28+08:00" />
+<meta property="article:modified_time" content="2020-04-17T14:36:28+08:00" />
+<meta itemprop="name" content="CSAPP-第一章-计算机系统漫游">
+<meta itemprop="description" content="第1章-计算机系统漫游 程序被其他程序翻译成不同的格式 GCC编译器驱动程序读取源程序文件，并把它翻译成一个可执行目标文件。这个翻译过程可分为4">
+<meta itemprop="dateModified" content="2020-04-17T14:36:28&#43;08:00" />
+<meta itemprop="wordCount" content="3134">
+
+
+
+<meta itemprop="keywords" content="Os,C," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CSAPP-第一章-计算机系统漫游"/>
+<meta name="twitter:description" content="第1章-计算机系统漫游 程序被其他程序翻译成不同的格式 GCC编译器驱动程序读取源程序文件，并把它翻译成一个可执行目标文件。这个翻译过程可分为4"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CSAPP-第一章-计算机系统漫游</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-17 </span>
+        <div class="post-category">
+            <a href="/categories/os/"> Os </a>
+            </div>
+          <span class="more-meta"> 约 3134 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#程序被其他程序翻译成不同的格式">程序被其他程序翻译成不同的格式</a></li>
+    <li><a href="#处理器读并解释存储在内存的指令">处理器读并解释存储在内存的指令</a>
+      <ul>
+        <li><a href="#系统的硬件组成">系统的硬件组成</a></li>
+      </ul>
+    </li>
+    <li><a href="#高速缓存至关重要">高速缓存至关重要</a></li>
+    <li><a href="#操作系统管理硬件">操作系统管理硬件</a>
+      <ul>
+        <li><a href="#进程">进程</a></li>
+        <li><a href="#线程">线程</a></li>
+        <li><a href="#虚拟内存">虚拟内存</a></li>
+        <li><a href="#文件">文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#重要主题">重要主题</a>
+      <ul>
+        <li><a href="#amdahl定律">Amdahl定律</a></li>
+        <li><a href="#并发和并行">并发和并行</a></li>
+        <li><a href="#计算机系统中抽象的重要性">计算机系统中抽象的重要性</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="第1章-计算机系统漫游">第1章-计算机系统漫游</h1>
+<h2 id="程序被其他程序翻译成不同的格式">程序被其他程序翻译成不同的格式</h2>
+<ul>
+<li>GCC编译器驱动程序读取源程序文件，并把它翻译成一个可执行目标文件。这个翻译过程可分为4个阶段（预处理阶段，编译阶段，汇编阶段，链接阶段）完成，这4个阶段的程序（预处理器，编译器，汇编器，链接器）一起构成了编译系统。</li>
+<li>预处理阶段。预处理器（cpp）根据以字符<code>#</code>开头的命令，修改原始的C程序。经过预处理器处理的文件以<code>.i</code>作为文件扩展名。
+<ul>
+<li>可以通过<code>gcc -E hello.c -o hello.i</code>获取预处理后的文件。</li>
+</ul>
+</li>
+<li>编译阶段。编译器（ccl）讲文本文件<code>hello.i</code>翻译成文本文件<code>hello.s</code>，包含一个汇编语言程序。
+<ul>
+<li>可以通过<code>gcc -S hello.i -o hello.s</code>获取编译后的汇编文件。</li>
+</ul>
+</li>
+<li>汇编阶段。汇编器（as）将<code>hello.s</code>翻译成机器语言指令，把这些机器语言指令打包成一种==可重定位目标程序（relocatable object program）==的格式，并将结果保存到目标文件<code>hello.o</code>中<code>hello.o</code>文件是一个二进制文件。
+<ul>
+<li>可以通过<code>gcc -c hello.s -o hello.o</code>获取汇编后的二进制文件。</li>
+</ul>
+</li>
+<li>链接阶段。链接器（ld）负责合并了将<code>printf.o</code>文件合并到<code>hello.o</code>程序中，结果得到了<code>hello</code>文件，它是一个==可执行目标文件==，可以被加载到内存中，由系统执行
+<ul>
+<li>可以通过<code>gcc hello.o -o hello</code>获得链接后的可执行文件</li>
+</ul>
+</li>
+</ul>
+<h2 id="处理器读并解释存储在内存的指令">处理器读并解释存储在内存的指令</h2>
+<h3 id="系统的硬件组成">系统的硬件组成</h3>
+<ul>
+<li>总线，它携带信息字节并负责在各个部件间传递。
+<ul>
+<li>总线常常被设计为传送定长的字节块，也就是字（word）。字中的字节数（即字长）是一个基本的系统参数，各个系统都不尽相同。</li>
+<li>现在大多数机器字长要么是4个字节，要么是8个字节。</li>
+</ul>
+</li>
+<li>I/O设备，是系统于外部时间联系的通道。
+<ul>
+<li>每个I/O设备都通过一个控制器或适配器与I/O总线相连。</li>
+</ul>
+</li>
+<li>主存，它是一个临时存储设备。
+<ul>
+<li>从物理上来说，主存是一个由一组动态随机存取存储器（DRAM）芯片组成的。</li>
+<li>从逻辑上来说，存储器是一个线性的字节数组，每个字节都有其唯一的地址（数组索引）。</li>
+</ul>
+</li>
+<li>处理器（中央处理单元），是解释存储在主存中指令的引擎，处理器的核心是一个大小为一个字的存储设备（或寄存器），称为程序计数器（PC）。
+<ul>
+<li>任何时刻，PC都指向主存中的某条机器语言指令（即含有该条指令的地址）。</li>
+<li>寄存器文件是一个小的存储设备，由一些单个字长的寄存器组成，每个寄存器都有唯一的名字。逻辑单元（ALU）计算新的数据和地址值。</li>
+<li>CPU在指令的要求下可能会执行下列操作
+<ul>
+<li>加载：从主存复制一个字节或一个字到寄存器，以覆盖原来的内容。</li>
+<li>存储：从寄存器复制一个字节或者一个字到主存的某个位置，以覆盖这个位置上原来的内容。</li>
+<li>操作：把两个寄存器的内容复制到逻辑单元（ALU），ALU对这两个字做算术运算，并将结果放到一个寄存器中，以覆盖该寄存器中原来的内容。</li>
+<li>跳转：从指令本身中抽取一个字，并将这个字复制到程序计数器（PC）中，以覆盖PC中原来的值。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="高速缓存至关重要">高速缓存至关重要</h2>
+<ul>
+<li>针对处理器与主存之间的差异，系统设计者采用了更小更快的存储设备，称为高速缓存存储器（cache memory），简称高速缓存。</li>
+<li>位于处理器芯片上的L1高速缓存的容量可以达到数万字节，访问速度几乎和访问寄存器文件一样快。</li>
+<li>一个容量为数十万到数百万字节的更大的L2高速缓存通过一条特殊的总线连接到处理器。进程通过访问L2高速缓存的时间要比访问L1高速缓存的时间长5倍，但这仍比访问主存的时间快5~10倍。</li>
+<li>L1和L2高速缓存是用一种叫做静态随机访问存储器（SRAM）的硬件技术实现的。</li>
+</ul>
+<h2 id="操作系统管理硬件">操作系统管理硬件</h2>
+<ul>
+<li>操作系统有两个基本功能
+<ul>
+<li>防止硬件被失控的应用程序滥用。</li>
+<li>向应用程序提供简单一致的机制来控制复杂而又通常大不相同的低级硬件设备。</li>
+</ul>
+</li>
+<li>操作系统通过几个基本的抽象概念来实现这两个功能。
+<ul>
+<li>进程：对处理器、主存和I/O设备的抽象表示。</li>
+<li>虚拟内存：对主存和磁盘I/O设备的抽象表示。</li>
+<li>文件：文件是对I/O设备的抽象表示。</li>
+</ul>
+</li>
+</ul>
+<h3 id="进程">进程</h3>
+<ul>
+<li>进程是操作系统对一个正在运行的程序的一种抽象。</li>
+<li>一个系统上可以运行多个进程，而每个进程都好像在独占使用硬件。</li>
+<li>并发运行，则是说一个进程的指令和另一个进程的指令是交错执行的。</li>
+<li>无论是在单核还是多核系统中，一个CPU看上去都像是在并发地执行多个进程，这是处理器在进程间切换来实现的。</li>
+<li>操作系统实现这种交错执行的机制称为==上下文切换==。</li>
+<li>操作系统保持和跟踪==进程运行所需的所有状态信息==。这种状态，称为==上下文==。</li>
+<li>在任何一个时刻，单处理器系统都只能执行一个进程的代码。</li>
+<li>当操作系统决定要把控制权从当前进程转移到某个新进程时，就会进行==上下文切换==，即保存当前进程的上下文，恢复新进程的上下文，然后将控制权传递到新进程。</li>
+<li>从一个进程到另一个进程的转换是由==操作系统的内核（kernel）==管理的。</li>
+<li>内核是操作系统代码常驻主存的部分，当应用程序需要操作系统的某些操作时，比如读写文件，它就是执行一条特殊的系统调用（system call）指令，将控制权传递给内核，然后内核执行被请求的操作并返回应用程序。</li>
+<li>内核不是一个独立的进程，它是系统管理全部进程所用代码和数据结构的集合。</li>
+</ul>
+<h3 id="线程">线程</h3>
+<ul>
+<li>在现代操作系统中，一个进程实际上可以由多个称为线程的执行单元组成。</li>
+<li>每个线程都运行在==进程的上下文==中，并==共享同样的代码和全局数据==。</li>
+</ul>
+<h3 id="虚拟内存">虚拟内存</h3>
+<ul>
+<li>虚拟内存是一个抽象概念，它为每个进程提供了一个假象，即每个进程都在独占地使用主存。</li>
+<li>每个进程看到的内存都是一致的，称为==虚拟 地址空间==。</li>
+<li>进程的虚拟地址空间
+<ul>
+<li>程序代码和数据。</li>
+<li>堆。</li>
+<li>共享库。</li>
+<li>栈，位于用户虚拟地址空间顶部是用户栈，编译器用它来实现函数调用。</li>
+<li>内核虚拟内存。地址空间顶部的区域是为内核保留的。不允许应用程序读写这个区域的内容或者直接调用内核代码定义的函数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件">文件</h3>
+<ul>
+<li>文件就是字节序列。</li>
+<li>每个I/O设备，包括磁盘，键盘，显示器甚至网络，都可以看成是文件。</li>
+</ul>
+<h2 id="重要主题">重要主题</h2>
+<h3 id="amdahl定律">Amdahl定律</h3>
+<ul>
+<li>
+<p>对系统的某个部分加速时，其对系统整体性能的影响取决于==该部分的重要性和加速程度==。</p>
+</li>
+<li>
+<p>若系统执行某应用程序所需时间为$T_{old}$。假设系统某部分所需执行时间与系统所需执行时间的比例为a，而该部分性能提升比例为k。即该部分初始所需执行时间为$aT_{old}$，系统其他部分所需执行时间为$(1-a)T_{old}$。该部分现在所需的时间为$aT_{old}/k$。因此，总的执行时间为
+$$
+T_new = (1 - a)T_{old} + (aT_{old}) / k = T_{old}[ (1 - a) + a/k ]
+$$</p>
+</li>
+<li>
+<p>由此，计算加速比$S = T_{old} / T_{new}$为
+$$
+S = \frac{1}{(1 - a) + a/k}
+$$</p>
+</li>
+</ul>
+<h3 id="并发和并行">并发和并行</h3>
+<ul>
+<li>并发（concurrency）指一个同时具有多个活动的系统。</li>
+<li>并行（parallelism）指的是使用并发来使一个系统运行得更快。并行可以在计算机系统的多个抽象层次上使用。</li>
+<li>多核处理器是将多个CPU（称为核）集成到一个集成电路芯片上。每个核都有自己的L1和L2高速缓存。</li>
+<li>超线程，有时候称为多线程（simultaneous multi-threading）是一项允许一个CPU执行多个控制流的技术。</li>
+<li>多核处理器的使用可以从两方面提高系统性能。
+<ul>
+<li>它减少了在执行多个任务时模拟并发的需要。</li>
+<li>它可以使应用程序运行得更快，要求程序以多线程方式来书写。</li>
+</ul>
+</li>
+<li>在较低的抽象层次上，现代处理器可以同时执行多条指令的属性称为指令级并行。</li>
+<li>如果处理器可以达到比一个周期一条指令更快的执行速率，就称之为超标量（super-scalar）处理器。</li>
+<li>在最低层次上，许多现代处理器拥有特殊的硬件，允许一条指令产生多个可以并行执行的操作，这种方式称为单指令、多数据，即SIMD并行。</li>
+</ul>
+<h3 id="计算机系统中抽象的重要性">计算机系统中抽象的重要性</h3>
+<ul>
+<li>文件是对I/O设备的抽象。</li>
+<li>虚拟内存是对程序存储器的抽象。</li>
+<li>进程是对一个正在运行的程序的抽象。</li>
+<li>虚拟机是对整个计算机的抽象，包括操作系统、处理器和程序。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/os/">Os</a>
+          <a href="/tags/c/">C</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/clojureprogramming/chapter1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Clojure编程-第一章-Clojure简介</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/csapp/chapter2/">
+            <span class="next-text nav-default">CSAPP-第二章-信息的表示和处理</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Clojure趣学指南-第八章-宏 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第八章-宏 要理解宏, 你需要Clojure中的不同时间 读取时 宏展开时 编译时 运行时 宏在编译时执行它们的大部分工作. 代码是数据,数据即代码 在Clo" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/thejoyofclojure2th/chapter8/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Clojure趣学指南-第八章-宏" />
+<meta property="og:description" content="第八章-宏 要理解宏, 你需要Clojure中的不同时间 读取时 宏展开时 编译时 运行时 宏在编译时执行它们的大部分工作. 代码是数据,数据即代码 在Clo" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/thejoyofclojure2th/chapter8/" />
+<meta property="article:published_time" content="2020-04-18T15:21:38+08:00" />
+<meta property="article:modified_time" content="2020-04-18T15:21:38+08:00" />
+<meta itemprop="name" content="Clojure趣学指南-第八章-宏">
+<meta itemprop="description" content="第八章-宏 要理解宏, 你需要Clojure中的不同时间 读取时 宏展开时 编译时 运行时 宏在编译时执行它们的大部分工作. 代码是数据,数据即代码 在Clo">
+<meta itemprop="dateModified" content="2020-04-18T15:21:38&#43;08:00" />
+<meta itemprop="wordCount" content="940">
+
+
+
+<meta itemprop="keywords" content="Clojure,Lisp," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Clojure趣学指南-第八章-宏"/>
+<meta name="twitter:description" content="第八章-宏 要理解宏, 你需要Clojure中的不同时间 读取时 宏展开时 编译时 运行时 宏在编译时执行它们的大部分工作. 代码是数据,数据即代码 在Clo"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Clojure趣学指南-第八章-宏</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-18 </span>
+        <div class="post-category">
+            <a href="/categories/clojure/"> Clojure </a>
+            </div>
+          <span class="more-meta"> 约 940 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第八章-宏">第八章-宏</a>
+      <ul>
+        <li><a href="#代码是数据-数据即代码">代码是数据,数据即代码</a></li>
+        <li><a href="#定义控制结构">定义控制结构</a></li>
+        <li><a href="#使用宏去控制符号解析时间">使用宏去控制符号解析时间</a></li>
+        <li><a href="#使用宏管理资源">使用宏管理资源</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="第八章-宏">第八章-宏</h2>
+<p>要理解宏, 你需要Clojure中的不同时间</p>
+<ul>
+<li>读取时</li>
+<li>宏展开时</li>
+<li>编译时</li>
+<li>运行时</li>
+</ul>
+<p>宏在编译时执行它们的大部分工作.</p>
+<h3 id="代码是数据-数据即代码">代码是数据,数据即代码</h3>
+<p>在Clojure中, 文本形式和程序的实际形式没有区别. 当程序是组成程序的数据时, 你就可以编写程序来编写程序.</p>
+<p>Clojure的内置函数 <code>eval</code> 接受一个代表Clojure表达式的数据结构, 对它进行求值并返回结果.</p>
+<h4 id="单引号-反引号的连接">单引号, 反引号的连接</h4>
+<p>符号的英文含义</p>
+<ul>
+<li>unquote是 <code>~</code> 号. 求值</li>
+<li>syntax-quote(single back-quote)是 <code>`</code> 号. 保护不被求值.</li>
+<li>quote是单引号 <code>'</code> .</li>
+<li>unquote-splice是 <code>~@</code> .</li>
+</ul>
+<h4 id="宏的经验法则">宏的经验法则</h4>
+<p>编写和使用宏的经验法则</p>
+<ul>
+<li>如果函数可以实现, 不要编写宏. 保留宏来提供语法抽象或创建绑定形式.</li>
+<li>编写一个示例宏</li>
+<li>自己手动展开你写的示例宏</li>
+<li>使用 <code>macroexpand</code> <code>macroexpand-1</code> 和 <code>clojure.walk/macroexpand-all</code> 库来理解你实现的宏</li>
+<li>在REPL中试验</li>
+<li>尽可能将复杂的宏分解为更小的函数</li>
+</ul>
+<h3 id="定义控制结构">定义控制结构</h3>
+<h4 id="不使用单引号定义控制结构">不使用单引号定义控制结构</h4>
+<p>由于 <code>defmacro</code> 的参数在传递给宏之前不会求值, 他们可以被视作纯数据结构进行操纵和分析.</p>
+<p>unless宏详解</p>
+<ul>
+<li>反引号 <code>`</code> 允许 <code>if</code> 形式充当任何宏展开时都将成为表达式的模板(保护表达式不被求值).</li>
+<li>~ 和 ~@ 提供了condition和body的值(对表达式内的参数进行求值)</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defmacro </span><span class="nv">unless</span> <span class="p">[</span><span class="nv">condition</span> <span class="o">&amp;</span> <span class="nv">body</span><span class="p">]</span>
+  <span class="o">`</span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">not </span><span class="o">~</span><span class="nv">condition</span><span class="p">)</span>
+     <span class="p">(</span><span class="k">do </span><span class="o">~@</span><span class="nv">body</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用宏去控制符号解析时间">使用宏去控制符号解析时间</h3>
+<p>函数接受并返回在运行时对应用程序有意义的值, 而宏接受并返回在编译时有意义的代码形式.</p>
+<p>任意符号都有其微妙之处, 这取决于他们是否完全限定, 它的解析时间和它的词汇上下文. 这些因素在任何特定情况下都可以通过适当的 <code>quote</code> 和 <code>unquoting</code> 加以控制.</p>
+<p>capture术语指的是宏系统潜在的问题, 其中编译时生成的名称和运行时存在的名称冲突.</p>
+<p>Clojure宏大部分情况下在名称捕获是安全的, 因为在宏展开时使用 syntax-quote 尝试解析符号.</p>
+<p>Clojure确实提供了一种方法来延迟符号解析, 以便在执行上下文中解析它.</p>
+<p>Clojure提供了类似的宏, 它们可以嵌套和替换anaphora(回指)的需要.</p>
+<ul>
+<li><code>if-let</code></li>
+<li><code>when-let</code></li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defmacro </span><span class="nv">awhen</span> <span class="p">[</span><span class="nv">expr</span> <span class="o">&amp;</span> <span class="nv">body</span><span class="p">]</span>
+  <span class="o">`</span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="o">~</span><span class="ss">&#39;it</span> <span class="o">~</span><span class="nv">expr</span><span class="p">]</span>
+     <span class="p">(</span><span class="k">if </span><span class="o">~</span><span class="ss">&#39;it</span>
+       <span class="p">(</span><span class="nf">do</span>
+	 <span class="p">(</span><span class="nb">println </span><span class="o">~</span><span class="ss">&#39;it</span><span class="p">)</span>
+	 <span class="o">~@</span><span class="nv">body</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nf">awhen</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span> <span class="p">(</span><span class="nf">it</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">awhen</span> <span class="nv">nil</span> <span class="p">(</span><span class="nb">println </span><span class="s">&#34;Will never get here&#34;</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">awhen</span> <span class="mi">1</span> <span class="p">(</span><span class="nf">awhen</span> <span class="mi">2</span> <span class="p">[</span><span class="nv">it</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="nf">walk/macroexpand-all</span> <span class="o">&#39;</span><span class="p">(</span><span class="nf">awhen</span> <span class="mi">1</span> <span class="p">(</span><span class="nf">awhen</span> <span class="mi">2</span> <span class="p">[</span><span class="nv">it</span><span class="p">])))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用宏管理资源">使用宏管理资源</h3>
+<p><code>with-open</code> 宏接受可关闭对象并绑定到一个名称中, 在程序结尾自动调用 <code>.close</code> 方法.</p>
+<p>实例宏</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">joc-www</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">-&gt; </span><span class="s">&#34;http://www.baidu.com&#34;</span> <span class="nv">URL.</span>
+      <span class="nv">.openStream</span>
+      <span class="nv">InputStreamReader.</span>
+      <span class="nv">BufferedReader.</span><span class="p">))</span>
+
+
+<span class="p">(</span><span class="kd">defmacro </span><span class="nv">with-resource</span> <span class="p">[</span><span class="nb">binding </span><span class="nv">close-fn</span> <span class="o">&amp;</span> <span class="nv">body</span><span class="p">]</span>
+  <span class="o">`</span><span class="p">(</span><span class="k">let </span><span class="o">~</span><span class="nv">binding</span>
+     <span class="p">(</span><span class="nf">try</span>
+       <span class="p">(</span><span class="k">do </span><span class="o">~@</span><span class="nv">body</span><span class="p">)</span>
+       <span class="p">(</span><span class="nf">finally</span>
+	 <span class="p">(</span><span class="o">~</span><span class="nv">close-fn</span> <span class="o">~</span><span class="p">(</span><span class="nb">binding </span><span class="mi">0</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">stream</span> <span class="p">(</span><span class="nf">joc-www</span><span class="p">)]</span>
+  <span class="p">(</span><span class="nf">with-resource</span> <span class="p">[</span><span class="nv">page</span> <span class="nv">stream</span><span class="p">]</span>
+    <span class="o">#</span><span class="p">(</span><span class="nf">.close</span> <span class="nv">%</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">.readLine</span> <span class="nv">page</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-18
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/clojure/">Clojure</a>
+          <a href="/tags/lisp/">Lisp</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/thejoyofclojure2th/chapter9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Clojure趣学指南-第九章-结合数据和代码</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/thejoyofclojure2th/chapter7/">
+            <span class="next-text nav-default">Clojure趣学指南-第七章-函数式编程</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Clojure趣学指南-第五章 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第5章-集合类型 Clojure提供了丰富的集合复合数据类型, 包括: 向量(vectors) 列表(lists) 队列(queues) 集合(sets" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/thejoyofclojure2th/chapter5/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Clojure趣学指南-第五章" />
+<meta property="og:description" content="第5章-集合类型 Clojure提供了丰富的集合复合数据类型, 包括: 向量(vectors) 列表(lists) 队列(queues) 集合(sets" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/thejoyofclojure2th/chapter5/" />
+<meta property="article:published_time" content="2020-04-18T15:20:27+08:00" />
+<meta property="article:modified_time" content="2020-04-18T15:20:27+08:00" />
+<meta itemprop="name" content="Clojure趣学指南-第五章">
+<meta itemprop="description" content="第5章-集合类型 Clojure提供了丰富的集合复合数据类型, 包括: 向量(vectors) 列表(lists) 队列(queues) 集合(sets">
+<meta itemprop="dateModified" content="2020-04-18T15:20:27&#43;08:00" />
+<meta itemprop="wordCount" content="2586">
+
+
+
+<meta itemprop="keywords" content="Clojure,Lisp," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Clojure趣学指南-第五章"/>
+<meta name="twitter:description" content="第5章-集合类型 Clojure提供了丰富的集合复合数据类型, 包括: 向量(vectors) 列表(lists) 队列(queues) 集合(sets"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Clojure趣学指南-第五章</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-18 </span>
+        <div class="post-category">
+            <a href="/categories/clojure/"> Clojure </a>
+            </div>
+          <span class="more-meta"> 约 2586 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第5章-集合类型">第5章-集合类型</a>
+      <ul>
+        <li><a href="#持久性-序列和复合">持久性,序列和复合</a></li>
+        <li><a href="#向量">向量</a></li>
+        <li><a href="#列表-clojure代码形式数据结构">列表: Clojure代码形式数据结构</a></li>
+        <li><a href="#持久性队列">持久性队列</a></li>
+        <li><a href="#持久化集合">持久化集合</a></li>
+        <li><a href="#映射">映射</a></li>
+        <li><a href="#归纳总结-查找集合中项的位置">归纳总结: 查找集合中项的位置</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="第5章-集合类型">第5章-集合类型</h2>
+<p>Clojure提供了丰富的集合复合数据类型, 包括:</p>
+<ul>
+<li>向量(vectors)</li>
+<li>列表(lists)</li>
+<li>队列(queues)</li>
+<li>集合(sets)</li>
+<li>映射(maps)</li>
+</ul>
+<h3 id="持久性-序列和复合">持久性,序列和复合</h3>
+<p>Clojure中持久性集合允许你保存其状态的历史版本, 并且保证所有版本具有相同的更新和查找复杂性保证.</p>
+<h4 id="序列项及他们的意义">序列项及他们的意义</h4>
+<p>一个连续的集合(sequential collection)是一个拥有一系列的值而不重新排序的集合.</p>
+<p>Clojure有一个简单的API叫 <code>seq</code> 用于操纵集合, 它由两个函数组成 <code>first</code> 和 <code>rest</code></p>
+<ul>
+<li>如果集合有任意值, <code>first</code> 返回第一个元素, 否则返回 <code>nil</code> .</li>
+<li><code>rest</code> 返回除了第一个元素以外的其余元素组成的序列, 如果没有其余项, <code>rest</code> 返回空序列并且不为 <code>nil</code> .</li>
+</ul>
+<p>序列的简短概念</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>简短的描述</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collection</td>
+<td>一种复合数据类型</td>
+<td>[1 2], {:a 1}, #{1, 2}, and lists and arrays</td>
+</tr>
+<tr>
+<td>Sequential</td>
+<td>有序值序列</td>
+<td>[1 2 3 4], (1 2 3 4)</td>
+</tr>
+<tr>
+<td>Sequence</td>
+<td>可能存在或不存在的连续集合</td>
+<td>(map a-fun a-collection)的结果</td>
+</tr>
+<tr>
+<td>Seq</td>
+<td>用于操纵集合的API</td>
+<td>first, rest, nil, and ()</td>
+</tr>
+<tr>
+<td>clojure.core/seq</td>
+<td>一个返回实现seq API的函数</td>
+<td>(seq []);;=&gt; nil and (seq [1 2]) ;;=&gt; (1,2)</td>
+</tr>
+</tbody>
+</table>
+<p><code>seq</code> 函数接受广泛的集合对象的变体, 并返回集合本身.</p>
+<ul>
+<li>如果集合为空, <code>seq</code> 返回 <code>nil</code></li>
+</ul>
+<p>Clojure将集合数据类型分为3种逻辑类别或分区</p>
+<ul>
+<li>顺序集合</li>
+<li>映射</li>
+<li>集合</li>
+</ul>
+<p>如果两个顺序集合有相同的顺序和值, <code>=</code> 会返回 <code>true</code> , 即使他们的具体实现不同.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span> <span class="o">&#39;</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">))</span>
+<span class="c1">;= true</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果两个集合有相同的值, 但一个是顺序集合另一个不是, <code>=</code> 返回 <code>false</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">= </span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span> <span class="o">#</span><span class="p">{</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>事实上, 所有实现了 <code>java.util.List</code> 都属于顺序集合类别中.</p>
+<p>一个对象想要成为序列所需要做的就是支持两个函数 <code>first</code> 和 <code>rest</code> .</p>
+<h3 id="向量">向量</h3>
+<h4 id="创建向量">创建向量</h4>
+<p>向量字面量是方括号包围的, 因为列表形式使用小括号, 容易造成误会以为是函数调用, 所以 <code>let</code> 形式的绑定使用向量.</p>
+<p><code>vec</code> 可以从集合中创建一个向量.</p>
+<p><code>into</code> 函数可以将值放入向量中.</p>
+<ul>
+<li>如果想返回值是向量, 第一个参数必须是向量, 第二个参数可以是任意的连续集合.</li>
+</ul>
+<p><code>vector</code> 函数接受参数并创建一个向量.</p>
+<p>使用 <code>vector-of</code> 函数可以规定在向量内部存储原始类型, 接受关键字 <code>:int</code> , <code>:long</code> , <code>:float</code> , <code>:double</code> , <code>:byte</code> , <code>:short</code> , <code>:boolean</code> 或 <code>:char</code> 作为参数并返回空的向量.</p>
+<h4 id="更大的向量">更大的向量</h4>
+<p>向量相对于列表更有效率在以下3个方面</p>
+<ul>
+<li>在集合的末尾添加或移除元素.</li>
+<li>通过数字索引访问或者改变集合内部项</li>
+<li>逆序遍历集合</li>
+</ul>
+<p>向量查找函数</p>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>nth</th>
+<th>get</th>
+<th>向量作为函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>如果向量为nil</td>
+<td>返回nil</td>
+<td>返回nil</td>
+<td>抛出一个异常</td>
+</tr>
+<tr>
+<td>如果索引超过范围</td>
+<td>抛出异常</td>
+<td>返回nil</td>
+<td>抛出异常</td>
+</tr>
+<tr>
+<td>支持找不到的参数</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody>
+</table>
+<p>可以使用 <code>assoc</code> 函数改变向量中的任意一项.</p>
+<p><code>replace</code> 函数均可以工作在向量和序列(可使用map作为参数替换多个值), 但给定向量, 他会使用 <code>assoc</code> 替换并返回新的向量.</p>
+<p><code>get-in</code> , <code>assoc-in</code> 和 <code>update-in</code> 工作在嵌套的向量或者是映射.</p>
+<h4 id="向量作为栈">向量作为栈</h4>
+<p><code>conj</code> 函数添加一个元素进向量(进栈).</p>
+<p><code>pop</code> 函数从栈中移除一个元素(出栈).</p>
+<p>因为向量是不可变的, <code>pop</code> 返回新的向量.</p>
+<p><code>peek</code> 函数获取向量作为栈的最顶端的元素.</p>
+<p>上述的函数和操作都是常量时间.</p>
+<p>任何实现了 <code>clojure.lang.IPersistentStack</code> 都可以使用 <code>conj</code> , <code>pop</code> 和 <code>peek</code> .</p>
+<p>Clojure的列表也实现了 <code>clojure.lang.IPersistentStack</code> , 但是对应的函数操作列表左边的元素而不是右边的.</p>
+<h4 id="使用向量替代逆运算">使用向量替代逆运算</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">stric-mapl</span> <span class="p">[</span><span class="nv">f</span> <span class="nv">coll</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">coll</span> <span class="nv">coll</span>, <span class="nv">acc</span> <span class="nv">nil</span><span class="p">]</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">empty?</span> <span class="nv">coll</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">reverse </span><span class="nv">acc</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+	     <span class="p">(</span><span class="nb">cons </span><span class="p">(</span><span class="nf">f</span> <span class="p">(</span><span class="nb">first </span><span class="nv">coll</span><span class="p">))</span> <span class="nv">acc</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nf">strict-map</span> <span class="nb">- </span><span class="p">(</span><span class="nb">range </span><span class="mi">5</span><span class="p">))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">strict-map2</span> <span class="p">[</span><span class="nv">f</span> <span class="nv">coll</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">coll</span> <span class="nv">coll</span>, <span class="nv">acc</span> <span class="p">[]]</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">empty?</span> <span class="nv">coll</span><span class="p">)</span>
+      <span class="nv">acc</span>
+      <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+	     <span class="p">(</span><span class="nb">conj </span><span class="nv">acc</span> <span class="p">(</span><span class="nf">f</span> <span class="p">(</span><span class="nb">first </span><span class="nv">coll</span><span class="p">)))))))</span>
+
+<span class="p">(</span><span class="nf">strict-map2</span> <span class="nb">- </span><span class="p">(</span><span class="nb">range </span><span class="mi">5</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="子向量">子向量</h4>
+<p><code>subvec</code> 函数可以获取向量的子向量, 可以指定开始和结束位置.</p>
+<p><code>subvec</code> 返回的向量和原向量的引用相同.</p>
+<p>子向量的子向量的引用保持最初原向量的引用, 而不是中间子向量.</p>
+<h4 id="向量作为映射项">向量作为映射项</h4>
+<p>映射项本身就是一个向量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">vector? </span><span class="p">(</span><span class="nb">first </span><span class="p">{</span><span class="ss">:width</span> <span class="mi">10</span>, <span class="ss">:height</span> <span class="mi">20</span>, <span class="ss">:depth</span> <span class="mi">15</span><span class="p">}))</span>
+
+<span class="p">(</span><span class="nb">doseq </span><span class="p">[[</span><span class="nv">dimension</span> <span class="nv">amount</span><span class="p">]</span> <span class="p">{</span><span class="ss">:width</span> <span class="mi">10</span>, <span class="ss">:height</span> <span class="mi">20</span>, <span class="ss">:depth</span> <span class="mi">15</span><span class="p">}]</span>
+  <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nb">str </span><span class="p">(</span><span class="nb">name </span><span class="nv">dimension</span><span class="p">)</span> <span class="s">&#34;: &#34;</span> <span class="nv">amount</span> <span class="s">&#34; inches&#34;</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>一个MapEntry是他自身的类型, 并且提供两个函数 <code>:key</code> 和 <code>:val</code> 接受他们的键和值.</p>
+<h3 id="列表-clojure代码形式数据结构">列表: Clojure代码形式数据结构</h3>
+<p>Clojure的 <code>PersistenLists</code> 是最简单的Clojoure持久化集合类型.</p>
+<h4 id="像lisp一样的列表">像Lisp一样的列表</h4>
+<p>使用conj构建的列表是同构的, 它的下一个链上的所有对象都保证是列表, 而使用cons构建的序列只保证结果是某种连续集合.</p>
+<p>使用 <code>conj</code> 要获取较大的list.</p>
+<p>Clojure没有点对列表, <code>cdr</code> 是值.</p>
+<p>所有的序列打印都是圆括号, 这不说明他们有相同的类型和行为.</p>
+<h4 id="列表作为栈">列表作为栈</h4>
+<p>Clojure的 <code>IPersistentStack</code> 接口提供了 <code>peek</code> 和 <code>pop</code> 函数.</p>
+<p><code>next</code> 和 <code>rest</code> 的参数是空列表时是合法的, <code>pop</code> 会抛出异常.</p>
+<p><code>next</code> 处理1个项的列表时返回 <code>nil</code> , 而 <code>rest</code> 和 <code>pop</code> 返回空列表.</p>
+<h4 id="列表不是什么">列表不是什么</h4>
+<p>列表不适用于存储项以及搜索, 搜索某个项用向量比较好(内存连续分布).</p>
+<h3 id="持久性队列">持久性队列</h3>
+<p><code>conj</code> 函数往队列尾添加元素. <code>pop</code> 从队列头移除元素. <code>peek</code> 返回当前队列头的元素.</p>
+<p>Clojure的 <code>PersistentQueue</code> 是一个集合, 不是工作流机制.</p>
+<h4 id="队列的创建">队列的创建</h4>
+<p>一个创建空队列的实例 <code>clojure.lang.PersistentQueue/EMPTY</code></p>
+<p>打印队列的结果可以通过提供一个 <code>print-method</code> 多重方法.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defmethod </span><span class="nv">print-method</span> <span class="nv">clojure.lang.PersistentQueue</span>
+  <span class="p">[</span><span class="nv">q</span>, <span class="nv">w</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">print-method</span> <span class="ss">&#39;&lt;-</span> <span class="nv">w</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">print-method</span> <span class="p">(</span><span class="nb">seq </span><span class="nv">q</span><span class="p">)</span> <span class="nv">w</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">print-method</span> <span class="ss">&#39;-&lt;</span> <span class="nv">w</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="持久化集合">持久化集合</h3>
+<p>Clojure集合类似于数学上的集合, 他们是未排序的包含唯一元素的集合.</p>
+<h4 id="clojure集合基本属性">Clojure集合基本属性</h4>
+<p>集合是他们元素自身的函数, 并且返回匹配的元素项或 <code>nil</code>.</p>
+<p>集合元素可以使用 <code>get</code> 函数访问, 如果值存在返回集合的值, 否则返回 <code>nil</code>, 可以提供第三个参数, 当不存在时返回该值.</p>
+<p>Clojure集合值支持不同类型.</p>
+<p>Clojure集合的相等, 如果不同类型集合, 且集合都为空.</p>
+<h4 id="排序集合">排序集合</h4>
+<p><code>sorted-set</code> 函数可以用于排序集合.</p>
+<h4 id="clojure-dot-set命名空间">clojure.set命名空间</h4>
+<p><code>intersection</code> 交集函数. <code>union</code> 并集函数. <code>difference</code> 差集函数.</p>
+<p>差集函数返回第一个集合排除第二个集合元素的集合.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">clojure.set/difference</span> <span class="o">#</span><span class="p">{</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">}</span> <span class="o">#</span><span class="p">{</span><span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">})</span>
+<span class="c1">;= #{1 2}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="映射">映射</h3>
+<h4 id="hashmap">HashMap</h4>
+<p>可以使用 <code>hash-map</code> 函数创建HashMap.</p>
+<p>Clojure的HashMap支持不同类型的键.</p>
+<p>映射是他们键的函数, 可以直接使用映射加键名获取对应的值.</p>
+<p><code>seq</code> 函数接受map参数并返回键值对的向量组成的集合.</p>
+<p><code>into</code> 函数可以往map中添加键值对.</p>
+<p><code>zipmap</code> 接受键序列和值序列, 并组合成一个map.</p>
+<h4 id="sortedmap">SortedMap</h4>
+<p><code>sorted-map</code> 函数创建排序映射.</p>
+<p><code>sorted-map-by</code> 函数创建排序映射, 并设置排序规则.</p>
+<p>SortedMap不支持不同类型的键, 默认排序函数使用 <code>compare</code>.</p>
+<p>SortedMap和HashMap在处理数字类型键时方式不同, 由于SortedMap键类型必须相同, 且默认使用 <code>compare</code> 比较键所以会出现如下结果.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">assoc </span><span class="p">{</span><span class="mi">1</span> <span class="ss">:int</span><span class="p">}</span> <span class="mf">1.0</span> <span class="ss">:float</span><span class="p">)</span>
+<span class="c1">;= {1 :int, 1.0 :float}</span>
+<span class="p">(</span><span class="nb">assoc </span><span class="p">(</span><span class="nb">sorted-map </span><span class="mi">1</span> <span class="ss">:int</span><span class="p">)</span> <span class="mf">1.0</span> <span class="ss">:float</span><span class="p">)</span>
+<span class="c1">;= {1 :float}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="使用数组映射保持插入顺序">使用数组映射保持插入顺序</h4>
+<p><code>array-map</code> 函数可以创建数组映射, 插入顺序保持不变.</p>
+<p>避免改变底层映射实现的操作, 建议使用抽象map构建程序, 因为Clojure已经帮你优化并使用不同的实现.</p>
+<h3 id="归纳总结-查找集合中项的位置">归纳总结: 查找集合中项的位置</h3>
+<p><code>pos</code> 函数实现的目标</p>
+<ul>
+<li>工作在任意集合类型, 并返回值对应的索引.</li>
+<li>对于连续集合, 返回数字类型索引, 对于映射和集合, 返回关联键索引.</li>
+<li>其余情况返回 <code>nil</code>.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">pos</span> <span class="p">[</span><span class="nv">pred</span> <span class="nv">coll</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">for </span><span class="p">[[</span><span class="nv">i</span> <span class="nv">v</span><span class="p">]</span> <span class="p">(</span><span class="nb">index </span><span class="nv">coll</span><span class="p">)</span> <span class="ss">:when</span> <span class="p">(</span><span class="nf">pred</span> <span class="nv">v</span><span class="p">)]</span>
+    <span class="nv">i</span><span class="p">))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nb">index </span><span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">cond</span>
+    <span class="p">(</span><span class="nb">map? </span><span class="nv">coll</span><span class="p">)</span> <span class="p">(</span><span class="nb">seq </span><span class="nv">coll</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">set?</span> <span class="nv">coll</span><span class="p">)</span> <span class="p">(</span><span class="nb">map vector </span><span class="nv">coll</span> <span class="nv">coll</span><span class="p">)</span>
+    <span class="ss">:else</span> <span class="p">(</span><span class="nb">map vector </span><span class="p">(</span><span class="nb">iterate inc </span><span class="mi">0</span><span class="p">)</span> <span class="nv">coll</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-18
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/clojure/">Clojure</a>
+          <a href="/tags/lisp/">Lisp</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/thejoyofclojure2th/chapter6/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Clojure趣学指南-第六章</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/thejoyofclojure2th/chapter4/">
+            <span class="next-text nav-default">Clojure趣学指南-第四章</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

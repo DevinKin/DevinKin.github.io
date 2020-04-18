@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Clojure趣学指南-第九章-结合数据和代码 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/thejoyofclojure2th/chapter9/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Clojure趣学指南-第九章-结合数据和代码" />
+<meta property="og:description" content="第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/thejoyofclojure2th/chapter9/" />
+<meta property="article:published_time" content="2020-04-18T15:21:50+08:00" />
+<meta property="article:modified_time" content="2020-04-18T15:21:50+08:00" />
+<meta itemprop="name" content="Clojure趣学指南-第九章-结合数据和代码">
+<meta itemprop="description" content="第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns">
+<meta itemprop="dateModified" content="2020-04-18T15:21:50&#43;08:00" />
+<meta itemprop="wordCount" content="2349">
+
+
+
+<meta itemprop="keywords" content="Clojure,Lisp," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Clojure趣学指南-第九章-结合数据和代码"/>
+<meta name="twitter:description" content="第9章-结合数据和代码 命名空间 从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤 第一级是命名空间 第二级是变量名映射 创建命名空间 使用 ns"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Clojure趣学指南-第九章-结合数据和代码</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-18 </span>
+        <div class="post-category">
+            <a href="/categories/clojure/"> Clojure </a>
+            </div>
+          <span class="more-meta"> 约 2349 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第9章-结合数据和代码">第9章-结合数据和代码</a>
+      <ul>
+        <li><a href="#命名空间">命名空间</a></li>
+        <li><a href="#多重方法">多重方法</a></li>
+        <li><a href="#types-protocols-和-records">Types, protocols 和 records</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="第9章-结合数据和代码">第9章-结合数据和代码</h2>
+<h3 id="命名空间">命名空间</h3>
+<p>从高级层面来看, 命名空间可以比作为二级映射, 解析符号的步骤</p>
+<ul>
+<li>第一级是命名空间</li>
+<li>第二级是变量名映射</li>
+</ul>
+<h4 id="创建命名空间">创建命名空间</h4>
+<p>使用 <code>ns</code> 宏创建命名空间.</p>
+<p><code>in-ns</code> 函数可以在必要时创建命名空间并进入该命名空间.</p>
+<ul>
+<li>会导入 <code>java.lang</code> 包</li>
+<li>不会创建任何在 <code>clojure.core</code> 包下的函数和宏</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;gibbon</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">reduce + </span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="p">(</span><span class="nf">Integer.</span> <span class="mi">3</span><span class="p">)])</span>
+
+<span class="p">(</span><span class="nf">clojure.core/refer</span> <span class="ss">&#39;clojure.core</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">reduce + </span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="p">(</span><span class="nf">Integer.</span> <span class="mi">3</span><span class="p">)])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>create-ns</code> 会创建一个命名空间对象并返回.</p>
+<p><code>ns-map</code> 函数可以获取对应命名空间对象中变量绑定的映射.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">b</span> <span class="p">(</span><span class="nb">create-ns </span><span class="ss">&#39;bonobo</span><span class="p">))</span>
+
+<span class="p">((</span><span class="nb">ns-map </span><span class="nv">b</span><span class="p">)</span> <span class="ss">&#39;String</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以使用 <code>intern</code> 和 <code>ns-unmap</code> 操纵命名空间中的绑定.</p>
+<ul>
+<li><code>intern</code> 可以将变量绑定到命名空间</li>
+<li><code>ns-unmap</code> 可以将变量从命名空间中解绑.</li>
+</ul>
+<p>由于Java类映射是由 <code>create-ns</code> 创建的, 你要使用 <code>intern</code> 引入 <code>clojure.core</code> 函数.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">intern</span> <span class="nv">b</span> <span class="ss">&#39;x</span> <span class="mi">9</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">intern</span> <span class="nv">b</span> <span class="ss">&#39;reduce</span> <span class="nv">clojure.core/reduce</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">intern</span> <span class="nv">b</span> <span class="ss">&#39;+</span> <span class="nv">clojure.core/+</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;bonobo</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">reduce + </span><span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>remove-ns</code> 可以去掉命名空间.</p>
+<p><code>all-ns</code> 可以查看所有的命名空间.</p>
+<h4 id="只暴露需要的">只暴露需要的</h4>
+<p>使用元数据可以将变量, 函数或者宏只能在本包引用.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">hider.ns</span><span class="p">)</span>
+<span class="p">(</span><span class="kd">defn </span><span class="o">^</span><span class="p">{</span><span class="ss">:private</span> <span class="nv">true</span><span class="p">}</span> <span class="nv">answer</span> <span class="p">[]</span> <span class="mi">42</span><span class="p">)</span>
+
+<span class="p">(</span><span class="kd">ns </span><span class="nv">seeker.ns</span>
+  <span class="p">(</span><span class="ss">:refer</span> <span class="nv">hider.ns</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">answer</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="声明式地包含和排除包含">声明式地包含和排除包含</h4>
+<p>生产环境建议不使用 <code>use</code> 混合操作.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">joy.ns-ex</span>
+  <span class="p">(</span><span class="ss">:refer-clojure</span> <span class="ss">:exclude</span> <span class="p">[</span><span class="nv">defstruct</span><span class="p">])</span>
+  <span class="p">(</span><span class="ss">:use</span> <span class="p">(</span><span class="nf">clojure</span> <span class="nb">set </span><span class="nv">xml</span><span class="p">))</span>
+  <span class="p">(</span><span class="ss">:use</span> <span class="p">[</span><span class="nv">clojure.test</span> <span class="ss">:only</span> <span class="p">(</span><span class="nf">are</span> <span class="nv">is</span><span class="p">)])</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">(</span><span class="nf">clojure</span> <span class="p">[</span><span class="nv">zip</span> <span class="ss">:as</span> <span class="nv">z</span><span class="p">]))</span>
+  <span class="p">(</span><span class="ss">:import</span> <span class="p">(</span><span class="nf">java.util</span> <span class="nv">Date</span><span class="p">)</span>
+	   <span class="p">(</span><span class="nf">java.io</span> <span class="nv">File</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="多重方法">多重方法</h3>
+<p>UDP(Universal Design Pattern), 通用设计模式.</p>
+<p>可以使用Clojure的多重方法设施给UDP添加行为.</p>
+<p><code>defmulti</code> 宏接受一个方法名和分发函数, 这个分发函数的返回值会决定调用哪个重载的函数.</p>
+<p><code>defmethod</code> 宏接受一个方法名, 分发的值, 参数列表以及方法体.</p>
+<p>多重方法提供了一种基于分派函数的结果执行函数多态性的方法.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">beget</span> <span class="p">[</span><span class="nv">this</span> <span class="nv">proto</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">assoc </span><span class="nv">this</span> <span class="ss">::prototype</span> <span class="nv">proto</span><span class="p">))</span>
+
+<span class="p">(</span><span class="kd">defmulti </span><span class="nv">compiler</span> <span class="ss">:os</span><span class="p">)</span>
+<span class="p">(</span><span class="kd">defmethod </span><span class="nv">compiler</span> <span class="ss">::unix</span> <span class="p">[</span><span class="nv">m</span><span class="p">]</span> <span class="p">(</span><span class="nb">get </span><span class="nv">m</span> <span class="ss">:c-compiler</span><span class="p">))</span>
+<span class="p">(</span><span class="kd">defmethod </span><span class="nv">compiler</span> <span class="ss">::osx</span> <span class="p">[</span><span class="nv">m</span><span class="p">]</span> <span class="p">(</span><span class="nb">get </span><span class="nv">m</span> <span class="ss">:llvm-compiler</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">clone</span> <span class="p">(</span><span class="nb">partial </span><span class="nv">beget</span> <span class="p">{}))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">unix</span> <span class="p">{</span><span class="ss">:os</span> <span class="ss">::unix</span>, <span class="ss">:c-compiler</span> <span class="s">&#34;cc&#34;</span>, <span class="ss">:home</span> <span class="s">&#34;/home&#34;</span>, <span class="ss">:dev</span> <span class="s">&#34;dev&#34;</span><span class="p">})</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">osx</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">clone</span> <span class="nv">unix</span><span class="p">)</span>
+	     <span class="p">(</span><span class="nf">put</span> <span class="ss">:os</span> <span class="ss">::osx</span><span class="p">)</span>
+	     <span class="p">(</span><span class="nf">put</span> <span class="ss">:llvm-compiler</span> <span class="s">&#34;clang&#34;</span><span class="p">)</span>
+	     <span class="p">(</span><span class="nf">put</span> <span class="ss">:home</span> <span class="s">&#34;/Users&#34;</span><span class="p">)))</span>
+<span class="p">(</span><span class="nf">compiler</span> <span class="nv">unix</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">compiler</span> <span class="nv">osx</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>derive</code> 函数可以定义一个派生函数, 继承其行为.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defmulti </span><span class="nv">home</span> <span class="ss">:os</span><span class="p">)</span>
+<span class="p">(</span><span class="kd">defmethod </span><span class="nv">home</span> <span class="ss">::unix</span> <span class="p">[</span><span class="nv">m</span><span class="p">]</span> <span class="p">(</span><span class="nb">get </span><span class="nv">m</span> <span class="ss">:home</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">home</span> <span class="nv">unix</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">derive</span> <span class="ss">::osx</span> <span class="ss">::unix</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">home</span> <span class="nv">osx</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以使用 <code>parents</code> , <code>ancestors</code> , <code>descendants</code> 和 <code>isa?</code> 来查看继承关系</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">parents</span> <span class="ss">::osx</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">ancestors</span> <span class="ss">:osx</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">descendants</span> <span class="ss">::unix</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">isa?</span> <span class="ss">::osx</span> <span class="ss">::unix</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">isa?</span> <span class="ss">::unix</span> <span class="ss">::osx</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>多重方法可以使用多继承, 可以使用 <code>prefer-method</code> 来决定方法的优先级, 使用 <code>remove-method</code> 来移除方法.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">derive</span> <span class="ss">::osx</span> <span class="ss">::bsd</span><span class="p">)</span>
+<span class="p">(</span><span class="kd">defmethod </span><span class="nv">home</span> <span class="ss">::bsd</span> <span class="p">[</span><span class="nv">m</span><span class="p">]</span> <span class="s">&#34;/home&#34;</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">home</span> <span class="nv">osx</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">prefer-method</span> <span class="nv">home</span> <span class="ss">::bsd</span> <span class="ss">::unix</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">home</span> <span class="nv">osx</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">remove-method </span><span class="nv">home</span> <span class="ss">::bsd</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以使用 <code>make-hierarchy</code> 和 <code>derive</code> 来定义派生层次结构, 并将该层次结构传递给 <code>defmulti</code> , 避免使用全局层次映射.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">derive</span> <span class="p">(</span><span class="nf">make-hierarchy</span><span class="p">)</span> <span class="ss">::osx</span> <span class="ss">::unix</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>juxt</code> 函数接受多个函数并组合为一个函数, 返回使用参数调用每个给定函数的结果向量.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">each-math</span> <span class="p">(</span><span class="nf">juxt</span> <span class="nb">+ * - </span><span class="nv">/</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">each-math</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span>
+					<span class="c1">;[5 6 -1 2/3]</span>
+
+<span class="p">((</span><span class="nf">juxt</span> <span class="nb">take </span><span class="nv">drop</span><span class="p">)</span> <span class="mi">3</span> <span class="p">(</span><span class="nb">range </span><span class="mi">9</span><span class="p">))</span>
+					<span class="c1">;[(0 1 2) (3 4 5 6 7 8)]</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="types-protocols-和-records">Types, protocols 和 records</h3>
+<p>Clojure提供了用于创建逻辑分组的多态函数的工具, 这些函数既简单又高效.</p>
+<ul>
+<li>types</li>
+<li>records</li>
+<li>protocols</li>
+</ul>
+<h4 id="records">Records</h4>
+<p>可以使用 <code>defrecord</code> 来定义一个记录类型.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defrecord </span><span class="nv">TreeNode</span> <span class="p">[</span><span class="nb">val </span><span class="nv">l</span> <span class="nv">r</span><span class="p">])</span>
+<span class="p">(</span><span class="nf">TreeNode.</span> <span class="mi">5</span> <span class="nv">nil</span> <span class="nv">nil</span><span class="p">)</span>
+<span class="c1">;={:val 5, :l nil, :r nil}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>import</code> 函数或者是 <code>:import</code> 命名空间声明导入 <code>defrecord</code> 和 <code>deftype</code> 定义的类</p>
+<p>一个 <code>record</code> 提供了一个对象命名, 创建速度更快, 使用内存更小, 比数组map和HashMap查找对应的键速度更快.</p>
+<p><code>Record</code> 类型可以存储原始类型如(byte, int, long等)</p>
+<p><code>Records</code> 不能作为函数使用, 不像maps本身就是一个函数.</p>
+<p><code>Records</code> 拥有和maps相同的键值对映射时永远不等于maps.</p>
+<p><code>Records</code> 支持元数据, 可以使用 <code>with-meta</code> 和 <code>meta</code> .</p>
+<p>和 Clojure集合一样, 你可以重新定义 <code>record</code> , 从而为您提供动态的Java编译性能.</p>
+<p>使用 <code>hash-map</code> 对象创建的代码都可以通过细微的变化改造为使用 <code>records</code> , 以获得良好的性能.</p>
+<p><code>assoc</code> 和 <code>dissoc</code> 可以操纵 <code>record</code> 的键, 但是返回的是一个普通map而不是 <code>record</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">dissoc </span><span class="p">(</span><span class="nf">TreeNode.</span> <span class="mi">5</span> <span class="nv">nil</span> <span class="nv">nil</span><span class="p">)</span> <span class="ss">:l</span><span class="p">)</span>
+<span class="c1">;{:val 5, :r nil}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="protocols">Protocols</h4>
+<p>Clojure中的 <code>protocol</code> 是一系列带签名的函数, 至少包含一个参数, 并被赋予一个统一的名称.</p>
+<ul>
+<li>类似Java的接口以及c++纯虚类</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defprotocol </span><span class="nv">FIXO</span>
+  <span class="p">(</span><span class="nf">fixo-push</span> <span class="p">[</span><span class="nv">fixo</span> <span class="nv">value</span><span class="p">])</span>
+  <span class="p">(</span><span class="nf">fixo-pop</span> <span class="p">[</span><span class="nv">fixo</span><span class="p">])</span>
+  <span class="p">(</span><span class="nf">fixo-peek</span> <span class="p">[</span><span class="nv">fixo</span><span class="p">]))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>extend</code> , <code>extend-type</code> 或者 <code>extend-protocol</code> 来实现Protocols</p>
+<p><code>extend-type</code> 和 <code>extend-protocol</code> 是用于给定类型提供多重方法方便的宏.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">extend-type</span> <span class="nv">TreeNode</span>
+  <span class="nv">FIXO</span>
+  <span class="p">(</span><span class="nf">fixo-push</span> <span class="p">[</span><span class="nb">node </span><span class="nv">value</span><span class="p">]</span>
+    <span class="p">(</span><span class="nf">xconj</span> <span class="nb">node </span><span class="nv">value</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nf">xseq</span> <span class="p">(</span><span class="nf">fixo-push</span> <span class="nv">sample-tree</span> <span class="mi">5</span><span class="nv">/2</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>extend-type</code> 第一个参数是类或者是接口, 其余参数形式均继承第一个参数.</p>
+<p><code>protocol</code> 中的所有函数必须全部被实现, 否则调用时可能会找不到具体某个函数的实现.</p>
+<p>Clojure中的混合(Mixins)是指创建包含协议函数实现的离散映射，这些协议函数实现以创建协议的完整实现的方式组合在一起。</p>
+<p>Clojure多态是基于协议函数, 不是基于类型的.</p>
+<p>可以将继承协议为 <code>nil</code> , 协议函数就可以处理接受 <code>nil</code> 类型的情形.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">reduce </span><span class="nv">fixo-push</span> <span class="nv">nil</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">5</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">0</span><span class="p">])</span>
+<span class="c1">; No implementation of method: :fixo-push of protocol: #&#39;chapter9.records/FIXO found for class: nil</span>
+
+<span class="p">(</span><span class="nf">extend-type</span> <span class="nv">nil</span>
+  <span class="nv">FIXO</span>
+  <span class="p">(</span><span class="nf">fixo-push</span> <span class="p">[</span><span class="nv">t</span> <span class="nv">v</span><span class="p">]</span>
+    <span class="p">(</span><span class="nf">TreeNode.</span> <span class="nv">v</span> <span class="nv">nil</span> <span class="nv">nil</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nf">xseq</span> <span class="p">(</span><span class="nb">reduce </span><span class="nv">fixo-push</span> <span class="nv">nil</span> <span class="p">[</span><span class="mi">3</span> <span class="mi">5</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">0</span><span class="p">]))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Clojure不推荐实现继承, 尽管可以做到和Java一样的交互. 可以根据协议方法上定义一个正常函数.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">fixo-into</span> <span class="p">[</span><span class="nv">c1</span> <span class="nv">c2</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">reduce </span><span class="nv">fixo-push</span> <span class="nv">c1</span> <span class="nv">c2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">xseq</span> <span class="p">(</span><span class="nf">fixo-into</span> <span class="p">(</span><span class="nf">TreeNode.</span> <span class="mi">5</span> <span class="nv">nil</span> <span class="nv">nil</span><span class="p">)</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="nb">seq </span><span class="p">(</span><span class="nf">fixo-into</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">]))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>extend</code> 函数接受协议函数map, 并且可以根据需求去映射对应的实现函数, 包括合并已经存在定义的实现.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">tree-node-fixo</span>
+  <span class="p">{</span><span class="ss">:fixo-push</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nb">node </span><span class="nv">value</span><span class="p">]</span>
+		<span class="p">(</span><span class="nf">xconj</span> <span class="nb">node </span><span class="nv">value</span><span class="p">))</span>
+   <span class="ss">:fixo-peek</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">node</span><span class="p">]</span>
+		<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="ss">:l</span> <span class="nv">node</span><span class="p">)</span>
+		  <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="ss">:l</span> <span class="nv">node</span><span class="p">))</span>
+		  <span class="p">(</span><span class="ss">:val</span> <span class="nv">node</span><span class="p">)))</span>
+   <span class="ss">:fixo-pop</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">node</span><span class="p">]</span>
+	       <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="ss">:l</span> <span class="nv">node</span><span class="p">)</span>
+		 <span class="p">(</span><span class="nf">TreeNode.</span> <span class="p">(</span><span class="ss">:val</span> <span class="nv">node</span><span class="p">)</span> <span class="p">(</span><span class="nf">fixo-pop</span> <span class="p">(</span><span class="ss">:l</span> <span class="nv">node</span><span class="p">))</span> <span class="p">(</span><span class="ss">:r</span> <span class="nv">node</span><span class="p">))</span>
+		 <span class="p">(</span><span class="ss">:r</span> <span class="nv">node</span><span class="p">)))})</span>
+
+<span class="p">(</span><span class="nf">extend</span> <span class="nv">TreeNode</span> <span class="nv">FIXO</span> <span class="nv">tree-node-fixo</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">xseq</span> <span class="p">(</span><span class="nf">fixo-into</span> <span class="p">(</span><span class="nf">TreeNode.</span> <span class="mi">5</span> <span class="nv">nil</span> <span class="nv">nil</span><span class="p">)</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">]))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>reify</code> 宏将所有强大的函数闭包, <code>extend</code> 的所有性能和协议参与都集中到一个表单中.</p>
+<p>想要一个带有数量限制的像栈的FIXO实现. 栈满时返回一个未改变的对象.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">fixed-fixo</span>
+  <span class="p">([</span><span class="nv">limit</span><span class="p">]</span> <span class="p">(</span><span class="nf">fixed-fixo</span> <span class="nv">limit</span> <span class="p">[]))</span>
+  <span class="p">([</span><span class="nv">limit</span> <span class="nv">vector</span><span class="p">]</span>
+   <span class="p">(</span><span class="nf">reify</span> <span class="nv">FIXO</span>
+     <span class="p">(</span><span class="nf">fixo-push</span> <span class="p">[</span><span class="nv">this</span> <span class="nv">value</span><span class="p">]</span>
+       <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">count </span><span class="nv">vector</span><span class="p">)</span> <span class="nv">limit</span><span class="p">)</span>
+	 <span class="p">(</span><span class="nf">fixed-fixo</span> <span class="nv">limit</span> <span class="p">(</span><span class="nb">conj vector </span><span class="nv">value</span><span class="p">))</span>
+	 <span class="nv">this</span><span class="p">))</span>
+     <span class="p">(</span><span class="nf">fixo-peek</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span>
+       <span class="p">(</span><span class="nb">peek </span><span class="nv">vector</span><span class="p">))</span>
+     <span class="p">(</span><span class="nf">fixo-pop</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span>
+       <span class="p">(</span><span class="nb">peek </span><span class="nv">vector</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">limited</span> <span class="p">(</span><span class="nf">fixed-fixo</span> <span class="mi">2</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="nf">.fixo-push</span> <span class="nv">limited</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">fobj</span> <span class="p">(</span><span class="nf">.fixo-push</span> <span class="nv">limited</span> <span class="mi">1</span><span class="p">))</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">sobj</span> <span class="p">(</span><span class="nf">.fixo-push</span> <span class="nv">limited</span> <span class="mi">4</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在Clojure, 方法总是和协议使用相同的命名空间, 这意味着一个 <code>record</code> 或者类型可以 <code>extend</code> 两个不同协议的同名方法, 并且没有任何歧义.</p>
+<p>由于方法共享他们协议下的命名空间, 你不能识别在同一个命名空间的不同协议的相同方法名.</p>
+<p>协议和接口方法可以直接在 <code>defrecord</code> 形式中写好, 这可以更简便并且产生更快的代码, 快出好几倍.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defrecord </span><span class="nv">TreeNode</span> <span class="p">[</span><span class="nb">val </span><span class="nv">l</span> <span class="nv">r</span><span class="p">]</span>
+  <span class="nv">FIXO</span>
+  <span class="p">(</span><span class="nf">fixo-push</span> <span class="p">[</span><span class="nv">t</span> <span class="nv">v</span><span class="p">]</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">v</span> <span class="nv">val</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">TreeNode.</span> <span class="nb">val </span><span class="p">(</span><span class="nf">fixo-push</span> <span class="nv">l</span> <span class="nv">v</span><span class="p">)</span> <span class="nv">r</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">TreeNode.</span> <span class="nb">val </span><span class="nv">l</span> <span class="p">(</span><span class="nf">fixo-push</span> <span class="nv">r</span> <span class="nv">v</span><span class="p">))))</span>
+  <span class="p">(</span><span class="nf">fixo-peek</span> <span class="p">[</span><span class="nv">t</span><span class="p">]</span>
+    <span class="p">(</span><span class="k">if </span><span class="nv">l</span>
+      <span class="p">(</span><span class="nf">fixo-peek</span> <span class="nv">l</span><span class="p">)</span>
+      <span class="nv">val</span><span class="p">))</span>
+  <span class="p">(</span><span class="nf">fixo-pop</span> <span class="p">[</span><span class="nv">t</span><span class="p">]</span>
+    <span class="p">(</span><span class="k">if </span><span class="nv">l</span>
+      <span class="p">(</span><span class="nf">TreeNode.</span> <span class="nb">val </span><span class="p">(</span><span class="nf">fixo-pop</span> <span class="nv">l</span><span class="p">)</span> <span class="nv">r</span><span class="p">)</span>
+      <span class="nv">r</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">sample-tree2</span> <span class="p">(</span><span class="nb">reduce </span><span class="nv">fixo-push</span> <span class="p">(</span><span class="nf">TreeNode.</span> <span class="mi">3</span> <span class="nv">nil</span> <span class="nv">nil</span><span class="p">)</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span><span class="p">]))</span>
+<span class="p">(</span><span class="nf">xseq</span> <span class="nv">sample-tree2</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>defrecord</code> 允许实现Java的接口并继承 <code>java.lang.Object</code> , 但是 <code>extend</code> 不可能做到.</p>
+<p><code>defrecord</code> 同时支持原始类型(int,long&hellip;).</p>
+<h4 id="使用deftype从更原始的基础上构建">使用deftype从更原始的基础上构建</h4>
+<p>由于 <code>record</code> 是maps, 所以 <code>defrecord</code> 实现了所有maps拥有的功能.</p>
+<ul>
+<li><code>assoc</code></li>
+<li><code>dissoc</code></li>
+<li><code>get</code></li>
+</ul>
+<p>在很少情况下使用自定义的不是 <code>record</code> 类型的数据结构, Clojure提供了底层的 <code>deftype</code> 构造类型, 但它不实现任何东西.</p>
+<p><code>deftype</code> 是一种Clojure让你创建易失性和可变域类型的机制.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-18
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/clojure/">Clojure</a>
+          <a href="/tags/lisp/">Lisp</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/thejoyofclojure2th/chapter8/">
+            <span class="next-text nav-default">Clojure趣学指南-第八章-宏</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -6,10 +6,19 @@
     <description>Recent content in Clojure on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 18 Apr 2020 15:21:50 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 21 Apr 2020 22:21:40 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/tags/clojure/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Clojure趣学指南-第10章-变动和并发编程</title>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter10/</link>
+      <pubDate>Tue, 21 Apr 2020 22:21:40 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter10/</guid>
+      <description>变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第</description>
+    </item>
     
     <item>
       <title>Clojure趣学指南-第九章-结合数据和代码</title>

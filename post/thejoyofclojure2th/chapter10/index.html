@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Clojure趣学指南-第10章-变动和并发编程 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/thejoyofclojure2th/chapter10/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Clojure趣学指南-第10章-变动和并发编程" />
+<meta property="og:description" content="变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/thejoyofclojure2th/chapter10/" />
+<meta property="article:published_time" content="2020-04-21T22:21:40+08:00" />
+<meta property="article:modified_time" content="2020-04-21T22:21:40+08:00" />
+<meta itemprop="name" content="Clojure趣学指南-第10章-变动和并发编程">
+<meta itemprop="description" content="变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第">
+<meta itemprop="dateModified" content="2020-04-21T22:21:40&#43;08:00" />
+<meta itemprop="wordCount" content="3047">
+
+
+
+<meta itemprop="keywords" content="Clojure,Lisp," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Clojure趣学指南-第10章-变动和并发编程"/>
+<meta name="twitter:description" content="变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Clojure趣学指南-第10章-变动和并发编程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-21 </span>
+        <div class="post-category">
+            <a href="/categories/clojure/"> Clojure </a>
+            </div>
+          <span class="more-meta"> 约 3047 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#变动和并发编程">变动和并发编程</a>
+      <ul>
+        <li><a href="#什么时候使用refs">什么时候使用refs</a></li>
+        <li><a href="#使用refs重构">使用refs重构</a></li>
+        <li><a href="#什么时候使用agents">什么时候使用agents</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="变动和并发编程">变动和并发编程</h2>
+<p>Clojure主要的可变引用：</p>
+<ul>
+<li><code>refs</code></li>
+<li><code>agents</code></li>
+<li><code>agents</code></li>
+<li><code>atoms</code></li>
+</ul>
+<p>STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式</p>
+<h3 id="什么时候使用refs">什么时候使用refs</h3>
+<p>第一章中，定义了下面三个重要术语：</p>
+<ul>
+<li>Time：事件发生的相对时刻</li>
+<li>State：实体在时间瞬间的属性快照</li>
+<li>Identity：由一段时间内发生的常见状态流标识的逻辑实体。</li>
+</ul>
+<p>Clojure提供了工，通过其~refs~类型，更改等方式处理身份语义，其语义由Clojure的软事务存储控制。</p>
+<p>Clojure中的事务由 <code>dosync</code> 代码块标记，用于建立一个嵌入其中的可变数据单元集。</p>
+<p>Clojure当前提供了四种不同的引用，辅助并发编程的类型：</p>
+<ul>
+<li><code>refs</code></li>
+<li><code>agents</code></li>
+<li><code>agents</code></li>
+<li><code>atoms</code></li>
+</ul>
+<p>除 <code>var</code> 外，所有变量均被视为共享引用，并允许在执行线程中看到更改。</p>
+<p>引用类型的理想用途：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Ref</th>
+<th>Agent</th>
+<th>Atom</th>
+<th>Var</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协调的（Coordinated）</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>异步的（Asynchronous）</td>
+<td>否</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>重试的（Retriable）</td>
+<td>是</td>
+<td>否</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>线程局部的（Thread-local）</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p><code>refs</code> 的特性在于协调。这意味着读取和写入多个引用可以保证不出现竞争条件。</p>
+<p><code>Asynchronous</code> （异步的）意味着更新请求排队等待一段时间后在另一个线程中发生。</p>
+<p><code>Retriable</code> （重试的）表示更新引用值所做的工作是推测性的，可能会重复执行。</p>
+<p><code>thread-local</code> 意味着线程安全是通过将单个状态更改隔离到单个线程来实现的。</p>
+<p>通过 <code>@</code> 或者是 <code>deref</code> 函数进行的值访问提供来统一的客户端接口，而与使用引用类型无关。</p>
+<p>另一方面，与每个引用类型关联的写机制在名称和特定行为方面都是唯一的，但是在结构上相似。</p>
+<p>每个引用类型的值是根据函数的结果而改变，该函数的结果会成为引用类型的新值。</p>
+<p>最后，所有引用类型都允许通过 <code>setvalidator</code> 关联验证函数，从而提供一致性，该函数将用作任何值更改的最终看守者。</p>
+<h4 id="事务">事务</h4>
+<p>使用Clojure的软件事务存储前，你会发现不会是用到锁。由于使用STM时不需要临时锁定方案，因此没有出现死锁的机会。</p>
+<p>同样的，Clojure软件事务存储不需要使用监视器，因此不会丢失唤醒条件。</p>
+<p>Clojure软件事务存储使用多版本并发控制(multiversion concurrency control，MVCC)来确保快照隔离。</p>
+<p>用简单的术语来说，快照隔离意味着每个事务都会得到它自己的数据视图。该快照由事务内的`ref`值组成，构成来MVCC的基础。</p>
+<p>事务结束时，将根据修改目标检查本地值是否存在冲突。</p>
+<p>STM提供的另一个优点是，在事务处理过程中出现异常的情况下，事务中的值将被丢弃，并且异常将被向外传播。</p>
+<h4 id="嵌套事务">嵌套事务</h4>
+<p>Clojure中嵌套事务的回滚：如果有A，B，b或者C这几个事务，如果B事务嵌套b事务，b
+事务失败导致回滚，会导致整个A-B-b-C事务回滚。</p>
+<p>由于Clojure每个线程一次只能执行一个事务，导致调用子事务会归并到更大的事务中。</p>
+<figure>
+    <img src="/ox-hugo/transations01.png"/> 
+</figure>
+
+<h4 id="stm使得事情变得更简单">STM使得事情变得更简单</h4>
+<p>尽管Clojure有助于并发编程，但并不能为您解决。但是Clojure的STM实施在解决棘手的并发问题方面有一些简化之处</p>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>一致性</p>
+<p>STM允许您以一致的方式对任意数据集执行任意组读/写操作。为了提供这个保证，STM
+允许你的程序在信息重叠的情况下做出决策。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>不需要锁</p>
+<p>Clojure的STM消除了对锁的依赖，因此不会导致死锁的发生。</p>
+<p>Clojure的STM提供了持续管理状态的工具。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>ACI</p>
+<p>数据库事务的词汇包括众所周知的缩写ACID</p>
+<ul>
+<li>A：原子性（atomicity）</li>
+<li>C：一致性（consistency）</li>
+<li>I：隔离性（isolation）</li>
+<li>D：持久性（durability）</li>
+</ul>
+<p>Clojure的所有引用类型提供了：原子性，一致性，隔离性。但是缺失了持久性，由于Clojure的STM是驻留在内存中，因此在灾难性系统故障面前会丢失数据。</p>
+<p>Clojure将维护持久性的问题移交给了应用程序开发人员，而不是默认情况下提供常见策略：数据库持久性，外部应用程序日志，序列化等等。</p>
+</li>
+</ul>
+<h4 id="潜在的缺点">潜在的缺点</h4>
+<p>总体而言，STM存在两个潜在的潜在问题</p>
+<ul>
+<li>写偏移</li>
+<li>动态锁定。</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>写偏移</p>
+<p>当一个事务使用引用的值来调节其行为但不写入该引用时，可能会发生写偏斜。同时，另一个事务会更新同一个引用的值。</p>
+<p>避免这种情况的一种方法是在第一个事务中执行“虚拟写入”，但是Clojure提供了一种成本更低的解决方案： <code>ensure</code> 函数。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>动态锁</p>
+<p>动态锁指的是一组事务，这些事务可以反复互相重新启动。</p>
+<p>Clojure解决动态锁有几种方式</p>
+<ul>
+<li>有一些事务重启限制，在违反该限制时会引发错误，当某些事务单元太大时，就会发生这种情况。</li>
+<li><code>barging</code> ：指STM实现的一些谨慎逻辑，该逻辑允许较老的事务继续运行，而较年轻的事务重试。</li>
+</ul>
+</li>
+</ul>
+<h4 id="stm不适用的场景">STM不适用的场景</h4>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>I/O</p>
+<p>任何在事务中的I/O操作都是强烈不建议的。由于事务重启，嵌套I/O最多可能变得无用，并且在最坏的情况下可能造成严重危害。</p>
+<p>例如：选择在事务中嵌套一个日志消息，那么每次重新启动失败事务时都会创建一个日志入口。</p>
+<p>建议在I/O操作时使用  <code>io!</code> 宏</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">io!</span> <span class="p">(</span><span class="nf">.println</span> <span class="nv">System/out</span> <span class="s">&#34;Haikeeba!&#34;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当  <code>io!</code> 宏在事务中使用时，会抛出异常。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>类实例变更</p>
+<p>在Clojure事务中避免对象变更。</p>
+<p>一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。</p>
+<p>不受约束的实例变更通常不是幂等的，这意味着多次运行一组变更操作通常会显示不同的结果。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>大事务集</p>
+<p>尽管事务的大小是高度主观的，但是划分工作单元时的一般经验法则应始终尽可能快地进出。</p>
+</li>
+</ul>
+<h3 id="使用refs重构">使用refs重构</h3>
+<p>对  <code>make-move</code> 进行重构。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">make-move-v2</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">dosync</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">move</span> <span class="p">(</span><span class="nf">choose-move</span> <span class="o">@</span><span class="nv">to-move</span><span class="p">)]</span>
+      <span class="p">(</span><span class="nf">move-piece</span> <span class="nv">move</span> <span class="o">@</span><span class="nv">to-move</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">update-to-move</span> <span class="nv">move</span><span class="p">))))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="使用commute交换变更">使用commute交换变更。</h4>
+<p>在某些情况下，给定事务中ref的值对其完成语义并不重要。如  <code>num-moves</code> ref是一个简单的计数器，并且肯定在任何给定时间它的值都与确定应如何递增无关。</p>
+<p>在处理这种宽松的依赖情况，Clojure提供了  <code>commute</code> 的操作，该操作需要将一个函数应用于引用。</p>
+<p>提供给  <code>commute</code> 运行的函数需要在事务至少运行两次，以帮助提高给定引用周围的并发级别。</p>
+<p><code>commute</code> 可以降低另一个事务的提交所产生的​事务中的值差异，从而提高STM中的并发性。</p>
+<p>通过在提交时检索ref的最新值，提交的值可能不是与事务中状态相对应的值。</p>
+<p><code>commutative</code> 交换的(排列次序不影响结果)。</p>
+<p>只要不出现意下情况，使用  <code>commute</code> 会比较好：</p>
+<ul>
+<li>在事务中看到的值可能不是提交时的值。</li>
+<li>提供给  <code>commute</code> 的函数可能运行两次，第一次是在计算事务中的值，第二次是计算提交时的值，它可以运行任意次。</li>
+</ul>
+<h4 id="使用ref-set做通常的变化">使用ref-set做通常的变化</h4>
+<p><code>ref-set</code> 函数不同于  <code>alter</code> 和  <code>commute</code> 函数，它给定原始值，而不是根据其值的函数更改ref。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">dosync </span><span class="p">(</span><span class="nb">ref-set </span><span class="nv">to-move</span> <span class="o">&#39;</span><span class="p">[[</span><span class="ss">:K</span> <span class="p">[</span><span class="mi">2</span> <span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="ss">:k</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span><span class="p">]]]))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通常情况下，应该避免使用普通的变化。</p>
+<h4 id="在压力下的refs">在压力下的Refs</h4>
+<p>最好避免过短或者过长的事务互相影响同一个ref。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">stress-ref</span>
+  <span class="s">&#34;stress test for ref&#34;</span>
+  <span class="p">[</span><span class="nv">r</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">slow-tries</span> <span class="p">(</span><span class="nf">atom</span> <span class="mi">0</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nf">future</span>
+      <span class="p">(</span><span class="nf">dosync</span>
+	<span class="p">(</span><span class="nf">swap!</span> <span class="nv">slow-tries</span> <span class="nv">inc</span><span class="p">)</span>
+	<span class="p">(</span><span class="nf">Thread/sleep</span> <span class="mi">200</span><span class="p">)</span>
+	<span class="o">@</span><span class="nv">r</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">format</span> <span class="s">&#34;r is: %s, history: %d, after: %d tries&#34;</span>
+		 <span class="o">@</span><span class="nv">r</span> <span class="p">(</span><span class="nf">.getHistoryCount</span> <span class="nv">r</span><span class="p">)</span> <span class="o">@</span><span class="nv">slow-tries</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">dotimes </span><span class="p">[</span><span class="nv">i</span> <span class="mi">500</span><span class="p">]</span>
+      <span class="p">(</span><span class="nf">Thread/sleep</span> <span class="mi">10</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">dosync </span><span class="p">(</span><span class="nb">alter </span><span class="nv">r</span> <span class="nv">inc</span><span class="p">)))</span>
+    <span class="ss">:done</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">stress-ref</span> <span class="p">(</span><span class="nb">ref </span><span class="mi">0</span><span class="p">))</span>
+
+<span class="c1">;; :doner is: 500, history: 10, after: 26 tries</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Clojure允许您创建一个对历史记录大小有较大限制的引用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">stress-ref</span> <span class="p">(</span><span class="nb">ref </span><span class="mi">0</span> <span class="ss">:max-history</span> <span class="mi">30</span><span class="p">))</span>
+<span class="c1">; :doner is: 500, history: 10, after: 26 tries</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果慢事务执行时进行大量重试，可能会浪费大量的计算资源。如果您的测试或生产环境显示出这种情况，并且根本无法解决潜在的事务规模差异，还有最后一种  <code>ref</code> 选择可以帮助。</p>
+<p>由于可以看到重试历史需要20次，可以在启动时接近这个值。从最小历史为15开始启动意味着缓慢的事务在成功之前仅重试了6次。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">stress-ref</span> <span class="p">(</span><span class="nb">ref </span><span class="mi">0</span> <span class="ss">:min-history</span> <span class="mi">15</span> <span class="ss">:max-history</span> <span class="mi">30</span><span class="p">))</span>
+<span class="c1">; r is: 118, history: 20, after: 6 tries</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用refs来保证协调的更改通常很容易以同步方式管理状态，几乎不需要使用
+<code>:min-history</code> 和 <code>:max-history</code> 进行调整。</p>
+<h3 id="什么时候使用agents">什么时候使用agents</h3>
+<p>每个  <code>agent</code> 又一个队列维护需要对其值执行的操作，并且每个操作都会为该
+<code>agent</code> 产生一个新值以保留并传递给后续操作， 因此， <code>agent</code>
+的状态会随着时间，一个接一个的动作而前进，并且就其性质而言，一次只能对一个给定的 <code>agent</code> 执行一次操作。</p>
+<p>其他操作可以在其他  <code>agent</code> 上执行，每个 <code>agent</code> 都在自己的线程中。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-21
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/clojure/">Clojure</a>
+          <a href="/tags/lisp/">Lisp</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/thejoyofclojure2th/chapter9/">
+            <span class="next-text nav-default">Clojure趣学指南-第九章-结合数据和代码</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="https://devinkin.github.io/post/thejoyofclojure2th/chapter10/" />
@@ -43,12 +43,12 @@
 <meta property="og:description" content="变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devinkin.github.io/post/thejoyofclojure2th/chapter10/" />
-<meta property="article:published_time" content="2020-04-21T22:21:40+08:00" />
-<meta property="article:modified_time" content="2020-04-21T22:21:40+08:00" />
+<meta property="article:published_time" content="2020-04-25T11:15:14+08:00" />
+<meta property="article:modified_time" content="2020-04-25T11:15:14+08:00" />
 <meta itemprop="name" content="Clojure趣学指南-第10章-变动和并发编程">
 <meta itemprop="description" content="变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第">
-<meta itemprop="dateModified" content="2020-04-21T22:21:40&#43;08:00" />
-<meta itemprop="wordCount" content="3047">
+<meta itemprop="dateModified" content="2020-04-25T11:15:14&#43;08:00" />
+<meta itemprop="wordCount" content="7397">
 
 
 
@@ -124,12 +124,12 @@
       <h1 class="post-title">Clojure趣学指南-第10章-变动和并发编程</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2020-04-21 </span>
+        <span class="post-time"> 2020-04-25 </span>
         <div class="post-category">
             <a href="/categories/clojure/"> Clojure </a>
             </div>
-          <span class="more-meta"> 约 3047 字 </span>
-          <span class="more-meta"> 预计阅读 7 分钟 </span>
+          <span class="more-meta"> 约 7397 字 </span>
+          <span class="more-meta"> 预计阅读 15 分钟 </span>
         
       </div>
     </header>
@@ -144,6 +144,9 @@
         <li><a href="#什么时候使用refs">什么时候使用refs</a></li>
         <li><a href="#使用refs重构">使用refs重构</a></li>
         <li><a href="#什么时候使用agents">什么时候使用agents</a></li>
+        <li><a href="#什么时候使用atoms">什么时候使用atoms</a></li>
+        <li><a href="#什么时候使用锁">什么时候使用锁</a></li>
+        <li><a href="#vars和动态绑定">Vars和动态绑定</a></li>
       </ul>
     </li>
   </ul>
@@ -358,6 +361,7 @@
 <p>在某些情况下，给定事务中ref的值对其完成语义并不重要。如  <code>num-moves</code> ref是一个简单的计数器，并且肯定在任何给定时间它的值都与确定应如何递增无关。</p>
 <p>在处理这种宽松的依赖情况，Clojure提供了  <code>commute</code> 的操作，该操作需要将一个函数应用于引用。</p>
 <p>提供给  <code>commute</code> 运行的函数需要在事务至少运行两次，以帮助提高给定引用周围的并发级别。</p>
+<p>对于 <code>commute</code> ，当发现与提交值不一致时，它将不会重试，它将获得最新的值，并根据最新的值再次进行更新操作。</p>
 <p><code>commute</code> 可以降低另一个事务的提交所产生的​事务中的值差异，从而提高STM中的并发性。</p>
 <p>通过在提交时检索ref的最新值，提交的值可能不是与事务中状态相对应的值。</p>
 <p><code>commutative</code> 交换的(排列次序不影响结果)。</p>
@@ -453,6 +457,688 @@
 <code>agent</code> 产生一个新值以保留并传递给后续操作， 因此， <code>agent</code>
 的状态会随着时间，一个接一个的动作而前进，并且就其性质而言，一次只能对一个给定的 <code>agent</code> 执行一次操作。</p>
 <p>其他操作可以在其他  <code>agent</code> 上执行，每个 <code>agent</code> 都在自己的线程中。</p>
+<p>可以通过使用  <code>send</code> 和  <code>send-off</code> 将任何代理上的操作排队。</p>
+<p><code>agents</code> 是集成在STM事务中，在事务中发送的所有操作将一直保留到事务提交为止，或者如果事务重试则被丢弃。</p>
+<p>在 <code>dosync</code> 的上下文里 <code>send</code> 和  <code>send-off</code> 不被视为副作用，因为它们正确且优雅地处理重试。</p>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>使用agent控制I/O</p>
+<p><code>agents</code> 常用的一个场景是串行访问资源，例如文件或一个I/O流。</p>
+<p>假设您想为多个线程提供一种报告其在各种任务上的进度的方法，并为每个线程提供一个唯一的递增编号。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">log-agent</span> <span class="p">(</span><span class="nb">agent </span><span class="mi">0</span><span class="p">))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">do-log</span>
+  <span class="s">&#34;log action&#34;</span>
+  <span class="p">[</span><span class="nv">msg-id</span> <span class="nv">message</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">println </span><span class="nv">msg-id</span> <span class="s">&#34; : &#34;</span> <span class="nv">message</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">inc </span><span class="nv">msg-id</span><span class="p">))</span>
+
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">do-step</span>
+  <span class="s">&#34;Simulate work&#34;</span>
+  <span class="p">[</span><span class="nv">channel</span> <span class="nv">message</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">Thread/sleep</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">send-off </span><span class="nv">log-agent</span> <span class="nv">do-log</span> <span class="p">(</span><span class="nb">str </span><span class="nv">channel</span> <span class="nv">message</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">three-step</span>
+  <span class="s">&#34;Execute steps, logging as you go&#34;</span>
+  <span class="p">[</span><span class="nv">channel</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">do-step</span> <span class="nv">channel</span> <span class="s">&#34; ready to begin (step 0)&#34;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">do-step</span> <span class="nv">channel</span> <span class="s">&#34; warming up (step 1)&#34;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">do-step</span> <span class="nv">channel</span> <span class="s">&#34; really getting going now (step 2)&#34;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">do-step</span> <span class="nv">channel</span> <span class="s">&#34; done! (step 3)&#34;</span><span class="p">)</span>
+  <span class="p">)</span>
+
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">all-together-now</span>
+  <span class="s">&#34;Start three threads, Each thread calls three-step&#34;</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">dothreads!</span> <span class="o">#</span><span class="p">(</span><span class="nf">three-step</span> <span class="s">&#34;alpha&#34;</span><span class="p">))</span>
+  <span class="p">(</span><span class="nf">dothreads!</span> <span class="o">#</span><span class="p">(</span><span class="nf">three-step</span> <span class="s">&#34;beta&#34;</span><span class="p">))</span>
+  <span class="p">(</span><span class="nf">dothreads!</span> <span class="o">#</span><span class="p">(</span><span class="nf">three-step</span> <span class="s">&#34;omega&#34;</span><span class="p">))</span>
+  <span class="p">)</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><code>agents</code> 的其他特性</p>
+<ul>
+<li><code>agent</code> 的当前状态容易被观察。使用 <code>dref</code> 即可。</li>
+<li><code>await</code> 和 <code>await-off</code> 函数可以使正在 <code>send</code> 的线程阻塞直到发送 <code>agent</code> 集合所有的操作都发送完毕。</li>
+<li>可以发送给 <code>agent</code> 的一组操作是开放的。您可以告诉 <code>agent</code> 做某件事，而这在 <code>agent</code> 设计之初就没有想到。</li>
+</ul>
+<p><code>await-for</code> 函数和 <code>await</code> 函数类似，但允许你指定超时的毫秒数字，即使排队操作尚未完成。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>send和send-off的区别</p>
+<p>使用 <code>send-off</code> 时，仅涉及一个操作队列：由单个代理程序管理的队列。每当 <code>agent</code> 将 <code>send-off</code> 操作排入队列时，便会为其分配一个线程，以遍历该队列。</p>
+<p>使用 <code>send</code> 时，有第二个队列：操作仍然进入 <code>agent</code> 的队列，但是 <code>agent</code> 本身排队等待来自固定大小的线程池的线程。</p>
+<p>使用 <code>send</code> 发送到任何 <code>agent</code> 的所有操作都在线程池中运行，该线程池中的线程数比处理器的物理数量多。这导致它们接近CPU的全部容量。</p>
+<p>由于 <code>send</code> 线程池的大小是固定的，因此使用它来分发阻塞代码可能会导致池中的所有线程都被阻塞，而其他 <code>send</code> 线程则排队等待线程完成其工作。</p>
+<p><code>send-off</code> 使用一个单独的线程池，该线程池可以根据需要增长。~send-off~ 请求将永远不会排队等待线程；如果提交了许多长时间运行的CPU绑定（非阻塞）请求，则 <code>send-off</code> 可能适得其反；与内核相比，具有更多长时间CPU绑定线程会导致不必要的调度开销，因为线程在内核之间是分时共享的。</p>
+</li>
+</ul>
+<h4 id="错误处理">错误处理</h4>
+<p>其他大多数引用类型都是同步的，因此在更新其状态时引发的异常会以正常方式在调用堆栈中抛出，以在您的应用程序中通过常规 <code>try/catch</code> 捕获（或不捕获）。</p>
+<p>由于 <code>agent</code> 操作在发送线程继续前进之后在其他线程中运行，因此您需要一种不同的机制来处理由代理操作引发的异常。 <code>agent</code> 有两种处理异常的模式。</p>
+<ul>
+<li><code>:continue</code></li>
+<li><code>:fail</code></li>
+</ul>
+<p>默认情况下，agent操作使用 <code>:fail</code> 模式，agent的操作抛出的异常会被agent捕获。同时，agent被认为是失败或者是暂停并且停止操作入队。所有的入队操作必须等到
+agent的错误处理完毕。</p>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>:fail模式</p>
+<p>一个通常错误处理agent的方式是忘记操作函数必须使用agent当前状态作为参数进行调用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">send </span><span class="nv">log-agent</span> <span class="p">(</span><span class="k">fn </span><span class="p">[]</span> <span class="mi">2000</span><span class="p">))</span>   <span class="c1">; incorrect</span>
+<span class="o">@</span><span class="nv">log-agent</span>
+<span class="c1">;=&gt; 1001</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>agent-error</code> 函数可以判断agent的操作是否失败，会打印出错误信息。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">agent-error</span> <span class="nv">log-agent</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>即使该 <code>action</code> 正常运行，该 <code>agent</code> 也已失败，因此不允许进一步发送。代理的状态保持不变。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">send </span><span class="nv">log-agent</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="mi">3000</span><span class="p">))</span>
+<span class="o">@</span><span class="nv">log-agent</span>
+<span class="c1">;=&gt; 1001</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>为了让 <code>agent</code> 有序的重新工作，需要重启它。 <code>clear-actions</code> 选项可以清除在队列中的操作，队列中的操作有可能是有失败的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">restart-agent</span> <span class="nv">log-agent</span> <span class="mi">2500</span> <span class="ss">:clear-actions</span> <span class="nv">true</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>restart-agent</code> 只能当 <code>agent</code> 确实失败时候才能运行，则任何尝试重新启动它的尝试都会在执行该操作的线程中引发异常，并且不会打扰该代理。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>:continue模式</p>
+<p><code>agent</code> 的操作抛出异常时，可以跳过该操作并执行下一个队列中的操作。</p>
+<p>常见的情况是结合错误处理器进行使用，如果你在创建 <code>agent</code> 指定一个错误处理器（ <code>:error-handler</code> ），当 <code>agent</code> 抛出异常时会调用错误处理器，直到错误处理器返回值后才执行下一个队列中的操作。这可以让错误处理器选择以恰当的方式报告错误。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">handle-log-error</span>
+  <span class="s">&#34;error handler&#34;</span>
+  <span class="p">[</span><span class="nv">the-agent</span> <span class="nv">the-err</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">println </span><span class="s">&#34;An action sent to the log-agent threw &#34;</span> <span class="nv">the-err</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">set-error-handler!</span> <span class="nv">log-agent</span> <span class="nv">handle-log-error</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">set-error-mode!</span> <span class="nv">log-agent</span> <span class="ss">:continue</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">send </span><span class="nv">log-agent</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="mi">0</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>错误处理器并不会更改 <code>agent</code> 的状态。 <code>:fail</code> 同样支持模式错误处理器。但错误处理器不能调用 <code>restart-agent</code> 。</p>
+</li>
+</ul>
+<h4 id="什么时候不使用agents">什么时候不使用agents</h4>
+<p>如果您需要一堆辅助线程来完成某些工作，或者需要特定的长时间运行的线程轮询或对事件进行阻塞，或者在任何其他情况下 <code>agent</code> 保持值似乎没有用，使用 <code>agent</code> 不适合，使用Java的executor或者使用Clojure的 <code>future</code> 管理线程池。</p>
+<p>另一个常见的诱惑是，当您需要保持状态但又不想在发送的代理动作完成之前发送线程继续进行时，使用代理。这可以通过使用等待来完成，但这是应避免的另一种滥用形式。</p>
+<h3 id="什么时候使用atoms">什么时候使用atoms</h3>
+<p><code>Atoms</code> 是异步的，但是和 <code>agents</code> 一样，是独立的，不协调的。</p>
+<p><code>atoms</code> 的使用案例类似于compare-and-swap（CAS）的交换用例相似。</p>
+<p><code>Atoms</code> 的更新操作在调用线程发生，并且在原子值更改后继续执行。</p>
+<p>如果另一个线程B在线程A成功之前更改了原子中的值，则A重试。但是这些重试是自旋循环，不会在STM中发生，因此原子更改无法与其他引用类型的更改协调。</p>
+<p>在Clojure事务中需要注意的是，事务可以重试多次，一旦 <code>atom</code> 的值被设置了在重试事务时不会回滚；因此实际上，这应该被视为副作用。</p>
+<p>因此，仅当您确定多次尝试更新原子值是幂等（多次操作产生相同的结果）时，才在事务中使用原子。</p>
+<p>除了使用 <code>@</code> 和 <code>deref</code> 获取 <code>atom</code> 的值，还可以使用以下函数获取</p>
+<ul>
+<li><code>swap!</code></li>
+<li><code>compare-and-set!</code></li>
+<li><code>reset!</code></li>
+</ul>
+<h4 id="在线程中共享">在线程中共享</h4>
+<p><code>atoms</code> 是线程安全的，并且在当您需要在线程之间共享轻量级可变引用时可以使用。</p>
+<p>全局可访问自增计数器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="o">^</span><span class="ss">:dynamic</span> <span class="nv">*time*</span> <span class="p">(</span><span class="nf">atom</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">tick</span>
+  <span class="s">&#34;timer increment&#34;</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">swap!</span> <span class="nv">*time*</span> <span class="nv">inc</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">dothreads!</span> <span class="nv">tick</span> <span class="ss">:threads</span> <span class="mi">1000</span> <span class="ss">:times</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="o">@</span><span class="nv">*time*</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="在事务中使用atoms">在事务中使用atoms</h4>
+<p>实际上，在更新时，将 <code>atoms</code> 用作保存函数的 <code>memoization</code> 缓存的引用是幂等的。</p>
+<p><code>Memoization</code> （记忆化）是一种功能，用于将计算的值存储在缓存中，以便对该函数的多次调用可以从缓存中检索以前计算的结果，而不是每次都执行潜在的昂贵计算。</p>
+<p>Clojure提供了一个核心函数 <code>memoize</code> ，可用于任何引用透明（纯）函数。</p>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>原子记忆化</p>
+<p><code>memoize</code> 函数在创建简单函数的缓存时很好，但有以下限制</p>
+<ul>
+<li>它不允许自定义缓存和过期策略</li>
+<li>它不允许你出于部分或批量清除缓存的目的来操作缓存。</li>
+</ul>
+<p>使用原子模拟记忆化函数的核心功能</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">manipulable-memoize</span>
+  <span class="s">&#34;使用atom进行缓存，并使用元数据标记atom是否缓存了函数的结果
+</span><span class="s">  with-meta 第一个参数是一个函数，所以该函数的返回值也是一个函数&#34;</span>
+  <span class="p">[</span><span class="nv">function</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">cache</span> <span class="p">(</span><span class="nf">atom</span> <span class="p">{})]</span>
+    <span class="p">(</span><span class="nf">with-meta</span>
+      <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
+    <span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">second </span><span class="p">(</span><span class="nb">find </span><span class="o">@</span><span class="nv">cache</span> <span class="nv">args</span><span class="p">))</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">ret</span> <span class="p">(</span><span class="nb">apply </span><span class="nv">function</span> <span class="nv">args</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nf">swap!</span> <span class="nv">cache</span> <span class="nb">assoc </span><span class="nv">args</span> <span class="nv">ret</span><span class="p">)</span>
+        <span class="nv">ret</span><span class="p">)))</span>
+      <span class="p">{</span><span class="ss">:cache</span> <span class="nv">cache</span><span class="p">})))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">slowly</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">x</span><span class="p">]</span> <span class="p">(</span><span class="nf">Thread/sleep</span> <span class="mi">1000</span><span class="p">)</span> <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">time </span><span class="p">[(</span><span class="nf">slowly</span> <span class="mi">9</span><span class="p">)</span> <span class="p">(</span><span class="nf">slowly</span> <span class="mi">9</span><span class="p">)])</span>
+<span class="c1">;=&gt; 2s</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">sometimes-slowly</span> <span class="p">(</span><span class="nf">manipulable-memoize</span> <span class="nv">slowly</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">time </span><span class="p">[(</span><span class="nf">sometimes-slowly</span> <span class="mi">108</span><span class="p">)</span> <span class="p">(</span><span class="nf">sometimes-slowly</span> <span class="mi">108</span><span class="p">)])</span>
+
+<span class="p">(</span><span class="nb">meta </span><span class="nv">sometimes-slowly</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>reset!</code> 函数可以将新值直接替换为 <code>atoms</code> 的值。</p>
+</li>
+</ul>
+<h3 id="什么时候使用锁">什么时候使用锁</h3>
+<p>Clojure的引用类型和并行原语涵盖了大量用例。</p>
+<p>但是，即使拥有大量可用的工具，在某些情况下，显式锁定也是唯一可用的选择，常见的情况是同时修改数组。</p>
+<p>定义一个协议，描述一个并发的，可变的，安全的数组，其中包含一个内部数组实例，使您可以安全地对其进行访问或对其进行改变。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">locks</span>
+  <span class="p">(</span><span class="ss">:refer-clojure</span> <span class="ss">:exclude</span> <span class="p">[</span><span class="nb">aget aset count </span><span class="nv">seq</span><span class="p">])</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.core</span> <span class="ss">:as</span> <span class="nv">clj</span><span class="p">])</span>
+  <span class="p">(</span><span class="ss">:use</span> <span class="p">[</span><span class="nv">mutation</span> <span class="ss">:only</span> <span class="p">(</span><span class="nf">dothreads!</span><span class="p">)]))</span>
+
+
+<span class="p">(</span><span class="kd">defprotocol </span><span class="nv">SafeArray</span>
+  <span class="p">(</span><span class="nb">aset </span><span class="p">[</span><span class="nv">this</span> <span class="nv">i</span> <span class="nv">f</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb">aget </span><span class="p">[</span><span class="nv">this</span> <span class="nv">i</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb">count </span><span class="p">[</span><span class="nv">this</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb">seq </span><span class="p">[</span><span class="nv">this</span><span class="p">])</span>
+  <span class="p">)</span>
+
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">make-dumb-array</span>
+  <span class="s">&#34;dump array&#34;</span>
+  <span class="p">[</span><span class="nv">t</span> <span class="nv">sz</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">a</span> <span class="p">(</span><span class="nb">make-array </span><span class="nv">t</span> <span class="nv">sz</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nf">reify</span>
+      <span class="nv">SafeArray</span>
+      <span class="p">(</span><span class="nb">count </span><span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="p">(</span><span class="nf">clj/count</span> <span class="nv">a</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb">seq </span><span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="p">(</span><span class="nf">clj/seq</span> <span class="nv">a</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb">aget </span><span class="p">[</span><span class="nv">_</span> <span class="nv">i</span><span class="p">]</span> <span class="p">(</span><span class="nf">clj/aget</span> <span class="nv">a</span> <span class="nv">i</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb">aset </span><span class="p">[</span><span class="nv">this</span> <span class="nv">i</span> <span class="nv">f</span><span class="p">]</span>
+	<span class="p">(</span><span class="nf">clj/aset</span> <span class="nv">a</span>
+	  <span class="nv">i</span>
+	  <span class="p">(</span><span class="nf">f</span> <span class="p">(</span><span class="nb">aget </span><span class="nv">this</span> <span class="nv">i</span><span class="p">))))</span>
+      <span class="p">)))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">pummel</span>
+  <span class="s">&#34;disastor&#34;</span>
+  <span class="p">[</span><span class="nv">a</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">dothreads!</span> <span class="o">#</span><span class="p">(</span><span class="nb">dotimes </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nb">count </span><span class="nv">a</span><span class="p">)]</span>
+		 <span class="p">(</span><span class="nb">aset </span><span class="nv">a</span> <span class="nv">i</span> <span class="nv">inc</span><span class="p">))</span>
+    <span class="ss">:threads</span> <span class="mi">100</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">D</span> <span class="p">(</span><span class="nf">make-dumb-array</span> <span class="nv">Integer/TYPE</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">pummel</span> <span class="nv">D</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">seq </span><span class="nv">D</span><span class="p">)</span>
+<span class="c1">;=&gt; (49 94 94 93 96 94 92 92)</span>
+<span class="c1">;=&gt; expect every result is 100</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="使用锁进行安全的变更">使用锁进行安全的变更</h4>
+<p>在Clojure中跨线程安全修改和查看可变对象（例如数组或类实例）的一致值的唯一方法是通过锁。</p>
+<p><code>locking</code> 宏接受单个参数作为锁定监视器，并在监视器上下文中执行主体。任何对监视器的读写操作都是线程安全的，并且监视器总是在主体末尾释放锁。</p>
+<p>使用锁进行并发编程的主要复杂性之一是必须完全适当地处理所有错误。否则，您将面临孤立锁的风险，并且它们会变成死锁。</p>
+<p><code>locking</code> 宏总是会释放锁，即便是遇到异常。</p>
+<p><code>locking</code> 宏是可重入的，因此在 <code>aset</code> 中调用两次也没问题。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">make-safe-array</span>
+  <span class="s">&#34;using locking macro&#34;</span>
+  <span class="p">[</span><span class="nv">t</span> <span class="nv">sz</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">a</span> <span class="p">(</span><span class="nb">make-array </span><span class="nv">t</span> <span class="nv">sz</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nf">reify</span>
+      <span class="nv">SafeArray</span>
+      <span class="p">(</span><span class="nb">count </span><span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="p">(</span><span class="nf">clj/count</span> <span class="nv">a</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb">seq </span><span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="p">(</span><span class="nf">clj/seq</span> <span class="nv">a</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb">aget </span><span class="p">[</span><span class="nv">_</span> <span class="nv">i</span><span class="p">]</span>
+	<span class="p">(</span><span class="nb">locking </span><span class="nv">a</span>
+	  <span class="p">(</span><span class="nf">clj/aget</span> <span class="nv">a</span> <span class="nv">i</span><span class="p">)))</span>
+      <span class="p">(</span><span class="nb">aset </span><span class="p">[</span><span class="nv">this</span> <span class="nv">i</span> <span class="nv">f</span><span class="p">]</span>
+	<span class="p">(</span><span class="nb">locking </span><span class="nv">a</span>
+	  <span class="p">(</span><span class="nf">clj/aset</span> <span class="nv">a</span>
+	    <span class="nv">i</span>
+	    <span class="p">(</span><span class="nf">f</span> <span class="p">(</span><span class="nb">aget </span><span class="nv">this</span> <span class="nv">i</span><span class="p">)))))</span>
+      <span class="p">)))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">A</span> <span class="p">(</span><span class="nf">make-safe-array</span> <span class="nv">Integer/TYPE</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">pummel</span> <span class="nv">A</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">seq </span><span class="nv">A</span><span class="p">)</span>
+<span class="c1">;= all 100</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的安全数组有一个缺点就是锁粗粒度比较大，导致其他线程必须要等待整个数组对象释放锁之后才能进行读写操作。</p>
+<h4 id="使用java显式锁">使用Java显式锁</h4>
+<p>Java在 <code>java.util.concurrent.locks</code> 包中提供了显式锁。</p>
+<p>实现一个智能数组，只锁定数组中的某个元素，可以使用少量的锁来节省资源。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">make-smart-array</span>
+  <span class="s">&#34;smart array with small lock&#34;</span>
+  <span class="p">[</span><span class="nv">t</span> <span class="nv">sz</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">a</span> <span class="p">(</span><span class="nb">make-array </span><span class="nv">t</span> <span class="nv">sz</span><span class="p">)</span>
+	<span class="nv">Lsz</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">sz</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="nv">L</span> <span class="p">(</span><span class="nb">into-array </span><span class="p">(</span><span class="nb">take </span><span class="nv">Lsz</span>
+			<span class="p">(</span><span class="nf">repeatedly</span> <span class="o">#</span><span class="p">(</span><span class="nf">ReentrantLock.</span><span class="p">))))]</span>
+    <span class="p">(</span><span class="nf">reify</span>
+      <span class="nv">SafeArray</span>
+      <span class="p">(</span><span class="nb">count </span><span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="p">(</span><span class="nf">clj/count</span> <span class="nv">a</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb">seq </span><span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="p">(</span><span class="nf">clj/seq</span> <span class="nv">a</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb">aget </span><span class="p">[</span><span class="nv">_</span> <span class="nv">i</span><span class="p">]</span>
+	<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">lk</span> <span class="p">(</span><span class="nf">clj/aget</span> <span class="nv">L</span> <span class="p">(</span><span class="nf">lock-i</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">i</span><span class="p">)</span> <span class="nv">Lsz</span><span class="p">))]</span>
+	  <span class="p">(</span><span class="nf">.lock</span> <span class="nv">lk</span><span class="p">)</span>
+	  <span class="p">(</span><span class="nf">try</span>
+	    <span class="p">(</span><span class="nf">clj/aget</span> <span class="nv">a</span> <span class="nv">i</span><span class="p">)</span>
+	    <span class="p">(</span><span class="nf">finally</span> <span class="p">(</span><span class="nf">.unlock</span> <span class="nv">lk</span><span class="p">)))))</span>
+      <span class="p">(</span><span class="nb">aset </span><span class="p">[</span><span class="nv">this</span> <span class="nv">i</span> <span class="nv">f</span><span class="p">]</span>
+	<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">lk</span> <span class="p">(</span><span class="nf">clj/aget</span> <span class="nv">L</span> <span class="p">(</span><span class="nf">lock-i</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">i</span><span class="p">)</span> <span class="nv">Lsz</span><span class="p">))]</span>
+	  <span class="p">(</span><span class="nf">.lock</span> <span class="nv">lk</span><span class="p">)</span>
+	  <span class="p">(</span><span class="nf">try</span>
+	    <span class="p">(</span><span class="nf">clj/aset</span> <span class="nv">a</span>
+	      <span class="nv">i</span>
+	      <span class="p">(</span><span class="nf">f</span> <span class="p">(</span><span class="nb">aget </span><span class="nv">this</span> <span class="nv">i</span><span class="p">)))</span>
+	    <span class="p">(</span><span class="nf">finally</span> <span class="p">(</span><span class="nf">.unlock</span> <span class="nv">lk</span><span class="p">)))))</span>
+      <span class="p">)))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">S</span> <span class="p">(</span><span class="nf">make-smart-array</span> <span class="nv">Integer/TYPE</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">pummel</span> <span class="nv">S</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">seq </span><span class="nv">S</span><span class="p">)</span>
+<span class="c1">;=&gt; all 100</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><code>make-smart-array</code> 的一个缺陷是所有读写操作都是用了相同的可重入锁。可以使用不同的锁 <code>ReetrantReadWriteLock</code> 。</p>
+<h3 id="vars和动态绑定">Vars和动态绑定</h3>
+<p><code>Vars</code> 是最常用的，因为它有两个特性：</p>
+<ul>
+<li><code>Vars</code> 可以在命名空间中命名和嵌入。</li>
+<li>动态 <code>vars</code> 可以提供线程局部状态。这个功能，var对引用类型的贡献最大。</li>
+</ul>
+<p>定义中var的线程局部值只能从单个线程读取或写入，因此它提供了Clojure引用类型所期望的线程安全语义。</p>
+<p>想要获取一个 <code>var</code> 对象，你必须传递一个名字给特殊操作符 <code>var</code> 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">var </span><span class="nv">*read-eval*</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当一个 <code>var</code> 对象打印出来时，它以 <code>#'</code> 开头，后面跟着 <code>var</code> 的全限定名称。</p>
+<p><code>#'</code> 读功能扩展为 <code>var</code> 运算符，这意味着这两个是同一操作。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="o">#</span><span class="ss">&#39;*read-eval*</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="绑定宏">绑定宏</h4>
+<p><code>var</code> 的根绑定可以充当堆栈的基础，每个线程的本地绑定都将推入该堆栈并根据请求从其弹出。</p>
+<p>推入和弹出线程局部绑定的常用机制是 <code>binding</code> 宏。</p>
+<p><code>binding</code> 宏接受一个或多个 <code>var</code> 的名称，并且每个变量都有一个值，用于在推入新绑定时初始化新绑定。</p>
+<p>这些绑定将一直有效，直到控制权脱离 <code>binding</code> 宏，这时它们就会从堆栈中弹出。</p>
+<p>这是一个简单的函数示例，该函数显示 <code>var</code>  <code>*read-eval*</code> 的当前值，即根值或线程局部值，以当前有效的为准。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">print-read-eval</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">println </span><span class="s">&#34;*read-eval* is currently：&#34;</span> <span class="nv">*read-eval*</span><span class="p">))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">binding-play</span>
+  <span class="s">&#34;binding macro test&#34;</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">print-read-eval</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">binding </span><span class="p">[</span><span class="nv">*read-eval*</span> <span class="nv">false</span><span class="p">]</span>
+    <span class="p">(</span><span class="nf">print-read-eval</span><span class="p">))</span>
+  <span class="p">(</span><span class="nf">print-read-eval</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">binding-play</span><span class="p">)</span>
+<span class="c1">;= *read-eval* is currently： true</span>
+<span class="c1">;= *read-eval* is currently： false</span>
+<span class="c1">;= *read-eval* is currently： true</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Var绑定示意图
+<img src="/ox-hugo/vars01.png" alt=""></p>
+<h4 id="创建一个命名var">创建一个命名var</h4>
+<p><code>Vars</code> 通常使用操作符 <code>def</code> 或者其他包含了 <code>def</code> 操作符的宏扩展形式。</p>
+<ul>
+<li><code>defn</code> 放置一个函数到 <code>var</code></li>
+<li><code>defmacro</code> 放置一个宏到 <code>var</code></li>
+<li><code>defonce</code> 为一个为绑定的 <code>var</code> 设置一个值</li>
+<li><code>defmulti</code> 放置一个多重方法到 <code>var</code></li>
+</ul>
+<p>因为一个已经命名的 <code>var</code> 在它的名字被求值的时候会自动解引用获得它的值，所以想指定 <code>var</code> 而不是它的值，可以使用 <code>#'</code> 或者是 <code>var</code> 。</p>
+<p><code>var</code> 可以以四种状态中的任何一种存在（或不存在），其准确的状态可以用以下函数判断</p>
+<ul>
+<li><code>resolve</code></li>
+<li><code>bound?</code></li>
+<li><code>thread-bound?</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>初始化机制</th>
+<th>(resolve &lsquo;x)</th>
+<th>(bound? #&lsquo;x)</th>
+<th>(thread-bound? #&lsquo;x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(def x)</td>
+<td>#&lsquo;user/x</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>(def x 5)</td>
+<td>#&lsquo;user/x</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>(binding [x 7] &hellip;)</td>
+<td>#&lsquo;user/x</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>(with-local-vars [x 9] &hellip;)</td>
+<td>nil</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<h4 id="创建一个匿名vars">创建一个匿名vars</h4>
+<p><code>Vars</code> 不总是有命名，或者不总需要在命名空间内部。</p>
+<p><code>with-local-vars</code> 宏创建一个动态 <code>vars</code> 并且一次给予它线程局部绑定，并且不会嵌入到命名空间。而是将它们绑定到本地变量，这意味着不会通过符号名称隐式查找关联的 <code>var</code> 。需要使用 <code>deref</code> 或者是 <code>var-get</code> 获取 <code>var</code> 当前的值。</p>
+<h4 id="动态作用域">动态作用域</h4>
+<p><code>Vars</code> 有一个动态域，和 <code>let</code> 的词法作用域相反。</p>
+<p>词法作用域和和动态作用域的区别：</p>
+<ul>
+<li>词法作用域可以通过查看代码的嵌套结构轻松查看其初始化位置。</li>
+<li>动态作用域在通过调用堆栈中较早位置的任何绑定进行了初始化，而未必位于附近的代码中。</li>
+</ul>
 
     </div>
 
@@ -464,7 +1150,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-04-21
+        2020-04-25
         
     </span>
   </p>

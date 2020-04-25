@@ -25,7 +25,7 @@ It makes use of a variety of open source projects including:
     <item>
       <title>Clojure趣学指南-第10章-变动和并发编程</title>
       <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter10/</link>
-      <pubDate>Tue, 21 Apr 2020 22:21:40 +0800</pubDate>
+      <pubDate>Sat, 25 Apr 2020 11:15:14 +0800</pubDate>
       
       <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter10/</guid>
       <description>变动和并发编程 Clojure主要的可变引用： refs agents agents atoms STM的概念定义:协调相关可变值单元格之间并发更新的一种非阻塞方式 什么时候使用refs 第</description>

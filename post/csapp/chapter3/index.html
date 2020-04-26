@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>第三章-程序的机器级表示 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.1 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/csapp/chapter3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="第三章-程序的机器级表示" />
+<meta property="og:description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/csapp/chapter3/" />
+<meta property="article:published_time" content="2020-04-26T21:18:35+08:00" />
+<meta property="article:modified_time" content="2020-04-26T21:18:35+08:00" />
+<meta itemprop="name" content="第三章-程序的机器级表示">
+<meta itemprop="description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成">
+<meta itemprop="dateModified" content="2020-04-26T21:18:35&#43;08:00" />
+<meta itemprop="wordCount" content="2274">
+
+
+
+<meta itemprop="keywords" content="Os,C," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="第三章-程序的机器级表示"/>
+<meta name="twitter:description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">第三章-程序的机器级表示</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-26 </span>
+        <div class="post-category">
+            <a href="/categories/os/"> Os </a>
+            </div>
+          <span class="more-meta"> 约 2274 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#程序的机器级表示">程序的机器级表示</a>
+      <ul>
+        <li><a href="#程序编码">程序编码</a></li>
+        <li><a href="#数据格式">数据格式</a></li>
+        <li><a href="#访问信息">访问信息</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="程序的机器级表示">程序的机器级表示</h2>
+<h3 id="程序编码">程序编码</h3>
+<p>假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">gcc -Og -o p p1.c p2.c
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>-Og</code> 告诉编译器使用会生成符合原始C代码整体结构的机器代码的优化等级。使用高级别优化产生的代码会严重变形，以至于产生的机器代码和初始源代码之间的关系非常难以理解。</p>
+<p>gcc将源代码转换为可执行代码的过程</p>
+<ul>
+<li>预处理：C预处理其扩展源代码，插入所有用 <code>#include</code> 命令指定的文件，并扩展所有用 <code>#define</code> 声明指定的宏。</li>
+<li>编译：编译器产生源文件的汇编代码。</li>
+<li>汇编：汇编器会将汇编代码转化为二进制表示，但是还没有填入全局值的地址。</li>
+<li>链接：链接器将两个目标代码文件与实现库函数（例如printf）的代码合并，并产生最终可执行代码文件（由命令行指示符-o指定）。</li>
+</ul>
+<h4 id="机器级代码">机器级代码</h4>
+<p>对于机器级编程来说，其中两种抽象尤为重要</p>
+<ul>
+<li>指令集体系结构或指令集架构（Instruction Set Architecture，ISA）：来定义机器级程序的格式和行为，它定义了处理器状态，指令的格式，以及每条指令对状态的影响。</li>
+<li>机器级程序使用的内存地址是虚拟地址，提供的内存模型看上去是一个非常大的字节数组。存储器系统实际实现是将多个硬件存储器和操作系统软件组合起来。</li>
+</ul>
+<p>x86-64的机器代码和原始的C代码差别非常大。一些通常对C语言程序员隐藏的处理器状态都是可见的：</p>
+<ul>
+<li>程序计数器（通常成为“PC”，在x86-64中用 <code>%rip</code> 表示）给出将要执行的下一条指令在内存中的地址。</li>
+<li>整数寄存器文件包含16个命名的位置，分别存储64位的值。</li>
+<li>条件码寄存器保存着最近执行的算术或逻辑指令的状态信息。</li>
+<li>一组向量寄存器可以存放一个或多个整数或浮点数。</li>
+</ul>
+<p>虽然C语言提供了一种模型，可以在内存中声明和分配各种数据类型的对象，但是机器码只是简单地将内存看成一个很大的，按字节寻址的数组。</p>
+<p>程序内存包括：程序的可执行机器代码，操作系统需要的一些信息，用来管理过程调用和返回的运行时栈，以及用户分配的内存块（用malloc库函数分配的）。</p>
+<p>较为典型的程序只会访问几兆字节或几千兆字节的数据。操作系统负责管理虚拟地址空间，将虚拟地址翻译成实际处理器内存中的物理地址。</p>
+<h4 id="代码示例">代码示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">long</span> <span class="nf">mult2</span><span class="p">(</span><span class="kt">long</span><span class="p">,</span> <span class="kt">long</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">multstore</span><span class="p">(</span><span class="kt">long</span> <span class="n">x</span><span class="p">,</span> <span class="kt">long</span> <span class="n">y</span><span class="p">,</span> <span class="kt">long</span> <span class="o">*</span><span class="n">dest</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="n">mult2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="o">*</span><span class="n">dest</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>-S</code> 选项产生汇编代码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">gcc -Og -S mstore.c
+</code></pre></td></tr></table>
+</div>
+</div><p>汇编代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm">	<span class="na">.file</span>	<span class="s">&#34;mstore.c&#34;</span>
+	<span class="na">.text</span>
+	<span class="na">.globl</span>	<span class="no">multstore</span>
+	<span class="na">.type</span>	<span class="no">multstore</span><span class="p">,</span> <span class="na">@function</span>
+<span class="nl">multstore:</span>
+<span class="nl">.LFB0:</span>
+	<span class="na">.cfi_startproc</span>
+	<span class="nf">subl</span>	<span class="no">$20</span><span class="p">,</span> <span class="nv">%esp</span>
+	<span class="na">.cfi_def_cfa_offset</span> <span class="mi">24</span>
+	<span class="nf">pushl</span>	<span class="mi">28</span><span class="p">(</span><span class="nv">%esp</span><span class="p">)</span>
+	<span class="na">.cfi_def_cfa_offset</span> <span class="mi">28</span>
+	<span class="nf">pushl</span>	<span class="mi">28</span><span class="p">(</span><span class="nv">%esp</span><span class="p">)</span>
+	<span class="na">.cfi_def_cfa_offset</span> <span class="mi">32</span>
+	<span class="nf">call</span>	<span class="no">mult2</span>
+	<span class="nf">movl</span>	<span class="mi">40</span><span class="p">(</span><span class="nv">%esp</span><span class="p">),</span> <span class="nv">%edx</span>
+	<span class="nf">movl</span>	<span class="nv">%eax</span><span class="p">,</span> <span class="p">(</span><span class="nv">%edx</span><span class="p">)</span>
+	<span class="nf">addl</span>	<span class="no">$28</span><span class="p">,</span> <span class="nv">%esp</span>
+	<span class="na">.cfi_def_cfa_offset</span> <span class="mi">4</span>
+	<span class="nf">ret</span>
+	<span class="na">.cfi_endproc</span>
+<span class="nl">.LFE0:</span>
+	<span class="na">.size</span>	<span class="no">multstore</span><span class="p">,</span> <span class="no">.-multstore</span>
+	<span class="na">.ident</span>	<span class="s">&#34;GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609&#34;</span>
+	<span class="na">.section</span>	<span class="no">.note.GNU-stack</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">,</span><span class="na">@progbits</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>-c</code> 选项，GCC会编译并汇编该代码，得到二进制格式的目标代码文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">gcc -Og -c mstore.c
+</code></pre></td></tr></table>
+</div>
+</div><p>要展示程序的字节表示，可以在文件 <code>mstore.o</code> 上运行GDB调试工具，输入命令
+<code>x/14xb multstore</code></p>
+<p>要查看机器代码文件的内容，有一类称为反汇编器（disassembler）。Linux系统中，可以使用 <code>objdump -d mstore.o</code> 进行查看。</p>
+<p>关于机器代码和它的反汇编表示的特性注意以下几点</p>
+<ul>
+<li>x86-64的指令长度从1到15个字节不等。</li>
+<li>设计指令的格式的方式是，从某个给定位置开始，可以将字节唯一地解码成机器指令。</li>
+<li>反汇编器只是给予机器代码文件中的字节序列来确定汇编代码。</li>
+<li>反汇编器使用的指令命名规则和GCC生成的汇编代码使用的有些细微的差别。</li>
+</ul>
+<p>使用 <code>-o</code> 选项生成可执行文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">gcc -Og -o prog main.c mstore.c
+</code></pre></td></tr></table>
+</div>
+</div><p>通过使用命令 <code>objdump -d prog</code> 看到和反汇编的代码几乎一样，主要区别是链接器将调用函数 <code>mult2</code> 使用的地址填上来。</p>
+<p>链接器的任务之一就是为函数调用找到匹配的函数的可执行代码的位置。</p>
+<h4 id="关于格式的注解">关于格式的注解</h4>
+<p>所有以 <code>.</code> 开头的行都是知道汇编器和链接器工作的伪指令。</p>
+<h3 id="数据格式">数据格式</h3>
+<p>由于从16位体系结构扩展成32位的，Intel用术语“字（word）”表示16位数据类型。因此称32位数为“双字（double words）”，称64位数为“四字（quad words）”。</p>
+<p>x86-64指令集同样包括完整的针对字节，字和双字的指令。</p>
+<table>
+<thead>
+<tr>
+<th>C声明</th>
+<th>Intel数据类型</th>
+<th>汇编代码后缀</th>
+<th>大小（字节）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>char</td>
+<td>字节</td>
+<td>b</td>
+<td>1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>字</td>
+<td>w</td>
+<td>2</td>
+</tr>
+<tr>
+<td>int</td>
+<td>双字</td>
+<td>l</td>
+<td>4</td>
+</tr>
+<tr>
+<td>long</td>
+<td>四字</td>
+<td>q</td>
+<td>8</td>
+</tr>
+<tr>
+<td>char*</td>
+<td>四字</td>
+<td>q</td>
+<td>8</td>
+</tr>
+<tr>
+<td>float</td>
+<td>单精度</td>
+<td>s</td>
+<td>4</td>
+</tr>
+<tr>
+<td>double</td>
+<td>双精度</td>
+<td>l</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<h3 id="访问信息">访问信息</h3>
+<p>一个x86-64中央处理单元（CPU）包含一组16个存储64位值的通用目的寄存器。这些寄存器可以用来存储整数数据和指针。它们的名字都以 <code>%r</code> 开头。</p>
+<p>从 <code>%ax</code> 到 <code>%sp</code> ，每个寄存器都有特殊的用途。</p>
+<p>扩展到IA32架构时，这些寄存器也扩展成32位寄存器，标号从 <code>%eax</code> 到 <code>%ebp</code> 。扩展到x86-64后，原来的8个寄存器扩展成64位，标号从 <code>%rax</code> 到 <code>%rbp</code> 。除此之外，还增加了8个新的寄存器，它们的标号都是按照新的命名规范制定的：从 <code>%r8</code> 到 <code>%r15</code></p>
+<p>栈指针 <code>%rsp</code> 用来指明运行时栈的结束位置。</p>
+<h4 id="操作数指示符">操作数指示符</h4>
+<p>大多数指令有一个或多个操作数（operand），指示出执行一个操作中要使用的源数据值，以及放置结果的目的位置。</p>
+<p>源数据值可以以常数形式给出，或是从寄存器或和内存中读出。结果可以存放在寄存器或内存中。</p>
+<p>各种不同的操作数可能被分为三种类型</p>
+<ul>
+<li>立即数（immediate），用来表示常数值，在ATT格式中，书写方式是 <code>$</code> 后面跟一个标准C表示法表示的整数，如 <code>$-577</code> 或 <code>$0x1F</code> 。不同的指令允许的立即数范围不同，汇编器会自动选择最紧凑的方式进行数值编码。</li>
+<li>寄存器（register），它表示某个寄存器的内容。它表示某个寄存器的内容，16个寄存器的低1字节，2字节，4字节或8字节中的一个作为操作数，这些字节分别对应于8
+位，16位，32位或64位。用符号$r_a$来表示任意寄存器$a$，用引用$R[r_a]$来表示它的值，这是将寄存器集合堪称一个数组$R$，用寄存器标识符作为索引。</li>
+<li>内存引用，它会根据计算出来的地址（通常称为有效地址）访问某个内存位置。用符号$M_b[Addr]$表示对存储在内存中从地址$Addr$开始的$b$个字节值的引用。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-26
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/os/">Os</a>
+          <a href="/tags/c/">C</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/thejoyofclojure2th/chapter10/">
+            <span class="next-text nav-default">Clojure趣学指南-第10章-变动和并发编程</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

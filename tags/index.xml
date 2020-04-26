@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 25 Apr 2020 11:15:14 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2020 21:18:35 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,9 +14,18 @@
     <item>
       <title>C</title>
       <link>https://devinkin.github.io/tags/c/</link>
-      <pubDate>Sat, 25 Apr 2020 11:15:14 +0800</pubDate>
+      <pubDate>Sun, 26 Apr 2020 21:18:35 +0800</pubDate>
       
       <guid>https://devinkin.github.io/tags/c/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Os</title>
+      <link>https://devinkin.github.io/tags/os/</link>
+      <pubDate>Sun, 26 Apr 2020 21:18:35 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/tags/os/</guid>
       <description></description>
     </item>
     
@@ -35,15 +44,6 @@
       <pubDate>Sat, 25 Apr 2020 11:15:14 +0800</pubDate>
       
       <guid>https://devinkin.github.io/tags/lisp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Os</title>
-      <link>https://devinkin.github.io/tags/os/</link>
-      <pubDate>Fri, 17 Apr 2020 14:36:28 +0800</pubDate>
-      
-      <guid>https://devinkin.github.io/tags/os/</guid>
       <description></description>
     </item>
     

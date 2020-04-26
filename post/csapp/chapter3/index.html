@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>第三章-程序的机器级表示 - Devinkin Blog</title>
+  <title>CSAPP-第三章-程序的机器级表示 - Devinkin Blog</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -39,21 +39,21 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="第三章-程序的机器级表示" />
+<meta property="og:title" content="CSAPP-第三章-程序的机器级表示" />
 <meta property="og:description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devinkin.github.io/post/csapp/chapter3/" />
-<meta property="article:published_time" content="2020-04-26T21:18:35+08:00" />
-<meta property="article:modified_time" content="2020-04-26T21:18:35+08:00" />
-<meta itemprop="name" content="第三章-程序的机器级表示">
+<meta property="article:published_time" content="2020-04-26T21:34:17+08:00" />
+<meta property="article:modified_time" content="2020-04-26T21:34:17+08:00" />
+<meta itemprop="name" content="CSAPP-第三章-程序的机器级表示">
 <meta itemprop="description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成">
-<meta itemprop="dateModified" content="2020-04-26T21:18:35&#43;08:00" />
-<meta itemprop="wordCount" content="2274">
+<meta itemprop="dateModified" content="2020-04-26T21:34:17&#43;08:00" />
+<meta itemprop="wordCount" content="2451">
 
 
 
 <meta itemprop="keywords" content="Os,C," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="第三章-程序的机器级表示"/>
+<meta name="twitter:title" content="CSAPP-第三章-程序的机器级表示"/>
 <meta name="twitter:description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成"/>
 
 <!--[if lte IE 9]>
@@ -121,14 +121,14 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">第三章-程序的机器级表示</h1>
+      <h1 class="post-title">CSAPP-第三章-程序的机器级表示</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2020-04-26 </span>
         <div class="post-category">
             <a href="/categories/os/"> Os </a>
             </div>
-          <span class="more-meta"> 约 2274 字 </span>
+          <span class="more-meta"> 约 2451 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -377,6 +377,80 @@
 位，16位，32位或64位。用符号$r_a$来表示任意寄存器$a$，用引用$R[r_a]$来表示它的值，这是将寄存器集合堪称一个数组$R$，用寄存器标识符作为索引。</li>
 <li>内存引用，它会根据计算出来的地址（通常称为有效地址）访问某个内存位置。用符号$M_b[Addr]$表示对存储在内存中从地址$Addr$开始的$b$个字节值的引用。</li>
 </ul>
+<p>有多种不同的寻址模式，允许不同形式的内存引用。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>格式</th>
+<th>操作数值</th>
+<th>名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>立即数</td>
+<td>$Imm</td>
+<td>Imm</td>
+<td>立即数寻址</td>
+</tr>
+<tr>
+<td>寄存器</td>
+<td>\(r_a\)</td>
+<td>\(R[r_a]\)</td>
+<td>寄存器寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>Imm</td>
+<td>M[Imm]</td>
+<td>绝对寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>\((r_a)\)</td>
+<td>\(M[R[r_a]]\)</td>
+<td>间接寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>\((r_b , r_i)\)</td>
+<td>\(M[R[r_b] + R[r_i]]\)</td>
+<td>变址寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>\(Imm(r_b, r_i)\)</td>
+<td>\(M[Imm + R[r_b] + R[r_i]]\)</td>
+<td>变址寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>\((, r_i, s)\)</td>
+<td>\(M[R[r_i] \cdot s]\)</td>
+<td>比例变址寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>\(Imm(, r_i, s)\)</td>
+<td>\(M[Imm + R[r_i] \cdot s]\)</td>
+<td>比例变址寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>\((r_b, r_i, s)\)</td>
+<td>\(M[R[r_b] + R[r_i] \cdot s]\)</td>
+<td>比例变址寻址</td>
+</tr>
+<tr>
+<td>存储器</td>
+<td>\(Imm(r_b, r_i, s)\)</td>
+<td>\(M[Imm + R[r_b] + R[r_i] \cdot s]\)</td>
+<td>比例变址寻址</td>
+</tr>
+</tbody>
+</table>
+<p>最常见的寻址语法是$$</p>
 
     </div>
 

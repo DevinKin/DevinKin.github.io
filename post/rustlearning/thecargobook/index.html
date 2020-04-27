@@ -43,12 +43,12 @@
 <meta property="og:description" content="TheCargoBook笔记 Cargo是Rust的包管理工具。Cargo下载您的Rust软件包的依赖项，编译您的软件包，制作可分发的软件包，" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devinkin.github.io/post/rustlearning/thecargobook/" />
-<meta property="article:published_time" content="2020-04-27T07:42:33+08:00" />
-<meta property="article:modified_time" content="2020-04-27T07:42:33+08:00" />
+<meta property="article:published_time" content="2020-04-27T20:41:15+08:00" />
+<meta property="article:modified_time" content="2020-04-27T20:41:15+08:00" />
 <meta itemprop="name" content="Cargo指南">
 <meta itemprop="description" content="TheCargoBook笔记 Cargo是Rust的包管理工具。Cargo下载您的Rust软件包的依赖项，编译您的软件包，制作可分发的软件包，">
-<meta itemprop="dateModified" content="2020-04-27T07:42:33&#43;08:00" />
-<meta itemprop="wordCount" content="574">
+<meta itemprop="dateModified" content="2020-04-27T20:41:15&#43;08:00" />
+<meta itemprop="wordCount" content="1107">
 
 
 
@@ -128,8 +128,8 @@
         <div class="post-category">
             <a href="/categories/rust/"> Rust </a>
             </div>
-          <span class="more-meta"> 约 574 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
+          <span class="more-meta"> 约 1107 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
     </header>
@@ -184,11 +184,63 @@
 <ul>
 <li>
 <p>添加依赖</p>
-<p>在 <code>dependencies</code> 添加依赖即可，详细参数可看以下链接。
-<a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies">
-指定包依赖</a></p>
+<p>在 <code>dependencies</code> 添加依赖即可，详细参数可看以下链接。<a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies">指定包依赖</a></p>
 </li>
 </ul>
+<h4 id="包结构">包结构</h4>
+<p>Cargo包的结构如下</p>
+<ul>
+<li>
+<p><code>Cargo.toml</code> 和 <code>Cargo.lock</code> 存储在包的根目录下</p>
+</li>
+<li>
+<p>源代码存储在 <code>src</code> 目录下</p>
+</li>
+<li>
+<p>默认的库文件存储在 <code>src/lib.rs</code></p>
+</li>
+<li>
+<p>默认的可执行文件是 <code>src/main.rs</code> ，其他可执行文件可以放置在 <code>src/bin/</code></p>
+</li>
+<li>
+<p>基准测试在 <code>benches</code> 目录中</p>
+</li>
+<li>
+<p>例子代码在 <code>examples</code> 目录中</p>
+</li>
+<li>
+<p>集成测试在 <code>tests</code> 目录中</p>
+<p>有关手动配置目标的更多详细信息，请参见 <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target">配置目标</a>。</p>
+</li>
+</ul>
+<p>有关控制Cargo如何自动推断目标名称的更多信息，请参阅 <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#target-auto-discovery">目标自动发现</a>。</p>
+<h4 id="cargo-dot-toml和cargo-dot-lock">Cargo.toml和Cargo.lock</h4>
+<p>Cargo.toml和Cargo.lock用于两种不同的目的</p>
+<ul>
+<li><code>Cargo.toml</code> ：由你广义地描述你的依赖关系。</li>
+<li><code>Cargo.lock</code> ：包含有关您的依赖项的确切信息。它是由Cargo维护的，不应手动对其进行编辑。</li>
+</ul>
+<p>如果你构建一个非最终产品，例如其他rust包将依赖的rust库，将 <code>Cargo.lock</code> 放入
+<code>.gitignore</code> 中。</p>
+<p>如果你构建一个最终产品，则可以像命令行工具或应用程序那样的可执行文件，或者使用 <code>create-type</code> 为 <code>staticlib</code> 或 <code>cdylib</code> 的系统库，将 <code>Cargo.lock</code> 放入
+<code>git</code> 中，用于版本控制。</p>
+<p><code>cargo update</code> 可以更新所有的依赖， <code>-p</code> 选项可以指定更新哪个依赖。</p>
+<h4 id="测试">测试</h4>
+<p>Cargo可以使用 <code>cargo test</code> 命令进行测试。</p>
+<p>Cargo会寻找两个目录进行测试</p>
+<ul>
+<li><code>src</code> ：单元测试</li>
+<li><code>tests</code> ：集成测试</li>
+</ul>
+<p>如果只进行包的测试，可以只包名进行测试。</p>
+<h4 id="构建缓存">构建缓存</h4>
+<p>Cargo构建默认的输出路径是 <code>target</code> 目录。可以通过修改以下内容更改输出目录：</p>
+<ul>
+<li>设置环境变量 <code>CARGO_TARGET_DIR</code></li>
+<li><code>build.target-dir</code> 配置值</li>
+<li><code>--target-dir</code> 命令行选项</li>
+</ul>
+<p><code>--target</code> 选项可以指定构建时输出的父目录。</p>
 
     </div>
 

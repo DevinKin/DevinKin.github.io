@@ -25,7 +25,7 @@ It makes use of a variety of open source projects including:
     <item>
       <title>Cargo指南</title>
       <link>https://devinkin.github.io/post/rustlearning/thecargobook/</link>
-      <pubDate>Mon, 27 Apr 2020 07:42:33 +0800</pubDate>
+      <pubDate>Mon, 27 Apr 2020 20:41:15 +0800</pubDate>
       
       <guid>https://devinkin.github.io/post/rustlearning/thecargobook/</guid>
       <description>TheCargoBook笔记 Cargo是Rust的包管理工具。Cargo下载您的Rust软件包的依赖项，编译您的软件包，制作可分发的软件包，</description>

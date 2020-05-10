@@ -9,22 +9,57 @@
   </url>
   
   <url>
+    <loc>https://devinkin.github.io/tags/c/</loc>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://devinkin.github.io/categories/</loc>
-    <lastmod>2020-05-09T21:21:36+08:00</lastmod>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/clojure/</loc>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/categories/clojure/</loc>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/thejoyofclojure2th/chapter11/</loc>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/lisp/</loc>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/post/</loc>
-    <lastmod>2020-05-09T21:21:36+08:00</lastmod>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/tags/</loc>
-    <lastmod>2020-05-09T21:21:36+08:00</lastmod>
+    <lastmod>2020-05-10T21:36:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -60,13 +95,6 @@
   <url>
     <loc>https://devinkin.github.io/post/finacialmanagement/richdadpoordad/chapter3/</loc>
     <lastmod>2020-05-09T21:02:58+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/tags/c/</loc>
-    <lastmod>2020-04-27T20:41:15+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -121,28 +149,7 @@
   </url>
   
   <url>
-    <loc>https://devinkin.github.io/tags/clojure/</loc>
-    <lastmod>2020-04-25T11:15:14+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/categories/clojure/</loc>
-    <lastmod>2020-04-25T11:15:14+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://devinkin.github.io/post/thejoyofclojure2th/chapter10/</loc>
-    <lastmod>2020-04-25T11:15:14+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/tags/lisp/</loc>
     <lastmod>2020-04-25T11:15:14+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

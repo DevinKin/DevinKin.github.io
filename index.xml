@@ -23,6 +23,15 @@ It makes use of a variety of open source projects including:
     </item>
     
     <item>
+      <title>Clojure趣学指南-第十一章-并行</title>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter11/</link>
+      <pubDate>Sun, 10 May 2020 21:36:00 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter11/</guid>
+      <description>第十一章-并行 通常情况下，并行任务朝着一个总体目标努力；并且一项任务的结果不会影响任何其他并行任务的行为，从而保持确定性。 什么时候使用fut</description>
+    </item>
+    
+    <item>
       <title>富爸爸穷爸爸-第4章-关注自己的事业</title>
       <link>https://devinkin.github.io/post/finacialmanagement/richdadpoordad/chapter4/</link>
       <pubDate>Sat, 09 May 2020 21:21:36 +0800</pubDate>

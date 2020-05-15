@@ -6,7 +6,7 @@
     <description>Recent content in Clojure on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 10 May 2020 21:36:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 15 May 2020 21:26:23 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/tags/clojure/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>Clojure趣学指南-第十一章-并行</title>
       <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter11/</link>
-      <pubDate>Sun, 10 May 2020 21:36:00 +0800</pubDate>
+      <pubDate>Fri, 15 May 2020 21:26:23 +0800</pubDate>
       
       <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter11/</guid>
       <description>第十一章-并行 通常情况下，并行任务朝着一个总体目标努力；并且一项任务的结果不会影响任何其他并行任务的行为，从而保持确定性。 什么时候使用fut</description>

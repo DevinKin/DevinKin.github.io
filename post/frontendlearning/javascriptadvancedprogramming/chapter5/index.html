@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JavaScript高级程序设计-第5章-引用类型 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第5章-引用类型 Object类型 创建 Object 实例的方式有两种 使用 new 操作符后跟 Object 构造函数. 使用对象字面量表示法. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 var person" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.70.0 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter5/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="JavaScript高级程序设计-第5章-引用类型" />
+<meta property="og:description" content="第5章-引用类型 Object类型 创建 Object 实例的方式有两种 使用 new 操作符后跟 Object 构造函数. 使用对象字面量表示法. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 var person" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter5/" />
+<meta property="article:published_time" content="2020-05-16T22:10:19+08:00" />
+<meta property="article:modified_time" content="2020-05-16T22:10:19+08:00" />
+<meta itemprop="name" content="JavaScript高级程序设计-第5章-引用类型">
+<meta itemprop="description" content="第5章-引用类型 Object类型 创建 Object 实例的方式有两种 使用 new 操作符后跟 Object 构造函数. 使用对象字面量表示法. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 var person">
+<meta itemprop="dateModified" content="2020-05-16T22:10:19&#43;08:00" />
+<meta itemprop="wordCount" content="8285">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaScript高级程序设计-第5章-引用类型"/>
+<meta name="twitter:description" content="第5章-引用类型 Object类型 创建 Object 实例的方式有两种 使用 new 操作符后跟 Object 构造函数. 使用对象字面量表示法. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 var person"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JavaScript高级程序设计-第5章-引用类型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-05-16 </span>
+        
+          <span class="more-meta"> 约 8285 字 </span>
+          <span class="more-meta"> 预计阅读 17 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第5章-引用类型">第5章-引用类型</a>
+      <ul>
+        <li><a href="#object类型">Object类型</a></li>
+        <li><a href="#array类型">Array类型</a></li>
+        <li><a href="#date类型">Date类型</a></li>
+        <li><a href="#regexp类型">RegExp类型</a></li>
+        <li><a href="#function类型">Function类型</a></li>
+        <li><a href="#基本包装类型">基本包装类型</a></li>
+        <li><a href="#单体内置对象">单体内置对象</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="第5章-引用类型">第5章-引用类型</h2>
+<h3 id="object类型">Object类型</h3>
+<p>创建 <code>Object</code> 实例的方式有两种</p>
+<ul>
+<li>使用 <code>new</code> 操作符后跟 <code>Object</code> 构造函数.</li>
+<li>使用对象字面量表示法.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">();</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&#34;Nicholas&#34;</span><span class="p">;</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">29</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span> <span class="o">:</span> <span class="s2">&#34;Nicholas&#34;</span><span class="p">,</span>
+    <span class="nx">age</span> <span class="o">:</span> <span class="mi">29</span>
+<span class="p">};</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>JavaScript支持方括号访问属性 <code>person[&quot;name&quot;]</code></p>
+<h3 id="array类型">Array类型</h3>
+<p>ECMAScript数字的每一项都可以保存任何类型的数据, 大小可以动态调整.</p>
+<p>创建数组有两种方式</p>
+<ul>
+<li>使用 <code>Array</code> 构造函数, 可以忽略 <code>new</code> 操作符.</li>
+<li>数组字面量创建.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="s2">&#34;Greg&#34;</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">names</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">var</span> <span class="nx">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">];</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">[,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">];</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">names</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>数组的项数保存在 <code>length</code> 属性中, 这个属性始终会返回0或更大的值.</p>
+<p>数组的 <code>length</code> 属性不是只读的.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">];</span>
+<span class="nx">colors</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">];</span>
+<span class="nx">colors</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">];</span>
+<span class="nx">colors</span><span class="p">[</span><span class="nx">colors</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&#34;black&#34;</span><span class="p">;</span>
+<span class="nx">colors</span><span class="p">[</span><span class="nx">colors</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&#34;brown&#34;</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">];</span>
+<span class="nx">colors</span><span class="p">[</span><span class="mi">99</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&#34;black&#34;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="检测数组">检测数组</h4>
+<p>ECMAScript新增了 <code>Array.isArray()</code> 方法, 确定某个值是不是数组, 不管它是在哪个全局执行环境中创建的.</p>
+<h4 id="转换方法">转换方法</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">];</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">valueOf</span><span class="p">());</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+
+<span class="cm">/**
+</span><span class="cm">red,blue,green
+</span><span class="cm">[ &#39;red&#39;, &#39;blue&#39;, &#39;green&#39; ]
+</span><span class="cm">[ &#39;red&#39;, &#39;blue&#39;, &#39;green&#39; ]
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当调用数组的 <code>toLocaleString()</code> 方法时, 它也会创建一个数组值的以逗号分隔的字符串, 每一项调用的是 <code>toLocaleString()</code> 方法.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">person1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">toLocaleString</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="s2">&#34;Nikolaos&#34;</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">toString</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="s2">&#34;Nicholas&#34;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">person2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">toLocaleString</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="s2">&#34;Grigorios&#34;</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">toString</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="s2">&#34;Greg&#34;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">people</span> <span class="o">=</span> <span class="p">[</span><span class="nx">person1</span><span class="p">,</span> <span class="nx">person2</span><span class="p">];</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">people</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">people</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">people</span><span class="p">.</span><span class="nx">toLocaleString</span><span class="p">());</span>
+
+<span class="cm">/**
+</span><span class="cm">[
+</span><span class="cm">    {
+</span><span class="cm">	toLocaleString: [Function: toLocaleString],
+</span><span class="cm">	toString: [Function: toString]
+</span><span class="cm">    },
+</span><span class="cm">    {
+</span><span class="cm">	toLocaleString: [Function: toLocaleString],
+</span><span class="cm">	toString: [Function: toString]
+</span><span class="cm">    }
+</span><span class="cm">]
+</span><span class="cm">Nicholas,Greg
+</span><span class="cm">Nikolaos,Grigorios
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>数组的 <code>join()</code> 方法可以使用不同的分隔符来构建这个字符串, 只接收一个参数, 即用作分隔符的字符串, 然后返回包含所有数组项的字符.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">];</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&#34;||&#34;</span><span class="p">));</span>
+
+<span class="cm">/**
+</span><span class="cm">   red.green.blue
+</span><span class="cm">   red||green||blue
+</span><span class="cm">   */</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="栈方法">栈方法</h4>
+<p><code>push()</code> 方法接受任意数量参数, 把他们逐个添加到数组尾部, 并返回修改后数组的长度.</p>
+<p><code>pop()</code> 方法则从数组末尾移除最后一项, 减少数组的 <code>length</code> 值, 然后返回移除项.</p>
+<h4 id="队列方法">队列方法</h4>
+<p><code>shift()</code> 方法能移动数组的第一项并返回该项, 同时将数组长度减1.</p>
+<p><code>push()</code> 方法接受任意数量参数, 把他们逐个添加到数组尾部, 并返回修改后数组的长度.</p>
+<p><code>unshift()</code> 方法能在数组前端添加任意个项并返回新数组的长度.</p>
+<h4 id="重排序方法">重排序方法</h4>
+<p><code>reverse()</code> 方法会反转数组项顺序.</p>
+<p><code>sort()</code> 接受一个比较函数作为参数进行排序.</p>
+<p>比较函数接收两个参数</p>
+<ul>
+<li>第一个参数应该在第二个之前返回一个负数.</li>
+<li>两个参数相等, 返回0.</li>
+<li>第一个参数应该在第二个之后返回一个正数.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">compare</span><span class="p">(</span><span class="nx">value1</span><span class="p">,</span> <span class="nx">value2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">value1</span> <span class="o">&lt;</span> <span class="nx">value2</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">value1</span> <span class="o">&gt;</span> <span class="nx">value2</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">];</span>
+<span class="nx">values</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">compare</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="操作方法">操作方法</h4>
+<p><code>concat()</code> 方法基于当前数组中所有项创建一个新数组, 将所有接收到的参数添加到这个副本的末尾.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">colors2</span> <span class="o">=</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&#34;yellow&#34;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&#34;black&#34;</span><span class="p">,</span> <span class="s2">&#34;brown&#34;</span><span class="p">]);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors2</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>slice()</code> 方法基于当前数组中的一或多个项创建一个新数组, 该方法接收一个或两个参数, 即要返回项起始和结束位置.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">,</span> <span class="s2">&#34;yellow&#34;</span><span class="p">,</span> <span class="s2">&#34;purple&#34;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">colors2</span> <span class="o">=</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">colors3</span> <span class="o">=</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors2</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors3</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>splice()</code> 方法主要用途是向数组的中部插入项, 使用这种方法的方式有以下3种</p>
+<ul>
+<li>删除: 可以删除任意数量的项, 指定两个参数, 要删除的第一项的位置和要删除的项数.</li>
+<li>插入: 可以指定位置插入任意数量的项. 提供3个参数, 起始位置, 0(要删除的项数)和要插入的项. 如果要插入多个项, 可以再传入4,5,以及任意多个项.</li>
+<li>替换: 可以向指定位置插入任意数量的项, 且同时删除任意数量的项, 指定3个参数, 起始位置, 要删除的项数, 要插入的任意数量的项. 插入项数和删除项数可以不必相等.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;green&#34;</span><span class="p">,</span> <span class="s2">&#34;blue&#34;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">removed</span> <span class="o">=</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">removed</span><span class="p">);</span>
+
+<span class="nx">removed</span> <span class="o">=</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&#34;yellow&#34;</span><span class="p">,</span> <span class="s2">&#34;orange&#34;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">removed</span><span class="p">);</span>
+
+<span class="nx">removed</span> <span class="o">=</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&#34;red&#34;</span><span class="p">,</span> <span class="s2">&#34;purple&#34;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">colors</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">removed</span><span class="p">);</span>
+
+<span class="cm">/**
+</span><span class="cm">   [ &#39;green&#39;, &#39;blue&#39; ]
+</span><span class="cm">   [ &#39;red&#39; ]
+</span><span class="cm">   [ &#39;green&#39;, &#39;yellow&#39;, &#39;orange&#39;, &#39;blue&#39; ]
+</span><span class="cm">   []
+</span><span class="cm">   [ &#39;green&#39;, &#39;red&#39;, &#39;purple&#39;, &#39;orange&#39;, &#39;blue&#39; ]
+</span><span class="cm">   [ &#39;yellow&#39; ]
+</span><span class="cm"> */</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="迭代方法">迭代方法</h4>
+<p>ECMAScript6为数组定义了5个迭代方法, 每个方法都接收两个参数</p>
+<ul>
+<li>每一项上运行的函数, 该函数接收3个参数, 数组项的值, 该项在数组中的位置和数组对象本身.</li>
+<li>运行该函数的作用域对象, 影响 <code>this</code> 的值.</li>
+</ul>
+<p>5个迭代方法的作用分别是, 这些方法都不会修改数组中包含的值</p>
+<ul>
+<li><code>every()</code> 对数组中的每一项运行给定函数, 如果对每一项都返回 <code>true</code> , 则返回 <code>true</code> .</li>
+<li><code>filter()</code> 对数组中的每一项运行给定函数, 如果该函数会返回 <code>true</code> 的项组成的函数.</li>
+<li><code>forEach()</code> 对数组中的每一项运行给定函数. 这个方法没有返回值.</li>
+<li><code>map()</code> 对数组中的每一项运行给定函数, 返回每次函数调用的结果组成的数组.</li>
+<li><code>some()</code> 对数组中的每一项运行给定函数, 如果该函数对任一项返回 <code>true</code> , 则返回 <code>true</code> .</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">everyResult</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">every</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">item</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">everyResult</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">someResult</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">item</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">someResult</span><span class="p">);</span>
+
+<span class="cm">/**
+</span><span class="cm">   false
+</span><span class="cm">   true
+</span><span class="cm">   */</span>
+
+<span class="kd">var</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">filterResult</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">item</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">filterResult</span><span class="p">)</span>
+<span class="c1">//[ 3, 4, 5, 4, 3
+</span><span class="c1"></span>
+
+<span class="kd">var</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">mapResult</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">item</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">mapResult</span><span class="p">);</span>
+<span class="cm">/**
+</span><span class="cm">   [
+</span><span class="cm">   2, 4, 6, 8, 10,
+</span><span class="cm">   8, 6, 4, 2
+</span><span class="cm">]
+</span><span class="cm"> */</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="聚合方法">聚合方法</h4>
+<p><code>reduce()</code> 和 <code>reduceRight()</code> 方法都会迭代数组的所有项, 然后构建一个最终返回的值.</p>
+<ul>
+<li><code>reduce()</code> 方法从数组的第一项开始, 逐个遍历到最后.</li>
+<li><code>reduceRight()</code> 则从数组的最后一项开始, 向前遍历到第一项.</li>
+<li>两个方法都接收两个参数, 一个在每一项上调用的函数和(可选的)作为聚合基础的初始值.
+<ul>
+<li>该函数接收4个参数, 前一个值, 当前值, 项的索引和数组对象.</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">sum</span> <span class="o">=</span> <span class="nx">values</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">prev</span><span class="p">,</span> <span class="nx">cur</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">prev</span> <span class="o">+</span> <span class="nx">cur</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sum</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="date类型">Date类型</h3>
+<p><code>Date</code> 类型使用自UTC开始的毫秒数来保存日期.</p>
+<p><code>Date.UTC()</code> 方法返回当前时间到UTC开始的毫秒数. 参数分别是</p>
+<ul>
+<li>年份</li>
+<li>基于0的月份(一月是0,二月是1)</li>
+<li>月中的哪一天(1到31)</li>
+<li>小时数(0到23)</li>
+<li>分钟</li>
+<li>秒</li>
+<li>毫秒</li>
+</ul>
+<p><code>Date.parse()</code> 方法接收一个表示日期的字符串参数, 然后尝试根据这个字符串返回相应的毫秒数.</p>
+<p><code>Date</code> 构造函数和 <code>Date.UTC()</code> 的参数类似, 但是日期时间都基于本地时区而非GMT来创建.</p>
+<p>ECMAScript5添加了 <code>Date.now()</code> 方法, 返回表示调用这个方法时的日期和时间的毫秒数.</p>
+<h4 id="继承的方法">继承的方法</h4>
+<p><code>Date</code> 类型的 <code>toLocaleString()</code> 方法会按照浏览器设置的地区相适应的格式返回日期和时间.</p>
+<p><code>Date</code> 类型的 <code>toString()</code> 方法通常返回带有时区信息的日期和时间, 一般以军用时间(小时范围为0到23)表示.</p>
+<p><code>Date</code> 类型的 <code>valueOf()</code> 方法, 根本不返回字符串, 而是返回日期的毫秒表示.</p>
+<h4 id="日期格式化方法">日期格式化方法</h4>
+<p><code>Date</code> 类型有专门用于将日期格式为字符串的方法</p>
+<ul>
+<li><code>toDateString()</code> 以特定于实现的格式显示星期几,月,日和年.</li>
+<li><code>toTimeString()</code> 以特定于实现的格式显示时,分,秒和时区.</li>
+<li><code>toLocaleDateString</code> 以特定于实现的格式显示星期几,月,日和年.</li>
+<li><code>toLocaleTimeString()</code> 以特定于实现的格式显示时,分,秒.</li>
+<li><code>toUTCString()</code> 以特定于实现的格式完整的UTC日期.</li>
+</ul>
+<h4 id="日期-时间组件方法-dot">日期/时间组件方法.</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getTime()</td>
+<td>返回表示日期的毫秒数,与valueOf()返回的值相同</td>
+</tr>
+<tr>
+<td>setTime(毫秒)</td>
+<td>以毫秒设置日期,会改变整个日期</td>
+</tr>
+<tr>
+<td>getFullYear()</td>
+<td>取得4位数的年份(2007)</td>
+</tr>
+<tr>
+<td>getUTCFullYear()</td>
+<td>取得UTC日期4位数的年份(2007)</td>
+</tr>
+<tr>
+<td>setFullYear(年)</td>
+<td>设置日期的年份,传入的年份值必须是4位数字(2007)</td>
+</tr>
+<tr>
+<td>setUTCFullYear(年)</td>
+<td>设置UTC日期的年份,传入的年份值必须是4位数字(2007)</td>
+</tr>
+<tr>
+<td>getMonth()</td>
+<td>返回日期中的月份,其中0表示一月,11表示十二月</td>
+</tr>
+<tr>
+<td>getUTCMonth()</td>
+<td>获取UTC日期的月份,其中0表示一月,11表示十二月</td>
+</tr>
+<tr>
+<td>setMonth(月)</td>
+<td>设置日期的月份.传入的月份必须大于0,超过11则增加年份</td>
+</tr>
+<tr>
+<td>setUTCMonth(月)</td>
+<td>设置UTC日期的月份.传入的月份必须大于0,超过11则增加年份</td>
+</tr>
+<tr>
+<td>getDate()</td>
+<td>返回日期月份中的天数(1到31)</td>
+</tr>
+<tr>
+<td>getUTCDate()</td>
+<td>返回UTC日期月份中的天数(1到31)</td>
+</tr>
+<tr>
+<td>setDate()</td>
+<td>设置日期月份中的天数.如果传入的值超过了该月中应有的天数,增加月份</td>
+</tr>
+<tr>
+<td>setUTCDate()</td>
+<td>设置UTC日期月份中的天数.如果传入的值超过了该月中应有的天数,增加月份</td>
+</tr>
+<tr>
+<td>getDay()</td>
+<td>返回日期中星期的星期几(0表示星期日,6表示星期六)</td>
+</tr>
+<tr>
+<td>getUTCDay()</td>
+<td>返回UTC日期中星期的星期几(0表示星期日,6表示星期六)</td>
+</tr>
+<tr>
+<td>getHours()</td>
+<td>返回日期中的小时数(0到23)</td>
+</tr>
+<tr>
+<td>getUTCHours()</td>
+<td>返回UTC日期中的小时数(0到23)</td>
+</tr>
+<tr>
+<td>setHours(时)</td>
+<td>设置日期中的小时数.传入的值超过23则增加月份中的天数</td>
+</tr>
+<tr>
+<td>setUTCHours(时)</td>
+<td>设置UTC日期中的小时数.传入的值超过23则增加月份中的天数</td>
+</tr>
+<tr>
+<td>getMinutes()</td>
+<td>返回日期中的分钟数(0到59)</td>
+</tr>
+<tr>
+<td>getUTCMinutes()</td>
+<td>返回UTC日期中的分钟数(0到59)</td>
+</tr>
+<tr>
+<td>setMinutes(分)</td>
+<td>设置日期中的分钟数.传入的值超过59则增加小时数</td>
+</tr>
+<tr>
+<td>setUTCMinutes(分)</td>
+<td>设置UTC日期中的分钟数.传入的值超过59则增加小时数</td>
+</tr>
+<tr>
+<td>getSeconds()</td>
+<td>获取日期中的秒数(0到59)</td>
+</tr>
+<tr>
+<td>getUTCSeconds()</td>
+<td>获取UTC日期中的秒数(0到59)</td>
+</tr>
+<tr>
+<td>setSeconds(秒)</td>
+<td>设置日期中的描述.超过了59会增加分钟数</td>
+</tr>
+<tr>
+<td>setUTCSeconds(秒)</td>
+<td>设置UTC日期中的描述.超过了59会增加分钟数</td>
+</tr>
+<tr>
+<td>getMilliseconds()</td>
+<td>返回日期中的毫秒数</td>
+</tr>
+<tr>
+<td>getUTCMilliseconds()</td>
+<td>返回UTC日期中的毫秒数</td>
+</tr>
+<tr>
+<td>setMilliseconds(毫秒)</td>
+<td>设置日期中的毫秒数</td>
+</tr>
+<tr>
+<td>setUTCMilliseconds(毫秒)</td>
+<td>设置UTC日期中的毫秒数</td>
+</tr>
+<tr>
+<td>getTimezoneOffset()</td>
+<td>返回本地时间与UTC时间相差的分钟数.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="regexp类型">RegExp类型</h3>
+<p>ECMAScript通过 <code>RegExp</code> 类型来支持正则表达式. 创建的语法如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">expression</span> <span class="o">=</span> <span class="err">/pattern/flags;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中模式(pattern)部分可以是任何简单或复杂的正则表达式, 可以包含字符类, 限定符, 分组, 向前查找以及反向引用.</p>
+<p>每个正则表达式都可带有一或多个标志(flags), 标明正则表达式的行为.</p>
+<ul>
+<li><code>g</code> : 表示全局(global)模式, 即模式将被应用于所有字符串, 而非发现第一个匹配项时立即停止.</li>
+<li><code>i</code> : 表示不区分大小写(case-insensitive)模式, 即在确定匹配项时忽略模式于字符串的大小写.</li>
+<li><code>m</code> : 表示多行(multiline)模式, 即在到达一行文本末尾时还会继续查找下一行中是否存在模式匹配的项.</li>
+</ul>
+<p><code>RegExp</code> 构造函数它接收两个参数, 一个是要匹配的字符串模式, 另一个是可选标志字符串.</p>
+<h4 id="regexp实例属性">RegExp实例属性</h4>
+<p><code>RegExp</code> 的每个实例都具有下列属性</p>
+<ul>
+<li><code>global</code> 布尔值, 是否设置了g标志.</li>
+<li><code>ignoreCase</code> 布尔值, 是否设置了i标志.</li>
+<li><code>multiline</code> 布尔值, 表示是否设置了m标志.</li>
+<li><code>lastIndex</code> 整数, 表示开始搜索下一个匹配的字符位置, 从0算起.</li>
+<li><code>source</code> 正则表达式的字符串表示, 按照字面量形式而非传入构造函数中的字符串模式返回.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">pattern1</span> <span class="o">=</span> <span class="sr">/\[bc\]at/i</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern1</span><span class="p">.</span><span class="nx">global</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern1</span><span class="p">.</span><span class="nx">ignoreCase</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern1</span><span class="p">.</span><span class="nx">multiline</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern1</span><span class="p">.</span><span class="nx">lastIndex</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern1</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">pattern2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">&#34;\\[bc\\]at&#34;</span><span class="p">,</span> <span class="s2">&#34;i&#34;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern2</span><span class="p">.</span><span class="nx">global</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern2</span><span class="p">.</span><span class="nx">ignoreCase</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern2</span><span class="p">.</span><span class="nx">multiline</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern2</span><span class="p">.</span><span class="nx">lastIndex</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern2</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="regexp实例方法">RegExp实例方法</h4>
+<p><code>exec()</code> 方法接收一个参数, 即要应用模式的字符串, 然后返回包含第一个匹配信息的数组. 没有的情况下返回 <code>null</code> .</p>
+<p>返回的数组是 <code>Array</code> 实例, 但包含两个额外的属性</p>
+<ul>
+<li><code>index</code> 表示匹配在字符串中的位置</li>
+<li><code>input</code> 表示应用正则表达式的字符串</li>
+</ul>
+<p>在返回的数组中, 第一项是整个模式匹配的字符串, 其他项是与模式中的捕获组匹配的字符串.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&#34;mom and dad and baby fuck&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="sr">/mom( and dad( and baby)?)?/gi</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">matches</span> <span class="o">=</span> <span class="nx">pattern</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">.</span><span class="nx">input</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+
+
+<span class="cm">/**
+</span><span class="cm">0
+</span><span class="cm">mom and dad and baby fuck
+</span><span class="cm">mom and dad and baby
+</span><span class="cm">and dad and baby
+</span><span class="cm">and baby
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>对于 <code>exec()</code> 方法而言, 即使在模式中设置了全局标志(g), 它每次也只会返回一个匹配项. 在不设置全局标志的情况下, 在同一个字符串上多次调用 <code>exec()</code> 将始终返回第一个匹配项的信息.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&#34;cat, bat, sat, fat&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">pattern1</span> <span class="o">=</span> <span class="sr">/.at/</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">matches</span> <span class="o">=</span> <span class="nx">pattern1</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern1</span><span class="p">.</span><span class="nx">lastIndex</span><span class="p">);</span>
+
+<span class="nx">matches</span> <span class="o">=</span> <span class="nx">pattern1</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern1</span><span class="p">.</span><span class="nx">lastIndex</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">pattern2</span> <span class="o">=</span> <span class="sr">/.at/g</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">matches</span> <span class="o">=</span> <span class="nx">pattern2</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern2</span><span class="p">.</span><span class="nx">lastIndex</span><span class="p">);</span>
+
+<span class="nx">matches</span> <span class="o">=</span> <span class="nx">pattern2</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern2</span><span class="p">.</span><span class="nx">lastIndex</span><span class="p">);</span>
+
+
+<span class="cm">/**
+</span><span class="cm">   0
+</span><span class="cm">   cat
+</span><span class="cm">   0
+</span><span class="cm">   0
+</span><span class="cm">   cat
+</span><span class="cm">   0
+</span><span class="cm">
+</span><span class="cm">   0
+</span><span class="cm">   cat
+</span><span class="cm">   3
+</span><span class="cm">   5
+</span><span class="cm">   bat
+</span><span class="cm">   8
+</span><span class="cm">  */</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>test()</code> 方法接收一个字符串参数, 在模式与该参数匹配的情况下返回 <code>true</code> , 否则返回 <code>false</code> .</p>
+<p><code>RegExp</code> 实例继承的 <code>toLocaleString()</code> 和 <code>toString()</code> 方法都会返回正则表达式的字面量, 与创建正则表达式的方式无关.</p>
+<h4 id="regexp构造函数属性">RegExp构造函数属性</h4>
+<p><code>RegExp</code> 构造函数包含了一些属性, 这些属性适用于作用域中的所有正则表达式, 并且基于所执行的最近一次正则表达式操作而变化.</p>
+<p><code>RegExp</code> 构造函数的属性可以使用短属性名和长属性名访问.</p>
+<table>
+<thead>
+<tr>
+<th>长属性名</th>
+<th>短属性名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input</td>
+<td>$_</td>
+<td>最近一次要匹配的字符串.</td>
+</tr>
+<tr>
+<td>lastMatch</td>
+<td>$&amp;</td>
+<td>最近一次的匹配项.</td>
+</tr>
+<tr>
+<td>lastParen</td>
+<td>$+</td>
+<td>最近一次匹配的捕获组.</td>
+</tr>
+<tr>
+<td>leftContext</td>
+<td>$`</td>
+<td>input字符串中lastMatch之前的文本.</td>
+</tr>
+<tr>
+<td>multline</td>
+<td>$*</td>
+<td>布尔值,表示是否所有表达式都使用多行模式.</td>
+</tr>
+<tr>
+<td>rightContext</td>
+<td>$&rsquo;</td>
+<td>input字符串中lastMatch之后的文本</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&#34;this has been a short summer&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="sr">/(.)hort/g</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">pattern</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">text</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">input</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">leftContext</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">rightContext</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">lastMatch</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">lastParen</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">multiline</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">();</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">$_</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">[</span><span class="s2">&#34;$`&#34;</span><span class="p">]);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">[</span><span class="s2">&#34;$&#39;&#34;</span><span class="p">]);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">[</span><span class="s2">&#34;$&amp;&#34;</span><span class="p">]);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">[</span><span class="s2">&#34;$+&#34;</span><span class="p">]);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">[</span><span class="s2">&#34;$*&#34;</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm">   this has been a short summer
+</span><span class="cm">   this has been a
+</span><span class="cm">   summer
+</span><span class="cm">   short
+</span><span class="cm">   s
+</span><span class="cm">   undefined
+</span><span class="cm">
+</span><span class="cm">   this has been a short summer
+</span><span class="cm">   this has been a
+</span><span class="cm">   summer
+</span><span class="cm">   short
+</span><span class="cm">   s
+</span><span class="cm">   undefined
+</span><span class="cm"> */</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>还有9个用于存储捕获组的构造函数属性, 访问这些属性的语法是 <code>RegExp.$num</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&#34;this has been a short summer&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="sr">/(..)or(.)/g</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">pattern</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">text</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">$1</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">RegExp</span><span class="p">.</span><span class="nx">$2</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm">   sh
+</span><span class="cm">   t
+</span><span class="cm"> */</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="function类型">Function类型</h3>
+<p>JavaScript的每个函数都是 <code>Function</code> 类型的实例, 而且都与其他引用类型一样具有属性和方法.</p>
+<p>由于函数是对象, 因此函数名实际上是一个指向函数对象的指针, 不会与某个函数绑定.</p>
+<p>使用 <code>Function</code> 构造函数, 接收任意数量的参数, 但是最后一个参数始终被看成是函数体.(不推荐)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">sum</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Function</span><span class="p">(</span><span class="s2">&#34;num1&#34;</span><span class="p">,</span> <span class="s2">&#34;num2&#34;</span><span class="p">,</span> <span class="s2">&#34;return num1 + num2&#34;</span><span class="p">;)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>一个函数可能会有多个名字.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span><span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num1</span> <span class="o">+</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+
+<span class="kd">var</span> <span class="nx">anotherSum</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">anotherSum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+
+<span class="nx">sum</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">anotherSum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>JavaScript函数没有重载.</p>
+<h4 id="函数声明与函数表达式">函数声明与函数表达式</h4>
+<p>解析器会率先读取函数声明, 并使其在执行任何代码之前可用(可以访问).</p>
+<p>函数表达式必须等到解析器执行到它所在的代码行, 才会真正解释执行.</p>
+<ul>
+<li>第二个案例, 函数是在一个初始化语句中, 而不是一个函数声明, 所以案例2中的函数未定义.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">));</span>
+
+<span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num1</span> <span class="o">+</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="kd">var</span> <span class="nx">sum</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num1</span> <span class="o">+</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="作为值的函数">作为值的函数</h4>
+<p>函数作为参数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">callSomeFunction</span><span class="p">(</span><span class="nx">someFunction</span><span class="p">,</span> <span class="nx">someArgument</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">someFunction</span><span class="p">(</span><span class="nx">someArgument</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">add10</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">result1</span> <span class="o">=</span> <span class="nx">callSomeFunction</span><span class="p">(</span><span class="nx">add10</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result1</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">getGreeting</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s2">&#34;Hello, &#34;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">result2</span> <span class="o">=</span> <span class="nx">callSomeFunction</span><span class="p">(</span><span class="nx">getGreeting</span><span class="p">,</span> <span class="s2">&#34;Nicholas&#34;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result2</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>函数作为返回值, 使用 <code>sort()</code> 函数对数组的元素的按某些属性进行排序.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">createComparisonFunction</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">object1</span><span class="p">,</span> <span class="nx">object2</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">value1</span> <span class="o">=</span> <span class="nx">object1</span><span class="p">[</span><span class="nx">propertyName</span><span class="p">];</span>
+	<span class="kd">var</span> <span class="nx">value2</span> <span class="o">=</span> <span class="nx">object2</span><span class="p">[</span><span class="nx">propertyName</span><span class="p">];</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">value1</span> <span class="o">&lt;</span> <span class="nx">value2</span><span class="p">)</span> <span class="p">{</span>
+	    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">value1</span> <span class="o">&gt;</span> <span class="nx">value2</span><span class="p">)</span> <span class="p">{</span>
+	    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">name</span> <span class="o">:</span> <span class="s2">&#34;Zachary&#34;</span><span class="p">,</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">28</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;Nicholas&#34;</span><span class="p">,</span> <span class="nx">age</span> <span class="o">:</span> <span class="mi">29</span><span class="p">}];</span>
+<span class="nx">data</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">createComparisonFunction</span><span class="p">(</span><span class="s2">&#34;name&#34;</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">);</span>
+
+<span class="nx">data</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">createComparisonFunction</span><span class="p">(</span><span class="s2">&#34;age&#34;</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="函数内部属性">函数内部属性</h4>
+<p>在函数内部, 有两个特殊的对象</p>
+<ul>
+<li><code>arguments</code> : 一个类数组对象, 包含着传入函数的所有参数.</li>
+<li><code>this</code> : 该对象引用的是函数据以执行的环境对象.</li>
+</ul>
+<p><code>arguments</code> 主要用途是保存函数参数, 但是这个对象还有一个名叫 <code>callee</code> 的属性, 该属性是一个指针, 指向拥有这个 <code>arguments</code> 对象的函数.</p>
+<p>如果函数名被换了, 使用 <code>arguments.callee</code> 仍能保证递归正常调用.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">num</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">num</span> <span class="o">*</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">// 等价写法
+</span><span class="c1"></span><span class="kd">function</span> <span class="nx">factorial2</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">num</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">num</span> <span class="o">*</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">callee</span><span class="p">(</span><span class="nx">num</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">factorial</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">factorial2</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>this</code> 在不同执行环境输出不同, 函数只是一个包含指针的变量, 因此全局的 <code>sayColor()</code> 函数和 <code>o.sayColor()</code> 指向的仍然是同一个函数.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">window</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s2">&#34;red&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">color</span><span class="o">:</span> <span class="s2">&#34;blue&#34;</span><span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">sayColor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">sayColor</span><span class="p">();</span>
+
+<span class="nx">o</span><span class="p">.</span><span class="nx">sayColor</span> <span class="o">=</span> <span class="nx">sayColor</span><span class="p">;</span>
+<span class="nx">o</span><span class="p">.</span><span class="nx">sayColor</span><span class="p">();</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>函数对象的属性 <code>caller</code> , 这个属性保存着调用当前函数(inner)的函数的引用(outer).</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">outer</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">inner</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">inner</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">callee</span><span class="p">.</span><span class="nx">caller</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">outer</span><span class="p">();</span>
+
+<span class="c1">// [Function: outer]
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="函数属性和方法">函数属性和方法</h4>
+<p>ECMAScript中函数是对象, 因此函数也有属性和方法, 每个函数都包含两个属性</p>
+<ul>
+<li><code>length</code> : 表示函数希望接收到的参数的个数.</li>
+<li><code>prototype</code> : 保存他们所有实例方法的真正所在. 该属性不可枚举, 使用for-in无法发现.</li>
+</ul>
+<p>每个函数都包含两个非继承而来的方法, 这两个方法的用途都是在特定的作用域中调用函数</p>
+<ul>
+<li><code>apply()</code> 方法接收两个参数, 一个是在其中运行函数的作用域, 另一个是参数数组(可以是Array实例, 也可以是arguments对象).</li>
+<li><code>call()</code> 方法接收两个参数, 第一个参数是 <code>this</code> 值, 其余参数都直接传递给函数.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num1</span> <span class="o">+</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">callSum1</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">sum</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">callSum2</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">sum</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">[</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">callSum3</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">sum</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">callSum1</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">callSum1</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>apply()</code> 和 <code>call()</code> 函数可以扩充函数赖以运行的运行作用域. 对象不需要与方法任何耦合关系.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">window</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s2">&#34;red&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">color</span> <span class="o">:</span> <span class="s2">&#34;blue&#34;</span><span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">sayColor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// red
+</span><span class="c1"></span><span class="nx">sayColor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="c1">// red
+</span><span class="c1"></span><span class="nx">sayColor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nb">window</span><span class="p">);</span>
+<span class="c1">// blue
+</span><span class="c1"></span><span class="nx">sayColor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>ECMAScript5还定义了一个方法 <code>bind()</code> . 这个方法会创建一个函数实例, 其 <code>this</code> 值会被绑定到传给 <code>bind()</code> 函数的值.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">&#34;red&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">color</span> <span class="o">:</span> <span class="s2">&#34;blue&#34;</span><span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">sayColor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">objectSayColor</span> <span class="o">=</span> <span class="nx">sayColor</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span>
+<span class="nx">objectSayColor</span><span class="p">();</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="基本包装类型">基本包装类型</h3>
+<p>ECMAScript提供了3个特殊的引用类型: <code>Boolean</code> , <code>Number</code> 和 <code>String</code></p>
+<p>引用类型与基本包装类型的主要区别就是对象的生存期.</p>
+<ul>
+<li>使用 <code>new</code> 操作符创建的引用类型的实例, 在执行流离开当前作用域之前都一直保存在内存中.</li>
+<li>自动创建的基本包装类型的独享, 只存在于一行代码的执行瞬间, 然后立即被销毁.</li>
+</ul>
+<p>不建议显式创建基本包装类型的对象.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">object</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">(</span><span class="s2">&#34;some text&#34;</span><span class="p">);</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">obj</span> <span class="k">instanceof</span> <span class="nb">String</span><span class="p">);</span>    <span class="c1">// true
+</span><span class="c1"></span>
+<span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="s2">&#34;25&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">number</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>      <span class="c1">// 转型函数
+</span><span class="c1"></span><span class="nx">alert</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">number</span><span class="p">);</span>            <span class="c1">// &#34;number&#34;
+</span><span class="c1"></span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>     <span class="c1">// 构造函数
+</span><span class="c1"></span><span class="nx">alert</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">obj</span><span class="p">);</span>               <span class="c1">// &#34;object&#34;
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="number类型">Number类型</h4>
+<p><code>Number</code> 类重写了 <code>valueOf()</code> , <code>toLocaleString()</code> 和 <code>toString()</code> 方法, 重写后的 <code>valueOf()</code> 方法返回对象表示的基本类型的数值.</p>
+<p><code>toString()</code> 方法传递一个表示基数的参数, 告诉它返回几进制.</p>
+<p><code>toFixed()</code> 方法会按照指定的小数点返回数值的字符串表示.</p>
+<p><code>toExponential()</code> 方法返回以指数表示法(e表示法), 接收一个指定小数位数的参数.</p>
+<p><code>toPrecision()</code> 方法可能返回固定大小格式, 也可能返回指数形式.</p>
+<h4 id="string类型">String类型</h4>
+<p>访问字符串特定字符的方法有 <code>charAt</code> 和 <code>charCodeAt</code> , 两个方法都接收一个参数, 即基于0的字符位置, <code>charCodeAt</code> 返回字符编码.</p>
+<p><code>concat()</code> 方法可以将一个或多个字符串拼接起来得到新字符串.</p>
+<p><code>slice()</code> , <code>substr()</code> 和 <code>substring()</code> 三个方法都会返回操作字符串的一个子字符串, 而且都接收一个或两个参数.</p>
+<ul>
+<li>第一个参数指定子字符串的开始位置</li>
+<li>第二个参数(在指定情况下)表示子字符串到哪里结束, 没有指定则将字符串长度作为结束位置.</li>
+<li><code>slice()</code> 和 <code>substring()</code> 的第二个参数指定的是子字符串最后一个字符后面的位置.</li>
+<li><code>substr()</code> 的第二个参数指定的是返回的字符个数.</li>
+<li>以上方法返回一个基本类型的字符串值, 对原始字符串没有任何影响.</li>
+</ul>
+<p><code>indexOf()</code> 和 <code>lastIndexOf()</code> 两个方法都是从一个字符串中搜索给定的子字符串, 然后返回子字符串的位置, 没有找到子字符串, 返回-1.</p>
+<ul>
+<li><code>indexOf()</code> 方法从字符串的开头向后搜索子字符串.</li>
+<li><code>lastIndexOf()</code> 方法是从字符串的末尾向前搜索子字符串.</li>
+</ul>
+<p><code>trim()</code> 方法会创建一个字符串的副本, 删除前置及后缀的所有空格, 然后返回结果.</p>
+<p><code>toLowerCase()</code> , <code>toLocaleLowerCase()</code> , <code>toUpperCase()</code> 和 <code>toLocaleUpperCase()</code> 方法可以将字符串转换为大写或小写.</p>
+<p><code>match()</code> 与 <code>RegExp</code> 的 <code>exec()</code> 方法相同, <code>match()</code> 方法只接受一个参数, 要么是一个正则表达式, 要么是一个 <code>RegExp</code> 对象.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&#34;cat, bat, sat, fat&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="sr">/.at/</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">matches</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">pattern</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pattern</span><span class="p">.</span><span class="nx">lastIndex</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>search()</code> 方法与 <code>match()</code> 方法的参数相同, 返回字符串中第一个匹配项的索引, 没有找到匹配项, 返回-1. <code>search()</code> 方法始终是字符串开头向后查找模式.</p>
+<p><code>replace()</code> 方法接收两个参数, 第一个参数可以是一个 <code>RegExp</code> 对象或者一个字符串(这个字符串不会被转换为正则表达式), 第二个参数可以是一个字符串或者函数.</p>
+<ul>
+<li>如果第一个参数是字符串, 那么值会替换目标第一个子字符串.</li>
+<li>如果想要替换所有子字符串, 唯一办法就是提供正则表达式, 并且指定全局(g)标志.</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span>  <span class="nx">text</span> <span class="o">=</span> <span class="s2">&#34;cat, bat, sat, fat&#34;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&#34;at&#34;</span><span class="p">,</span> <span class="s2">&#34;ond&#34;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+
+<span class="nx">result</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/at/g</span><span class="p">,</span> <span class="s2">&#34;ond&#34;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>replace()</code> 第二个参数是字符串, 那么还可以使用一些特殊的字符序列, 将正则表达式操作得到的值插入到结果字符串中.</p>
+<table>
+<thead>
+<tr>
+<th>字符序列</th>
+<th>替换文本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$$</td>
+<td>$</td>
+</tr>
+<tr>
+<td>$&amp;</td>
+<td>匹配整个模式的子字符串.与RegExp.lastMatch的值相同</td>
+</tr>
+<tr>
+<td>$&rsquo;</td>
+<td>匹配的子字符串之前的子字符串.与RegExp.leftContext的值相同</td>
+</tr>
+<tr>
+<td>$`</td>
+<td>匹配的子字符串之后的子字符串.与RegExp.rightContext的值相同</td>
+</tr>
+<tr>
+<td>$n</td>
+<td>匹配第n个捕获组的字符串,其中n等于0~9.如果正则表达式中没有定义捕获组,则使用空字符串</td>
+</tr>
+<tr>
+<td>$nn</td>
+<td>匹配第nn个捕获组的子字符串,其中nn等于01~99.如果正则表达式中没有定义捕获组,则使用空字符串</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&#34;cat, bat, sat, fat&#34;</span><span class="p">;</span>
+<span class="nx">result</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(.at)/g</span><span class="p">,</span> <span class="s2">&#34;word ($1)&#34;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+
+<span class="c1">//word (cat), word (bat), word (sat), word (fat)
+</span></code></pre></td></tr></table>
+</div>
+</div><p><code>replace()</code> 方法第二个参数可以是一个函数, 在只有一个匹配项的情况下, 会向这个函数传递三个参数</p>
+<ul>
+<li>模式的匹配项</li>
+<li>模式匹配项在字符串中的位置</li>
+<li>原始字符串</li>
+</ul>
+<!-- raw HTML omitted -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">htmlEscape</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[&lt;&gt;&#34;&amp;]/g</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">match</span><span class="p">,</span> <span class="nx">pos</span><span class="p">,</span> <span class="nx">originalText</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">switch</span> <span class="p">(</span><span class="nx">match</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">case</span> <span class="s2">&#34;&lt;&#34;</span><span class="o">:</span>
+	    <span class="k">return</span> <span class="s2">&#34;&amp;lt;&#34;</span><span class="p">;</span>
+	    <span class="k">break</span><span class="p">;</span>
+	<span class="k">case</span> <span class="s2">&#34;&gt;&#34;</span><span class="o">:</span>
+	    <span class="k">return</span> <span class="s2">&#34;&amp;gt;&#34;</span><span class="p">;</span>
+	<span class="k">case</span> <span class="s2">&#34;&amp;&#34;</span><span class="o">:</span>
+	    <span class="k">return</span> <span class="s2">&#34;&amp;amp;&#34;</span><span class="p">;</span>
+	<span class="k">case</span> <span class="s2">&#34;\&#34;&#34;</span><span class="o">:</span>
+	    <span class="k">return</span> <span class="s2">&#34;&amp;quot;&#34;</span><span class="p">;</span>
+	<span class="k">default</span><span class="o">:</span>
+	    <span class="k">break</span><span class="p">;</span>
+	<span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">htmlEscape</span><span class="p">(</span><span class="s2">&#34;&lt;p class=\&#34;greeting\&#34;&gt;Hello World!&lt;/p&gt;&#34;</span><span class="p">));</span>
+<span class="c1">// &amp;lt;p class=&amp;quot;greeting&amp;quot;&amp;gt;Hello World!&amp;lt;/p&amp;gt;
+</span></code></pre></td></tr></table>
+</div>
+</div><p><code>replace()</code> 方法第二个参数可以是一个函数, 在正则表达式中定义了多个捕获组的情况下, 传递给函数的参数如下</p>
+<ul>
+<li>第一个捕获组的匹配项</li>
+<li>第二个捕获组的匹配项</li>
+<li>最后两个参数分别是模式的匹配项在字符串的位置和原始字符串.</li>
+</ul>
+<p><code>split()</code> 基于指定的分隔符将一个字符串分割成多个子字符串, 并将结果放在一个数组中.</p>
+<ul>
+<li>分隔符可以是一个字符串, 也可以是一个 <code>RegExp</code> 对象.</li>
+<li>第二个可选的参数, 用于指定数组的大小, 以便确保返回的数组不会超过既定大小.</li>
+</ul>
+<p><code>localeCompare()</code> 方法比较两个字符串, 并返回下列值中的一个</p>
+<ul>
+<li>如果字符串在字母表中应该排在字符串参数之前, 则返回一个负数(大多数情况下返回-1, 具体的值要视实现而定)</li>
+<li>如果字符串等于字符串参数, 则返回0.</li>
+<li>如果字符串在字母表中应该排在字符串参数之后, 则返回一个正数(大多数情况下返回1, 具体的值要视实现而定)</li>
+</ul>
+<p><code>fromCharCode()</code> 方法是静态方法, 这个方法的任务是接收一或多个字符编码, 然后将它们转换成一个字符串.</p>
+<h3 id="单体内置对象">单体内置对象</h3>
+<h4 id="global对象">Global对象</h4>
+<p><code>Global</code> 对象不属于任何其他对象的属性和方法.</p>
+<p>所有全局作用域中定义的属性和函数, 都是 <code>Global</code> 对象的属性.</p>
+<p><code>Global</code> 对象的 <code>encodeURI()</code> 和 <code>encodeURIComponent</code> 方法可以对URI进行编码, 以便发送给浏览器.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">uri</span> <span class="o">=</span> <span class="s2">&#34;http://www.wrox.com/illegal value.html#start&#34;</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">encodeURI</span><span class="p">(</span><span class="nx">uri</span><span class="p">));</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">uri</span><span class="p">));</span>
+
+<span class="cm">/**
+</span><span class="cm">   http://www.wrox.com/illegal%20value.html#start
+</span><span class="cm">   http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.html%23start
+</span><span class="cm">  */</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>decodeURI()</code> 和 <code>decodeURIComponent()</code> 方法可以对使用 <code>encodeURI()</code> 和 <code>encodeURIComponent()</code> 替换的字符进行解码.</p>
+<p><code>eval()</code> 方法只接收一个参数, 要执行的 <code>ECMAScript</code> 字符串, 并解析参数的代码.</p>
+<ul>
+<li>被执行的代码具有该执行环境相同的作用域链.</li>
+</ul>
+<h4 id="math对象">Math对象</h4>
+<p>Math对象的常用属性</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Math.E</td>
+<td>自然对数的底数,即常量e的值</td>
+</tr>
+<tr>
+<td>Math.LN10</td>
+<td>10的自然对数</td>
+</tr>
+<tr>
+<td>Math.LN2</td>
+<td>2的自然对数</td>
+</tr>
+<tr>
+<td>Math.LOG2E</td>
+<td>以2为底e的对数</td>
+</tr>
+<tr>
+<td>Math.LOG10E</td>
+<td>以10为底e的对数</td>
+</tr>
+<tr>
+<td>Math.PI</td>
+<td>Π的值</td>
+</tr>
+<tr>
+<td>Math.SQRT1_2</td>
+<td>1/2的平方根(2的平方根的倒数)</td>
+</tr>
+<tr>
+<td>Math.SQRT2</td>
+<td>2的平方根</td>
+</tr>
+</tbody>
+</table>
+<p><code>Math.ceil()</code> 执行向上舍入, 即它总是将数值向上舍入为最接近的整数.</p>
+<p><code>Math.floor()</code> 执行向下舍入, 即它总是将数值向下舍入为最接近的整数.</p>
+<p><code>Math.round()</code> 执行标准舍入, 即它总是将数值四舍五入为最接近的整数.</p>
+<p><code>Math.random()</code> 方法返回介于0和1之间一个随机数, 不包括0和1.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-05-16
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/frontendlearning/javascriptadvancedprogramming/chapter3/">
+            <span class="next-text nav-default">JavaScript高级程序设计-第三章-基本概念</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

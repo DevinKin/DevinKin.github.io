@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JavaScript高级程序设计-第四章-变量、作用域和内存问题 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第四章-变量、作用域和内存问题 基本类型和引用类型 ECMAScript变量可能包含两种不同数据类型的值： 基本类型值：简单的数据段。 引用类型值：" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.70.0 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter4/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="JavaScript高级程序设计-第四章-变量、作用域和内存问题" />
+<meta property="og:description" content="第四章-变量、作用域和内存问题 基本类型和引用类型 ECMAScript变量可能包含两种不同数据类型的值： 基本类型值：简单的数据段。 引用类型值：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter4/" />
+<meta property="article:published_time" content="2020-05-16T10:25:24+08:00" />
+<meta property="article:modified_time" content="2020-05-16T10:25:24+08:00" />
+<meta itemprop="name" content="JavaScript高级程序设计-第四章-变量、作用域和内存问题">
+<meta itemprop="description" content="第四章-变量、作用域和内存问题 基本类型和引用类型 ECMAScript变量可能包含两种不同数据类型的值： 基本类型值：简单的数据段。 引用类型值：">
+<meta itemprop="dateModified" content="2020-05-16T10:25:24&#43;08:00" />
+<meta itemprop="wordCount" content="758">
+
+
+
+<meta itemprop="keywords" content="JavaScript,前端," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaScript高级程序设计-第四章-变量、作用域和内存问题"/>
+<meta name="twitter:description" content="第四章-变量、作用域和内存问题 基本类型和引用类型 ECMAScript变量可能包含两种不同数据类型的值： 基本类型值：简单的数据段。 引用类型值："/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JavaScript高级程序设计-第四章-变量、作用域和内存问题</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-05-16 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> JavaScript </a>
+            </div>
+          <span class="more-meta"> 约 758 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#基本类型和引用类型">基本类型和引用类型</a>
+      <ul>
+        <li><a href="#动态的属性">动态的属性</a></li>
+        <li><a href="#复制变量值">复制变量值</a></li>
+        <li><a href="#传递参数">传递参数</a></li>
+        <li><a href="#检测类型">检测类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#执行环境及作用域">执行环境及作用域</a>
+      <ul>
+        <li><a href="#延长作用域链">延长作用域链</a></li>
+        <li><a href="#没有块级作用域">没有块级作用域</a></li>
+      </ul>
+    </li>
+    <li><a href="#垃圾收集">垃圾收集</a>
+      <ul>
+        <li><a href="#标记清除">标记清除</a></li>
+        <li><a href="#引用计数">引用计数</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="第四章-变量作用域和内存问题">第四章-变量、作用域和内存问题</h1>
+<h2 id="基本类型和引用类型">基本类型和引用类型</h2>
+<ul>
+<li>
+<p><code>ECMAScript</code>变量可能包含两种不同数据类型的值：</p>
+<ul>
+<li>基本类型值：简单的数据段。</li>
+<li>引用类型值：可能由多个值构成的对象。</li>
+</ul>
+</li>
+<li>
+<p>基本数据类型<code>Undefined</code>、<code>Null</code>、<code>Boolean</code>、<code>Number</code>、<code>String</code>，这5种基本类型是按值访问的，因为可以操作保存在变量中的实际的值。</p>
+</li>
+<li>
+<p>引用类型的值是保存在内存中的对象。</p>
+</li>
+<li>
+<p>JavaScript不允许直接操作对象的内存空间。</p>
+</li>
+</ul>
+<h3 id="动态的属性">动态的属性</h3>
+<ul>
+<li>对于引用类型的值，我们可以为其添加属性和方法，也可以改变和删除其属性和方法。</li>
+</ul>
+<h3 id="复制变量值">复制变量值</h3>
+<ul>
+<li>基本类型的复制是复制一个副本，两个变量互不影响。</li>
+<li>引用类型的复制是复制一个指针，两个变量引用同一个对象。</li>
+</ul>
+<h3 id="传递参数">传递参数</h3>
+<ul>
+<li><code>ECMAScript</code>中所有函数的参数都是按值传递的。</li>
+</ul>
+<h3 id="检测类型">检测类型</h3>
+<ul>
+<li>
+<p>检测基本类型的值时，使用<code>typeof</code>非常有用。</p>
+</li>
+<li>
+<p>检测引用类型的值时，可以使用<code>instanceof</code>操作符。</p>
+</li>
+<li>
+<p>语法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">result</span> <span class="o">=</span> <span class="nx">variable</span> <span class="k">instanceof</span> <span class="nx">constructor</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>所有引用类型的值都是<code>Object</code>的实例。</p>
+</li>
+</ul>
+<h2 id="执行环境及作用域">执行环境及作用域</h2>
+<ul>
+<li>全局执行环境是最外围的一个执行环境.</li>
+<li>在Web浏览器中，全局执行环境被认为是<code>window</code>对象。</li>
+<li>全局执行环境的变量对象始终都是作用域链中的最后一个对象。</li>
+<li>标识符解析是沿着作用域链一级一级地搜索标识符的过程。</li>
+</ul>
+<h3 id="延长作用域链">延长作用域链</h3>
+<ul>
+<li><code>try-catch</code>语句的<code>catch</code>块</li>
+<li><code>with</code>语句</li>
+</ul>
+<h3 id="没有块级作用域">没有块级作用域</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">if</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">&#34;blue&#34;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">color</span><span class="p">);</span>
+ 
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">doSomething</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="声明变量">声明变量</h4>
+<ul>
+<li>使用<code>var</code>声明的变量会自动添加到最接近的环境中。
+<ul>
+<li>在函数内部，最接近的环境就是函数的局部环境。</li>
+<li>在<code>with</code>语句中，最接近的环境就是函数环境。</li>
+</ul>
+</li>
+</ul>
+<h2 id="垃圾收集">垃圾收集</h2>
+<h3 id="标记清除">标记清除</h3>
+<ul>
+<li>当变量进入环境（如在函数中声明一个变量）时，就将这个变量标记为“进入环境”。离开某个环境时，就将其标记为“离开环境”。</li>
+</ul>
+<h3 id="引用计数">引用计数</h3>
+<ul>
+<li>引用计数策略容易触发循环引用的问题，会导致对象无法清除。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-05-16
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/javascript/">JavaScript</a>
+          <a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/frontendlearning/javascriptadvancedprogramming/chapter3/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">JavaScript高级程序设计-第三章-基本概念</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/finacialmanagement/junioraccountvideo/chapter1/">
+            <span class="next-text nav-default">初级会计视频-第一章-会计概述</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

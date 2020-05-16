@@ -9,6 +9,20 @@
   </url>
   
   <url>
+    <loc>https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter5/</loc>
+    <lastmod>2020-05-16T22:10:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/</loc>
+    <lastmod>2020-05-16T22:10:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://devinkin.github.io/categories/</loc>
     <lastmod>2020-05-16T10:25:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -16,7 +30,28 @@
   </url>
   
   <url>
-    <loc>https://devinkin.github.io/post/</loc>
+    <loc>https://devinkin.github.io/tags/javascript/</loc>
+    <lastmod>2020-05-16T10:25:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/categories/javascript/</loc>
+    <lastmod>2020-05-16T10:25:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter3/</loc>
+    <lastmod>2020-05-16T10:25:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter4/</loc>
     <lastmod>2020-05-16T10:25:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -31,6 +66,13 @@
   
   <url>
     <loc>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</loc>
+    <lastmod>2020-05-16T10:25:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/%E5%89%8D%E7%AB%AF/</loc>
     <lastmod>2020-05-16T10:25:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

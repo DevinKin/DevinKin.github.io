@@ -9,14 +9,56 @@
   </url>
   
   <url>
-    <loc>https://devinkin.github.io/tags/c/</loc>
-    <lastmod>2020-05-15T21:26:23+08:00</lastmod>
+    <loc>https://devinkin.github.io/categories/</loc>
+    <lastmod>2020-05-16T10:04:44+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://devinkin.github.io/categories/</loc>
+    <loc>https://devinkin.github.io/post/</loc>
+    <lastmod>2020-05-16T10:04:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/</loc>
+    <lastmod>2020-05-16T10:04:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</loc>
+    <lastmod>2020-05-16T10:04:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/%E6%8A%95%E8%B5%84/</loc>
+    <lastmod>2020-05-16T10:04:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/%E7%90%86%E8%B4%A2/</loc>
+    <lastmod>2020-05-16T10:04:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/categories/%E8%B4%A2%E5%8A%A1%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2020-05-16T10:04:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/c/</loc>
     <lastmod>2020-05-15T21:26:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -46,48 +88,6 @@
   <url>
     <loc>https://devinkin.github.io/tags/lisp/</loc>
     <lastmod>2020-05-15T21:26:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/post/</loc>
-    <lastmod>2020-05-15T21:26:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/tags/</loc>
-    <lastmod>2020-05-15T21:26:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</loc>
-    <lastmod>2020-05-13T23:34:39+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/tags/%E6%8A%95%E8%B5%84/</loc>
-    <lastmod>2020-05-13T23:34:39+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/tags/%E7%90%86%E8%B4%A2/</loc>
-    <lastmod>2020-05-13T23:34:39+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/categories/%E8%B4%A2%E5%8A%A1%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2020-05-13T23:34:39+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

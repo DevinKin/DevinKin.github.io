@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 15 May 2020 21:26:23 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 16 May 2020 10:04:44 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>初级会计视频-第一章-会计概述</title>
+      <link>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</link>
+      <pubDate>Sat, 16 May 2020 10:04:44 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</guid>
+      <description>第一章-会计概述 第一个等式：资产（第二章）=负债（第三章）+所有者权益（第三章） 第二章-资产：货应交，存固无 货币资金 应收账款 交移性金融资产 存</description>
+    </item>
     
     <item>
       <title>Clojure趣学指南-第十一章-并行</title>
@@ -18,15 +27,6 @@
       
       <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter11/</guid>
       <description>第十一章-并行 通常情况下，并行任务朝着一个总体目标努力；并且一项任务的结果不会影响任何其他并行任务的行为，从而保持确定性。 什么时候使用fut</description>
-    </item>
-    
-    <item>
-      <title>初级会计视频-第一章-会计概述</title>
-      <link>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</link>
-      <pubDate>Wed, 13 May 2020 23:34:39 +0800</pubDate>
-      
-      <guid>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</guid>
-      <description>第一章-会计概述 第一个等式：资产（第二章）=负债（第三章）+所有者权益（第三章） 第二章-资产：货应交，存固无 货币资金 应收账款 交移性金融资产 存</description>
     </item>
     
     <item>

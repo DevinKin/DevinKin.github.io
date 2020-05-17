@@ -10,14 +10,49 @@
   
   <url>
     <loc>https://devinkin.github.io/tags/c/</loc>
-    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
+    <lastmod>2020-05-17T23:08:31+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/categories/</loc>
-    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
+    <lastmod>2020-05-17T23:08:31+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/csapp/chapter3/</loc>
+    <lastmod>2020-05-17T23:08:31+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/os/</loc>
+    <lastmod>2020-05-17T23:08:31+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/categories/os/</loc>
+    <lastmod>2020-05-17T23:08:31+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/</loc>
+    <lastmod>2020-05-17T23:08:31+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/tags/</loc>
+    <lastmod>2020-05-17T23:08:31+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -38,20 +73,6 @@
   
   <url>
     <loc>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter4/</loc>
-    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/post/</loc>
-    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/tags/</loc>
     <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -235,27 +256,6 @@
   <url>
     <loc>https://devinkin.github.io/categories/rust/</loc>
     <lastmod>2020-04-27T20:41:15+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/post/csapp/chapter3/</loc>
-    <lastmod>2020-04-26T21:34:17+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/tags/os/</loc>
-    <lastmod>2020-04-26T21:34:17+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://devinkin.github.io/categories/os/</loc>
-    <lastmod>2020-04-26T21:34:17+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

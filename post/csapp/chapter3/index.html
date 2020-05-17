@@ -43,12 +43,12 @@
 <meta property="og:description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devinkin.github.io/post/csapp/chapter3/" />
-<meta property="article:published_time" content="2020-04-26T21:34:17+08:00" />
-<meta property="article:modified_time" content="2020-04-26T21:34:17+08:00" />
+<meta property="article:published_time" content="2020-05-17T23:08:31+08:00" />
+<meta property="article:modified_time" content="2020-05-17T23:08:31+08:00" />
 <meta itemprop="name" content="CSAPP-第三章-程序的机器级表示">
 <meta itemprop="description" content="程序的机器级表示 程序编码 假设一个C程序，有两个文件p1.c和p2.c，使用Unix命令行编译这些代码 1 gcc -Og -o p p1.c p2.c 其中 -Og 告诉编译器使用会生成">
-<meta itemprop="dateModified" content="2020-04-26T21:34:17&#43;08:00" />
-<meta itemprop="wordCount" content="2451">
+<meta itemprop="dateModified" content="2020-05-17T23:08:31&#43;08:00" />
+<meta itemprop="wordCount" content="5747">
 
 
 
@@ -124,12 +124,12 @@
       <h1 class="post-title">CSAPP-第三章-程序的机器级表示</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2020-04-26 </span>
+        <span class="post-time"> 2020-05-17 </span>
         <div class="post-category">
             <a href="/categories/os/"> Os </a>
             </div>
-          <span class="more-meta"> 约 2451 字 </span>
-          <span class="more-meta"> 预计阅读 5 分钟 </span>
+          <span class="more-meta"> 约 5747 字 </span>
+          <span class="more-meta"> 预计阅读 12 分钟 </span>
         
       </div>
     </header>
@@ -144,6 +144,8 @@
         <li><a href="#程序编码">程序编码</a></li>
         <li><a href="#数据格式">数据格式</a></li>
         <li><a href="#访问信息">访问信息</a></li>
+        <li><a href="#算术和逻辑操作">算术和逻辑操作</a></li>
+        <li><a href="#控制">控制</a></li>
       </ul>
     </li>
   </ul>
@@ -367,6 +369,10 @@
 <p>从 <code>%ax</code> 到 <code>%sp</code> ，每个寄存器都有特殊的用途。</p>
 <p>扩展到IA32架构时，这些寄存器也扩展成32位寄存器，标号从 <code>%eax</code> 到 <code>%ebp</code> 。扩展到x86-64后，原来的8个寄存器扩展成64位，标号从 <code>%rax</code> 到 <code>%rbp</code> 。除此之外，还增加了8个新的寄存器，它们的标号都是按照新的命名规范制定的：从 <code>%r8</code> 到 <code>%r15</code></p>
 <p>栈指针 <code>%rsp</code> 用来指明运行时栈的结束位置。</p>
+<figure>
+    <img src="/ox-hugo/register.png"/> 
+</figure>
+
 <h4 id="操作数指示符">操作数指示符</h4>
 <p>大多数指令有一个或多个操作数（operand），指示出执行一个操作中要使用的源数据值，以及放置结果的目的位置。</p>
 <p>源数据值可以以常数形式给出，或是从寄存器或和内存中读出。结果可以存放在寄存器或内存中。</p>
@@ -450,7 +456,555 @@
 </tr>
 </tbody>
 </table>
-<p>最常见的寻址语法是$$</p>
+<p>最常见的寻址语法是$Imm(r_b, r_i, s)$，这样的引用有四个组成部分</p>
+<ul>
+<li>$Imm$：立即数偏移</li>
+<li>$r_b$：基址寄存器，64位寄存器</li>
+<li>$r_i$：变址寄存器，64位寄存器</li>
+<li>$s$：比例因子，这里的必须是1，2，4，8。</li>
+</ul>
+<h4 id="数据传送指令">数据传送指令</h4>
+<p>数据传送指令是将数据从一个位置复制到另一个位置的指令。</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOV S, D</td>
+<td>D &lt;- S</td>
+<td>传送</td>
+</tr>
+<tr>
+<td>movb</td>
+<td></td>
+<td>传送字节</td>
+</tr>
+<tr>
+<td>movw</td>
+<td></td>
+<td>传送字</td>
+</tr>
+<tr>
+<td>movl</td>
+<td></td>
+<td>传送双字</td>
+</tr>
+<tr>
+<td>movq</td>
+<td></td>
+<td>传送四字</td>
+</tr>
+<tr>
+<td>movabsq I,R</td>
+<td>R &lt;- I</td>
+<td>传送绝对的四字</td>
+</tr>
+</tbody>
+</table>
+<p>源操作数指定的值是一个立即数，存储在寄存器中或者内存中。</p>
+<p>目的操作数指定一个位置，寄存器或者是内存地址。</p>
+<p>x86-64加了一条限制，传送指令的两个操作数不能都指向内存位置。</p>
+<p>将一个内存地址的值复制到另一个内存地址需要两条指令</p>
+<ul>
+<li>将源值加载到寄存器中</li>
+<li>将该寄存器的值写入目的内存地址。</li>
+</ul>
+<p>一般情况下， <code>MOV</code> 指令只会更新目的操作数指定的哪个寄存器字节或内存地址的值。</p>
+<p>唯一例外的是， <code>movl</code> 指令以寄存器作为目的时，它会把该寄存器的高位4字节设置为0。</p>
+<p><code>MOV</code> 指令源和目的类型的物种可能组合。</p>
+<ul>
+<li>立即数-&gt;寄存器： <code>movl $0x4050, %eax</code></li>
+<li>寄存器-&gt;寄存器： <code>movw %bp, %sp</code></li>
+<li>内存-&gt;寄存器： <code>movb (%rdi, %rcx), %al</code></li>
+<li>立即数-&gt;内存： <code>movb $-17, (%rsp)</code></li>
+<li>寄存器-&gt;内存： <code>movq %rax -12(%rbp)</code></li>
+</ul>
+<p>常规的 <code>movq</code> 指令只能表示32位补码的立即数作为源操作数，然后把这个值符号扩展得到64位的值，放到目的位置。</p>
+<p><code>movabsq</code> 指令能够以任意64位立即数作为源操作数，并且只能以寄存器作为目的。</p>
+<p>在较小的值源复制到较大的目的时使用，所有这些指令都把数据从源（寄存器或内存中）复制到目的寄存器。</p>
+<ul>
+<li><code>MOVZ</code> 类中的指令把目的中剩余的字节都填充为0</li>
+<li><code>MOVS</code> 类中的指令通过符号扩展来填充，把源操作数的最高位进行复制。</li>
+</ul>
+<p><code>MOVZ</code> 和 <code>MOVS</code> 两条指令的最后两个字符都是大小指示符</p>
+<ul>
+<li>第一个字符指定了源的大小</li>
+<li>第二个字符指定了目的的大小</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOVZ S, R</td>
+<td>R &lt;- 零扩展(S)</td>
+<td>以零进行扩展进行传送</td>
+</tr>
+<tr>
+<td>movzbw</td>
+<td></td>
+<td>将做了零扩展的字节传送到字</td>
+</tr>
+<tr>
+<td>movzbl</td>
+<td></td>
+<td>将做了零扩展的字节传送到双字</td>
+</tr>
+<tr>
+<td>movzwl</td>
+<td></td>
+<td>将做了零扩展的字传送到双字</td>
+</tr>
+<tr>
+<td>movzbq</td>
+<td></td>
+<td>将做了零扩展的字传送到四字</td>
+</tr>
+<tr>
+<td>movzwq</td>
+<td></td>
+<td>将做了零扩展的双字传送到四字</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOVS S, R</td>
+<td>R &lt;- 符号扩展(S)</td>
+<td>传送符号扩展的字节</td>
+</tr>
+<tr>
+<td>movsbw</td>
+<td></td>
+<td>将做了符号扩展的字节传送到字</td>
+</tr>
+<tr>
+<td>movsbl</td>
+<td></td>
+<td>将做了符号扩展的字节传送到双字</td>
+</tr>
+<tr>
+<td>movswl</td>
+<td></td>
+<td>将做了符号扩展的字传送到双字</td>
+</tr>
+<tr>
+<td>movsbq</td>
+<td></td>
+<td>将做了符号扩展的字节传送到四字</td>
+</tr>
+<tr>
+<td>movswq</td>
+<td></td>
+<td>将做了符号扩展的字传送到四字</td>
+</tr>
+<tr>
+<td>movslq</td>
+<td></td>
+<td>将做了符号扩展的双字传送到四字</td>
+</tr>
+<tr>
+<td>cltq</td>
+<td>%rax &lt;- 符号扩展(%eax)</td>
+<td>把%eax符号扩展到%rax</td>
+</tr>
+</tbody>
+</table>
+<p>传送指令的后缀由目的操作数的大小决定。</p>
+<h4 id="压入和弹出栈数据">压入和弹出栈数据</h4>
+<p>在x86-64中，程序栈存放在内存中某个区域。栈向下增长，栈顶元素的地址是所有栈中元素地址最低的。栈指针 <code>%rsp</code> 保存着栈顶元素的地址。</p>
+<p>入栈和出栈指令</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>push S</td>
+<td>R[%rsp] &lt;- R[%rsp] - 8;</td>
+<td>将四字节压入栈</td>
+</tr>
+<tr>
+<td></td>
+<td>M[R[%rsp]] &lt;- S</td>
+<td></td>
+</tr>
+<tr>
+<td>popq D</td>
+<td>D &lt;- M[R[%rsp]];</td>
+<td>将四字节弹出栈</td>
+</tr>
+<tr>
+<td></td>
+<td>R[%rsp] &lt;- R[%rsp]+8</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>指令 <code>pushq %rbp</code> 的行为等价于下面两条指令，但是 <code>pushq</code> 指令编码为1个字节，下面两条指令一个需要8个字节。</p>
+<ul>
+<li><code>subq $8, %rsp</code></li>
+<li><code>movq %rbp, (%rsp)</code></li>
+</ul>
+<p>指令 <code>popq %rax</code> 的行为等价于下面两条指令。</p>
+<ul>
+<li><code>movq %rsp, %rax</code></li>
+<li><code>addq $8, %rsp</code></li>
+</ul>
+<h3 id="算术和逻辑操作">算术和逻辑操作</h3>
+<p>指令类 <code>ADD</code> 由四条加法指令组成</p>
+<ul>
+<li><code>addb</code></li>
+<li><code>addw</code></li>
+<li><code>addl</code></li>
+<li><code>addq</code></li>
+</ul>
+<p>给出的每个指令类都有对四种不同大小数据的指令，这些操作被分为四组</p>
+<ul>
+<li>加载有效地址</li>
+<li>一元操作</li>
+<li>二元操作</li>
+<li>移位</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>leaq S,D</td>
+<td>D &lt;- &amp;S</td>
+<td>加载有效地址</td>
+</tr>
+<tr>
+<td>INC D</td>
+<td>D &lt;- D+1</td>
+<td>加1</td>
+</tr>
+<tr>
+<td>DEC D</td>
+<td>D &lt;- D-1</td>
+<td>减1</td>
+</tr>
+<tr>
+<td>NEG D</td>
+<td>D &lt;- -D</td>
+<td>取负</td>
+</tr>
+<tr>
+<td>NOT D</td>
+<td>D &lt;- ~D</td>
+<td>取补</td>
+</tr>
+<tr>
+<td>ADD S,D</td>
+<td>D &lt;- D+S</td>
+<td>加</td>
+</tr>
+<tr>
+<td>SUB S,D</td>
+<td>D &lt;- D-S</td>
+<td>减</td>
+</tr>
+<tr>
+<td>IMUL S,D</td>
+<td>D &lt;- D*S</td>
+<td>乘</td>
+</tr>
+<tr>
+<td>XOR S,D</td>
+<td>D &lt;- D^S</td>
+<td>异或</td>
+</tr>
+<tr>
+<td>OR S,D</td>
+<td>D &lt;- DǀS</td>
+<td>或</td>
+</tr>
+<tr>
+<td>AND S,D</td>
+<td>D &lt;- D&amp;S</td>
+<td>与</td>
+</tr>
+<tr>
+<td>SAL k,D</td>
+<td>D &lt;- D&laquo;k</td>
+<td>左移</td>
+</tr>
+<tr>
+<td>SHL k,D</td>
+<td>D &lt;- D&laquo;k</td>
+<td>左移（等同于SAL）</td>
+</tr>
+<tr>
+<td>SAR k,D</td>
+<td>D &lt;- D&raquo;_Ak</td>
+<td>算术右移</td>
+</tr>
+<tr>
+<td>SHR k,D</td>
+<td>D &lt;- D&raquo;_Lk</td>
+<td>逻辑右移</td>
+</tr>
+</tbody>
+</table>
+<h4 id="加载有效地址">加载有效地址</h4>
+<p>加载有效地址（load effective address）指令 <code>leaq</code> 实际上是 <code>movq</code> 指令变形的。它的指令形式是从内存读取数据到寄存器，但实际上它根本就没有引用内存。该指令将有效地址写入到目的操作数。</p>
+<p><code>leaq</code> 指令能执行加法和有限形式的乘法。编译以下算术表达式代码时，非常有用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">long</span> <span class="nf">scale</span><span class="p">(</span><span class="kt">long</span> <span class="n">x</span><span class="p">,</span> <span class="kt">long</span> <span class="n">y</span><span class="p">,</span> <span class="kt">long</span> <span class="n">z</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="mi">12</span><span class="o">*</span><span class="n">z</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>编译后的汇编代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="nl">scale:</span>
+<span class="nl">.LFB0:</span>
+	<span class="c">;; x in %rdi, y in %rsi, z in rdx
+</span><span class="c"></span>	<span class="na">.cfi_startproc</span>
+	<span class="nf">leaq</span>	<span class="p">(</span><span class="nv">%rdi</span><span class="p">,</span><span class="nv">%rsi</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="nv">%rax</span> 	<span class="c">; x + 4y
+</span><span class="c"></span>	<span class="no">leaq</span>	<span class="p">(</span><span class="nv">%rdx</span><span class="p">,</span><span class="nv">%rdx</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="nv">%rdx</span>	<span class="c">; z + 2*z
+</span><span class="c"></span>	<span class="no">leaq</span>	<span class="p">(</span><span class="nv">%rax</span><span class="p">,</span><span class="nv">%rdx</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="nv">%rax</span>	<span class="c">; (x+4*y) + 4*(3*z) = x + 4*y + 12*z
+</span><span class="c"></span>	<span class="no">ret</span>
+	<span class="na">.cfi_endproc</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="一元和二元操作">一元和二元操作</h4>
+<p>上面的算术逻辑指令表格中：</p>
+<ul>
+<li>第二组（INC到NOT指令）是一元操作，只有一个操作数，既是源又是目的。这个操作数可以是一个寄存器，也可以是一个内存位置。</li>
+<li>第三组（ADD到AND指令）是二元操作，第二个操作数既是源又是目的。第一个操作数可以是立即数，寄存器或者是内存位置。第二个操作数可以是寄存器或内存位置。当第二个操作数为内存地址时，处理器必须从内存中读出值，执行操作，再把结果写入到内存。</li>
+</ul>
+<h4 id="移位操作">移位操作</h4>
+<p>最后一组是移位操作（SAL到SHR指令），先给出移位量，然后第二项给出的是要移位的数。可以进行算数和逻辑右移。</p>
+<p>移位量可以十一个立即数，或者放在单字节寄存器 <code>%cl</code> 中。</p>
+<p>1个字节的移位量使得移位量的编码范围可以达到 $2^8-1=255$。x86-64中，移位操作对 <code>w</code> 位长的数据值进行操作，移位量是由 <code>%cl</code> 寄存器的低m位决定的，这里
+$2^m=w$。高位会被忽略。</p>
+<p>如当寄存器 <code>%cl</code> 的十六进制值为 <code>0xFF</code> 时，指令 <code>salb</code> 会移7位， <code>salw</code> 会移
+15位， <code>sall</code> 会移31位， <code>salq</code> 会移63位。</p>
+<p>左移指令有两个名字： <code>SAL</code> 和 <code>SHL</code> ，两者的效果是一样的，都是将右边填上0。</p>
+<p>右移指令不同， <code>SAR</code> 执行算术移位（填上符号位），而 <code>SHR</code> 执行逻辑移位（填上0）。</p>
+<p>移位操作的目的操作数可以是一个寄存器或是一个内存位置。</p>
+<h4 id="特殊的算术操作">特殊的算术操作</h4>
+<p>两个64位有符号或无符号整数相称得到的乘积需要128位来表示。x86-64指令集对128位（16字节）数的操作提供有限的支持。延续字（2字节），双字（4字节），和四字（8
+字节）的命名惯例，Intel把16字节的数称为八字（oct word）。</p>
+<p>描述产生两个64位数字的全128位乘积以及整数除法的指令</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imulq S</td>
+<td>R[%rdx]: R[%rax] &lt;- \(S \times R[%rax]\)</td>
+<td>有符号全乘法</td>
+</tr>
+<tr>
+<td>mulq S</td>
+<td>R[%rdx]: R[%rax] &lt;- \(S \times R[%rax]\)</td>
+<td>无符号全乘法</td>
+</tr>
+<tr>
+<td>clto</td>
+<td>R[%rdx]: R[%rax] &lt;- 符号扩展（R[%rax]）</td>
+<td>转换为八字</td>
+</tr>
+<tr>
+<td>idivq S</td>
+<td>R[%rdx] &lt;- R[%rdx]：R[%rax] mod S</td>
+<td>有符号除法</td>
+</tr>
+<tr>
+<td></td>
+<td>R[%rdx] &lt;- R[%rdx]：R[%rax] \(\div\) S</td>
+<td></td>
+</tr>
+<tr>
+<td>divq S</td>
+<td>R[%rdx] &lt;- R[%rdx]：R[%rax] mod S</td>
+<td>无符号除法</td>
+</tr>
+<tr>
+<td></td>
+<td>R[%rdx] &lt;- R[%rdx]：R[%rax] \(\div\) S</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>x86-64指令集还提供了两条不同“单操作数”乘法指令，以计算两个64位值的全128位乘积。这两个指令都要求一个参数必须在寄存器 <code>%rax</code> 中，另一个作为指令的源操作数给出，然后乘积存放在寄存器 <code>%rdx</code> （高64位）和 <code>rax</code> （低64位）中。</p>
+<ul>
+<li>一个是无符号数乘法（mulq）</li>
+<li>一个是补码乘法（imulq）</li>
+</ul>
+<p>无符号除法使用 <code>divq</code> 指令。通常，寄存器 <code>%rdx</code> 会事先设置为0。</p>
+<h3 id="控制">控制</h3>
+<h4 id="条件码">条件码</h4>
+<p>除了整数寄存器，CPU还维护着一组单个位的条件码（condition code）寄存器，它们描述了最近的算术或逻辑操作的属性。可以检测这些寄存器来执行条件分支指令。最常用的条件码有：</p>
+<ul>
+<li><code>CF</code> ：进位标志。最近的操作使最高位产生了进位。可以用来检查无符号操作的溢出。</li>
+<li><code>ZF</code> ：零标志。最近操作得出的结果为0。</li>
+<li><code>SF</code> ：符号标志。最近的操作得到的结果为负数。</li>
+<li><code>OF</code> ：溢出标志。最近的操作导致一个补码溢出——正溢出或者负溢出。</li>
+</ul>
+<p><code>leaq</code> 指令不改变任何条件码，因为它是用来进行地址计算的。</p>
+<p>有两类指令（有8、16、32和64位形式），它们只设置条件码而不改变任何其他寄存器。</p>
+<ul>
+<li><code>CMP</code> 指令根据两个操作数之差来设置条件码。除了只设置条件码而不更新目的寄存器之外， <code>CMP</code> 指令与 <code>SUB</code> 指令的行为是一样的。</li>
+<li><code>TEST</code> 指令的行为与 <code>AND</code> 指令一样，除了它们指设置条件码而不改变目的寄存器的值。</li>
+</ul>
+<p>典型用法是，两个操作数是一样的（例如， <code>testq %rax, rax</code> 用来检查 <code>%rax</code> 是负数、零，还是整数），或其中的一个操作数是掩码，用来指示哪些位应该被测试。</p>
+<p>比较和测试指令。这些指令不修改任何寄存器的值，指设置条件码。</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>基于</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP \(S_1, S_2\)</td>
+<td>\(S_2 - S_1\)</td>
+<td>比较</td>
+</tr>
+<tr>
+<td>cmpb</td>
+<td></td>
+<td>比较字节</td>
+</tr>
+<tr>
+<td>cmpw</td>
+<td></td>
+<td>比较字</td>
+</tr>
+<tr>
+<td>cmpl</td>
+<td></td>
+<td>比较双字</td>
+</tr>
+<tr>
+<td>cmpq</td>
+<td></td>
+<td>比较四字</td>
+</tr>
+<tr>
+<td>TEST \(S_1, S_2\)</td>
+<td>\(S_1 &amp; S_2\)</td>
+<td>测试</td>
+</tr>
+<tr>
+<td>testb</td>
+<td></td>
+<td>测试字节</td>
+</tr>
+<tr>
+<td>testw</td>
+<td></td>
+<td>测试字</td>
+</tr>
+<tr>
+<td>testl</td>
+<td></td>
+<td>测试双字</td>
+</tr>
+<tr>
+<td>testq</td>
+<td></td>
+<td>测试四字</td>
+</tr>
+</tbody>
+</table>
+<h4 id="访问条件码">访问条件码</h4>
+<p>条件码通常不会直接读取，常用的使用方法有三种：</p>
+<ol>
+<li>可以根据条件码的某种组合，将一个字节设置为0或1</li>
+<li>可以条件跳转到程序的某个其他的部分</li>
+<li>可以有条件地传送数据</li>
+</ol>
+<p>一条 <code>SET</code> 指令的目的操作数是低位字节寄存器元素之一，或是一个字节的内存位置，指令会将这个字节设置为0或者1.为了得到一个32位或64位结果，我们必须对高位清零。</p>
+<p><code>SET</code> 指令名字的不同后缀指明了它们所考虑的条件码的组合。这些指令的后缀表示不同的条件而不是操作数大小。</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>同义名</th>
+<th>效果</th>
+<th>设置条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sete D</td>
+<td>setz</td>
+<td>D &lt;- ZF</td>
+<td>相等/零</td>
+</tr>
+<tr>
+<td>setne D</td>
+<td>setnz</td>
+<td>D &lt;- -ZF</td>
+<td>不等、非零</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
     </div>
 
@@ -462,7 +1016,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-04-26
+        2020-05-17
         
     </span>
   </p>
@@ -475,13 +1029,9 @@
           <a href="/tags/c/">C</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/rustlearning/thecargobook/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Cargo指南</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/post/thejoyofclojure2th/chapter10/">
-            <span class="next-text nav-default">Clojure趣学指南-第10章-变动和并发编程</span>
+        
+        <a class="next" href="/post/frontendlearning/cssauthguide/chapter4/">
+            <span class="next-text nav-default">CSS权威指南-第4章-值和单位</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>

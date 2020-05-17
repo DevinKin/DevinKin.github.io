@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 16 May 2020 22:10:19 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 17 May 2020 15:51:10 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>初级会计视频-第一章-会计概述</title>
+      <link>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</link>
+      <pubDate>Sun, 17 May 2020 15:51:10 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</guid>
+      <description>第一章-会计概述 第一个等式：资产（第二章）=负债（第三章）+所有者权益（第三章） 第二章-资产：货应交，存固无 货币资金 应收账款 交移性金融资产 存</description>
+    </item>
     
     <item>
       <title>JavaScript高级程序设计-第5章-引用类型</title>
@@ -36,15 +45,6 @@
       
       <guid>https://devinkin.github.io/post/frontendlearning/javascriptadvancedprogramming/chapter4/</guid>
       <description>第四章-变量、作用域和内存问题 基本类型和引用类型 ECMAScript变量可能包含两种不同数据类型的值： 基本类型值：简单的数据段。 引用类型值：</description>
-    </item>
-    
-    <item>
-      <title>初级会计视频-第一章-会计概述</title>
-      <link>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</link>
-      <pubDate>Sat, 16 May 2020 10:25:24 +0800</pubDate>
-      
-      <guid>https://devinkin.github.io/post/finacialmanagement/junioraccountvideo/chapter1/</guid>
-      <description>第一章-会计概述 第一个等式：资产（第二章）=负债（第三章）+所有者权益（第三章） 第二章-资产：货应交，存固无 货币资金 应收账款 交移性金融资产 存</description>
     </item>
     
     <item>

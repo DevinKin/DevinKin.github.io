@@ -6,10 +6,37 @@
     <description>Recent content in 前端 on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 17 May 2020 18:38:59 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 17 May 2020 18:48:45 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CSS权威指南-第4章-值和单位</title>
+      <link>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter4/</link>
+      <pubDate>Sun, 17 May 2020 18:48:45 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter4/</guid>
+      <description>第4章-值和单位 数字 CSS中有两类数字: 整数 实数 函数式RGB颜色 1 2 3 4 rgb(100%, 100%, 100%) rgb(0%, 0%, 0%) rgb(255, 255,255) rgb(0, 0,0) 长度单位 长度单位可以划归为两类 绝对长度单位 相对长</description>
+    </item>
+    
+    <item>
+      <title>CSS权威指南-第2章-选择器</title>
+      <link>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter2/</link>
+      <pubDate>Sun, 17 May 2020 18:47:23 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter2/</guid>
+      <description>第2章-选择器 基本规则 规则结构 每个规则都有两个部分 选择器(selector) 声明块(declaration block) 声明块由一个或多个声明组成, 每个</description>
+    </item>
+    
+    <item>
+      <title>CSS权威指南-第3章-结构和层叠</title>
+      <link>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter3/</link>
+      <pubDate>Sun, 17 May 2020 18:47:17 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter3/</guid>
+      <description>第3章-结构和层叠 特殊性 对于每个规则, 用户代理会计算选择器的特殊性, 并将这个特殊性附加到规则中的各个声明. 如果一个元素有两个或多个冲突的属性</description>
+    </item>
     
     <item>
       <title>CSS权威指南-第1章-CSS和文档</title>

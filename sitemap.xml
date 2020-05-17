@@ -10,55 +10,76 @@
   
   <url>
     <loc>https://devinkin.github.io/tags/c/</loc>
-    <lastmod>2020-05-17T18:38:59+08:00</lastmod>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/categories/</loc>
-    <lastmod>2020-05-17T18:38:59+08:00</lastmod>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/tags/css/</loc>
-    <lastmod>2020-05-17T18:38:59+08:00</lastmod>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/categories/css/</loc>
-    <lastmod>2020-05-17T18:38:59+08:00</lastmod>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter1/</loc>
-    <lastmod>2020-05-17T18:38:59+08:00</lastmod>
+    <loc>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter4/</loc>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/post/</loc>
-    <lastmod>2020-05-17T18:38:59+08:00</lastmod>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/tags/</loc>
-    <lastmod>2020-05-17T18:38:59+08:00</lastmod>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://devinkin.github.io/tags/%E5%89%8D%E7%AB%AF/</loc>
+    <lastmod>2020-05-17T18:48:45+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter2/</loc>
+    <lastmod>2020-05-17T18:47:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter3/</loc>
+    <lastmod>2020-05-17T18:47:17+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter1/</loc>
     <lastmod>2020-05-17T18:38:59+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

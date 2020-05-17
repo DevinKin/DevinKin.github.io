@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CSS权威指南-第3章-结构和层叠 - Devinkin Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devinkin" /><meta name="description" content="第3章-结构和层叠 特殊性 对于每个规则, 用户代理会计算选择器的特殊性, 并将这个特殊性附加到规则中的各个声明. 如果一个元素有两个或多个冲突的属性" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.70.0 with theme even" />
+
+
+<link rel="canonical" href="https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://devinkin.github.io/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="CSS权威指南-第3章-结构和层叠" />
+<meta property="og:description" content="第3章-结构和层叠 特殊性 对于每个规则, 用户代理会计算选择器的特殊性, 并将这个特殊性附加到规则中的各个声明. 如果一个元素有两个或多个冲突的属性" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devinkin.github.io/post/frontendlearning/cssauthguide/chapter3/" />
+<meta property="article:published_time" content="2020-05-17T18:47:17+08:00" />
+<meta property="article:modified_time" content="2020-05-17T18:47:17+08:00" />
+<meta itemprop="name" content="CSS权威指南-第3章-结构和层叠">
+<meta itemprop="description" content="第3章-结构和层叠 特殊性 对于每个规则, 用户代理会计算选择器的特殊性, 并将这个特殊性附加到规则中的各个声明. 如果一个元素有两个或多个冲突的属性">
+<meta itemprop="dateModified" content="2020-05-17T18:47:17&#43;08:00" />
+<meta itemprop="wordCount" content="702">
+
+
+
+<meta itemprop="keywords" content="CSS,前端," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CSS权威指南-第3章-结构和层叠"/>
+<meta name="twitter:description" content="第3章-结构和层叠 特殊性 对于每个规则, 用户代理会计算选择器的特殊性, 并将这个特殊性附加到规则中的各个声明. 如果一个元素有两个或多个冲突的属性"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Devinkin</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Devinkin</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CSS权威指南-第3章-结构和层叠</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-05-17 </span>
+        <div class="post-category">
+            <a href="/categories/css/"> CSS </a>
+            </div>
+          <span class="more-meta"> 约 702 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第3章-结构和层叠">第3章-结构和层叠</a>
+      <ul>
+        <li><a href="#特殊性">特殊性</a></li>
+        <li><a href="#继承">继承</a></li>
+        <li><a href="#层叠">层叠</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="第3章-结构和层叠">第3章-结构和层叠</h2>
+<h3 id="特殊性">特殊性</h3>
+<p>对于每个规则, 用户代理会计算选择器的特殊性, 并将这个特殊性附加到规则中的各个声明. 如果一个元素有两个或多个冲突的属性声明, 那么有最高特殊性的声明就会胜出.</p>
+<p>选择器的特殊性由选择器本身的组件确定, 特殊性值表述为4个部分, 如: 0,0,0,0. 一个选择器具的具体特殊性如下</p>
+<ul>
+<li>对于选择器中给定的各个ID属性值, 加 0,1,0,0.</li>
+<li>对于选择器中给定的各个类属性值, 属性选择或伪类, 加 0,0,1,0.</li>
+<li>对于选择器中给定的各个元素和伪元素, 加 0,0,0,1.</li>
+<li>结合符和通配符对特殊性没有任何贡献.</li>
+</ul>
+<h4 id="内联样式特殊性">内联样式特殊性</h4>
+<p>特殊性第一个0是为内联样式声明保留的, 它比所有其他声明的特殊性都高.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">h1</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;color: green;&#34;</span><span class="p">&gt;</span>The Meadow Party<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="重要性">重要性</h4>
+<p>有时某个声明可能非常重要, 超过了其他所有声明. 可以使用 <code>!important</code> 来标志.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">p</span><span class="p">.</span><span class="nc">dary</span> <span class="p">{</span>
+    <span class="k">color</span><span class="p">:</span> <span class="mh">#333</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="k">background</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>!important</code> 总是放在声明的最后, 即分号前面.</p>
+<h3 id="继承">继承</h3>
+<p>基于继承机制, 样式不仅应用到指定的元素, 还会应用到它的后代元素.</p>
+<p>某些属性不能继承, 例如属性 <code>border</code>.</p>
+<p>继承的值没有特殊性, 连0特殊性也没有. 0特殊性(通配符)比无特殊性要强.</p>
+<h3 id="层叠">层叠</h3>
+<p>CSS2.1层叠规则</p>
+<ul>
+<li>找出所有相关规则, 这些规则都包含一个与给定元素匹配的选择器.</li>
+<li>按显式权重对应用到该元素的所有声明排序. 标志 <code>!import</code> 的规则的权重更高.</li>
+<li>按特殊性对应用到给定元素的所有声明排序. 有较高特殊性的元素权重更大.</li>
+<li>按照出现顺序对应用到给定元素的所有声明排序, 一个声明在样式表或文档中越后出现, 它的权重就越大.</li>
+</ul>
+<h4 id="按权重和来源排序">按权重和来源排序</h4>
+<p>在声明权重方面要考虑5级, 权重由大到小的顺序依次为</p>
+<ul>
+<li>读者的重要声明</li>
+<li>创作人员的重要声明</li>
+<li>创作人员的正常声明</li>
+<li>读者的正常声明</li>
+<li>用户代理声明</li>
+</ul>
+<h4 id="按特殊性排序">按特殊性排序</h4>
+<p>下面的特殊性一致, 推荐链接样式顺序如下(LVHA), 只有最后一个选择器会胜出.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="p">:</span><span class="nd">link</span> <span class="p">{</span><span class="k">color</span><span class="p">:</span> <span class="kc">blue</span><span class="p">;}</span>
+<span class="p">:</span><span class="nd">visited</span> <span class="p">{</span><span class="k">color</span><span class="p">:</span> <span class="kc">purple</span><span class="p">;}</span>
+<span class="p">:</span><span class="nd">hover</span> <span class="p">{</span><span class="k">color</span><span class="p">:</span> <span class="kc">red</span><span class="p">;}</span>
+<span class="p">:</span><span class="nd">active</span> <span class="p">{</span><span class="k">color</span><span class="p">:</span> <span class="kc">orange</span><span class="p">;}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devinkin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-05-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/css/">CSS</a>
+          <a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/frontendlearning/cssauthguide/chapter2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">CSS权威指南-第2章-选择器</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/frontendlearning/cssauthguide/chapter1/">
+            <span class="next-text nav-default">CSS权威指南-第1章-CSS和文档</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/DevinKin" class="iconfont icon-github" title="github"></a>
+  <a href="https://devinkin.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">devinkin</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://devinkin.github.io/js/main.4d21c1cefdf1cd0b77ef59bab2d1bbe3112fc9d6cc04710bb1f0b1fd7b891f11.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

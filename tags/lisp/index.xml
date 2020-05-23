@@ -6,10 +6,19 @@
     <description>Recent content in Lisp on Devinkin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 15 May 2020 21:26:23 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 23 May 2020 16:48:10 +0800</lastBuildDate>
     
 	<atom:link href="https://devinkin.github.io/tags/lisp/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Clojure趣学指南-第12章-调用Java</title>
+      <link>https://devinkin.github.io/post/thejoyofclojure2th/chapter12/</link>
+      <pubDate>Sat, 23 May 2020 16:48:10 +0800</pubDate>
+      
+      <guid>https://devinkin.github.io/post/thejoyofclojure2th/chapter12/</guid>
+      <description>第12章-调用Java Clojure提供了一组特定的与Java交互的工具 gen-class proxy definterface 异常机制 使用proxy生成对象 Clojure的 proxy 机制仅用于互操</description>
+    </item>
     
     <item>
       <title>Clojure趣学指南-第十一章-并行</title>
